@@ -1,0 +1,30 @@
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+
+# Dependencias e build (caso o backend seja adicionado ao repositorio)
+node_modules/
+dist/
+build/
+__pycache__/
+*.pyc
+
+# Ambiente e segredos - nunca versionar
+.env
+.env.*
+*.pem
+*.key
+credenciais*.json
+
+# Dados reais - nunca versionar dado de saude de colaborador
+db/backup-*.json
+db/producao*.json
+*.sqlite
+*.db
