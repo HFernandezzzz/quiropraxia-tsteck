@@ -22,6 +22,8 @@ Aplicação de **arquivo único** — HTML, CSS e JavaScript puro, sem framework
 - [Níveis de acesso e LGPD](#níveis-de-acesso-e-lgpd)
 - [Estrutura do repositório](#estrutura-do-repositório)
 - [Documentação](#documentação)
+- [Dados de demonstração](#dados-de-demonstração)
+- [Autoria](#autoria)
 
 ---
 
@@ -139,12 +141,14 @@ Pontos a tratar na implantação: log de acesso a ficha (hoje só há log de esc
 .
 ├── index.html                      Aplicação completa, com adaptador de persistência
 ├── db/
+│   ├── README.md                   Aviso sobre os dados e regra de versionamento
 │   ├── schema.sql                  Schema PostgreSQL, com notas para MySQL
-│   └── dados-exemplo.json          Registros de demonstração
+│   └── dados-exemplo.json          54 registros fictícios para homologação
 ├── docs/
 │   ├── documentacao-tecnica.md     Contrato dos serviços, modelo de dados, checklist
 │   ├── exemplo-relatorio-mensal.pdf
 │   └── img/                        Capturas de tela
+├── .gitignore
 ├── CHANGELOG.md
 ├── LICENSE
 └── README.md
