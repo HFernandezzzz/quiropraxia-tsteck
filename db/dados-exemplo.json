@@ -1,0 +1,1372 @@
+{
+ "_aviso": "DADOS FICTICIOS. Conjunto criado exclusivamente para demonstracao publica do sistema. Nenhuma informacao corresponde a colaborador real da TS Teck. Nomes, matriculas, diagnosticos, medicamentos e afastamentos sao inventados. Nao versionar dado real neste arquivo.",
+ "gerado": "2026-09-22T16:41:20.084Z",
+ "empresa": "TS Teck (demonstracao)",
+ "versao": 4,
+ "pacientes": [
+  {
+   "id": "p_ex1",
+   "nome": "Anderson Vilela Prado",
+   "matricula": "DEMO-001",
+   "setor": "Produção",
+   "funcao": "Operador de máquina CNC",
+   "turno": "1º turno",
+   "nascimento": "1984-03-12",
+   "admissao": "2016-08-01",
+   "telefone": "Ramal 000",
+   "ativo": true,
+   "problemaColuna": "Sim - diagnosticado",
+   "diagnostico": "Hérnia de disco L4-L5",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "exames": "Ressonância magnética (03/2025)",
+   "cirurgias": "Não",
+   "usaMedicamento": "Sim",
+   "medicamentos": "Ciclobenzaprina 5mg à noite",
+   "atividade": "Caminhada 2x por semana",
+   "posto": "Em pé a maior parte do dia",
+   "esforco": "Pesado / carga repetitiva",
+   "contraindicacoes": "Evitar manipulação rotacional lombar de alta velocidade.",
+   "apto": "Sim",
+   "motivoNaoApto": "",
+   "consentimento": "Sim",
+   "observacoes": "Relata piora nos dias de troca de ferramental.",
+   "criadoEm": "2026-08-04T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "p_ex2",
+   "nome": "Camila Rocha Bastos",
+   "matricula": "DEMO-002",
+   "setor": "Suprimentos / Compras",
+   "funcao": "Analista de compras",
+   "turno": "Administrativo",
+   "nascimento": "1992-11-27",
+   "admissao": "2021-02-15",
+   "telefone": "Ramal 000",
+   "ativo": true,
+   "problemaColuna": "Sim - em investigação",
+   "diagnostico": "Cervicalgia postural",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "exames": "RX cervical solicitado",
+   "cirurgias": "Não",
+   "usaMedicamento": "Não",
+   "medicamentos": "",
+   "atividade": "Pilates 1x por semana",
+   "posto": "Sentado a maior parte do dia",
+   "esforco": "Leve",
+   "contraindicacoes": "",
+   "apto": "Sim",
+   "motivoNaoApto": "",
+   "consentimento": "Sim",
+   "observacoes": "Monitor abaixo da linha dos olhos — avaliar ergonomia do posto.",
+   "criadoEm": "2026-08-11T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "p_ex3",
+   "nome": "Sérgio Tavares Nunes",
+   "matricula": "DEMO-003",
+   "setor": "Almoxarifado",
+   "funcao": "Auxiliar de almoxarifado",
+   "turno": "2º turno",
+   "nascimento": "1979-06-02",
+   "admissao": "2011-05-20",
+   "telefone": "Ramal 000",
+   "ativo": true,
+   "problemaColuna": "Sim - diagnosticado",
+   "diagnostico": "Escoliose leve e lombalgia crônica",
+   "regioes": [
+    "Lombar",
+    "Torácica"
+   ],
+   "exames": "RX de coluna total (2024)",
+   "cirurgias": "Não",
+   "usaMedicamento": "Sim",
+   "medicamentos": "Dipirona conforme dor",
+   "atividade": "Não pratica",
+   "posto": "Movimentação constante",
+   "esforco": "Moderado",
+   "contraindicacoes": "",
+   "apto": "Sim",
+   "motivoNaoApto": "",
+   "consentimento": "Não",
+   "observacoes": "Levantamento manual de caixas acima de 15kg.",
+   "criadoEm": "2026-07-22T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "p_ex4",
+   "nome": "Letícia Moraes Campos",
+   "matricula": "DEMO-004",
+   "setor": "Qualidade",
+   "funcao": "Inspetora de qualidade",
+   "turno": "1º turno",
+   "nascimento": "1995-01-19",
+   "admissao": "2023-03-06",
+   "telefone": "Ramal 000",
+   "ativo": true,
+   "problemaColuna": "Não",
+   "diagnostico": "",
+   "regioes": [
+    "Ombro"
+   ],
+   "exames": "",
+   "cirurgias": "",
+   "usaMedicamento": "Não",
+   "medicamentos": "",
+   "atividade": "Musculação 3x por semana",
+   "posto": "Alterna sentado e em pé",
+   "esforco": "Leve",
+   "contraindicacoes": "",
+   "apto": "Sim",
+   "motivoNaoApto": "",
+   "consentimento": "Sim",
+   "observacoes": "Procurou a sala por tensão no ombro direito.",
+   "criadoEm": "2026-09-02T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "atendimentos": [
+  {
+   "id": "a_ex1",
+   "pacienteId": "p_ex1",
+   "data": "2026-09-01",
+   "hora": "07:30",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 45,
+   "queixa": "Dor lombar irradiando para perna esquerda",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 8,
+   "dorDepois": 5,
+   "tecnicas": [
+    "Mobilização articular",
+    "Liberação miofascial",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    },
+    {
+     "nome": "Papel lençol 70cm x 50m",
+     "qtd": 1
+    }
+   ],
+   "evolucao": "Teste de Lasègue positivo à esquerda. Iniciada mobilização suave, sem manipulação de alta velocidade.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "exemplo": true,
+   "pontos": [
+    {
+     "f": "b",
+     "x": 56,
+     "y": 72,
+     "i": 3
+    },
+    {
+     "f": "b",
+     "x": 64,
+     "y": 76,
+     "i": 2
+    }
+   ],
+   "avaliacao": 5,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex2",
+   "pacienteId": "p_ex1",
+   "data": "2026-09-15",
+   "hora": "07:30",
+   "tipo": "Retorno",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "Dor lombar em melhora",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 3,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "evolucao": "Boa resposta. Orientado a alternar posição a cada 40 minutos.",
+   "proxima": "",
+   "encaminhamento": "Ergonomia / posto de trabalho",
+   "exemplo": true,
+   "pontos": [
+    {
+     "f": "b",
+     "x": 58,
+     "y": 74,
+     "i": 2
+    }
+   ],
+   "avaliacao": 5,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex3",
+   "pacienteId": "p_ex2",
+   "data": "2026-09-08",
+   "hora": "13:00",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 40,
+   "queixa": "Dor cervical no fim do expediente",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 7,
+   "dorDepois": 4,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Orientação postural",
+    "Exercícios terapêuticos"
+   ],
+   "materiais": [
+    {
+     "nome": "Papel lençol 70cm x 50m",
+     "qtd": 1
+    }
+   ],
+   "evolucao": "Tensão em trapézio superior bilateral. Entregue série de alongamentos para fazer no posto.",
+   "proxima": "",
+   "encaminhamento": "Ergonomia / posto de trabalho",
+   "exemplo": true,
+   "pontos": [
+    {
+     "f": "b",
+     "x": 60,
+     "y": 52,
+     "i": 3
+    },
+    {
+     "f": "f",
+     "x": 52,
+     "y": 50,
+     "i": 1
+    }
+   ],
+   "avaliacao": 4,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex4",
+   "pacienteId": "p_ex3",
+   "data": "2026-09-19",
+   "hora": "16:15",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "Lombalgia após jornada",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 2,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    },
+    {
+     "nome": "Bolsa térmica gel",
+     "qtd": 1
+    }
+   ],
+   "evolucao": "Melhora importante. Reforçada técnica de levantamento de carga.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "exemplo": true,
+   "pontos": [
+    {
+     "f": "b",
+     "x": 62,
+     "y": 78,
+     "i": 2
+    }
+   ],
+   "avaliacao": 5,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex5",
+   "pacienteId": "p_ex4",
+   "data": "2026-09-22",
+   "hora": "09:00",
+   "tipo": "Avaliação inicial",
+   "status": "Agendado",
+   "duracao": 40,
+   "queixa": "Tensão no ombro direito",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": null,
+   "dorDepois": null,
+   "tecnicas": [],
+   "materiais": [],
+   "evolucao": "",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex6",
+   "pacienteId": "p_ex2",
+   "data": "2026-09-22",
+   "hora": "13:30",
+   "tipo": "Retorno",
+   "status": "Agendado",
+   "duracao": 30,
+   "queixa": "Reavaliação cervical",
+   "regioes": [
+    "Cervical"
+   ],
+   "dorAntes": null,
+   "dorDepois": null,
+   "tecnicas": [],
+   "materiais": [],
+   "evolucao": "",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_ex7",
+   "pacienteId": "p_ex3",
+   "data": "2026-09-12",
+   "hora": "16:15",
+   "tipo": "Sessão de manutenção",
+   "status": "Faltou",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [],
+   "dorAntes": null,
+   "dorDepois": null,
+   "tecnicas": [],
+   "materiais": [],
+   "evolucao": "Não compareceu — parada de linha no setor.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h1",
+   "pacienteId": "p_ex1",
+   "data": "2026-05-04",
+   "hora": "08:00",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 9,
+   "dorDepois": 7,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h2",
+   "pacienteId": "p_ex2",
+   "data": "2026-05-07",
+   "hora": "09:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 7,
+   "dorDepois": 4,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h3",
+   "pacienteId": "p_ex3",
+   "data": "2026-05-10",
+   "hora": "10:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 5,
+   "dorDepois": 3,
+   "tecnicas": [
+    "Mobilização articular",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h4",
+   "pacienteId": "p_ex4",
+   "data": "2026-06-04",
+   "hora": "08:00",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": 8,
+   "dorDepois": 5,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h5",
+   "pacienteId": "p_ex1",
+   "data": "2026-06-07",
+   "hora": "09:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 4,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h6",
+   "pacienteId": "p_ex2",
+   "data": "2026-06-10",
+   "hora": "10:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 9,
+   "dorDepois": 6,
+   "tecnicas": [
+    "Mobilização articular",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h7",
+   "pacienteId": "p_ex3",
+   "data": "2026-06-13",
+   "hora": "11:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 7,
+   "dorDepois": 5,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h8",
+   "pacienteId": "p_ex4",
+   "data": "2026-06-16",
+   "hora": "12:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": 5,
+   "dorDepois": 2,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h9",
+   "pacienteId": "p_ex3",
+   "data": "2026-07-04",
+   "hora": "08:00",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 7,
+   "dorDepois": 5,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h10",
+   "pacienteId": "p_ex4",
+   "data": "2026-07-07",
+   "hora": "09:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": 5,
+   "dorDepois": 2,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h11",
+   "pacienteId": "p_ex1",
+   "data": "2026-07-10",
+   "hora": "10:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 8,
+   "dorDepois": 6,
+   "tecnicas": [
+    "Mobilização articular",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h12",
+   "pacienteId": "p_ex2",
+   "data": "2026-07-13",
+   "hora": "11:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 3,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h13",
+   "pacienteId": "p_ex2",
+   "data": "2026-08-04",
+   "hora": "08:00",
+   "tipo": "Avaliação inicial",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 3,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h14",
+   "pacienteId": "p_ex3",
+   "data": "2026-08-07",
+   "hora": "09:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 9,
+   "dorDepois": 7,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h15",
+   "pacienteId": "p_ex4",
+   "data": "2026-08-10",
+   "hora": "10:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": 7,
+   "dorDepois": 4,
+   "tecnicas": [
+    "Mobilização articular",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h16",
+   "pacienteId": "p_ex1",
+   "data": "2026-08-13",
+   "hora": "11:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar"
+   ],
+   "dorAntes": 5,
+   "dorDepois": 3,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h17",
+   "pacienteId": "p_ex2",
+   "data": "2026-08-16",
+   "hora": "12:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Cervical",
+    "Torácica"
+   ],
+   "dorAntes": 8,
+   "dorDepois": 5,
+   "tecnicas": [
+    "Liberação miofascial",
+    "Alongamento assistido"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h18",
+   "pacienteId": "p_ex3",
+   "data": "2026-08-19",
+   "hora": "13:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Lombar",
+    "Sacroilíaca"
+   ],
+   "dorAntes": 6,
+   "dorDepois": 4,
+   "tecnicas": [
+    "Mobilização articular",
+    "Termoterapia"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 4,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "a_h19",
+   "pacienteId": "p_ex4",
+   "data": "2026-08-22",
+   "hora": "08:00",
+   "tipo": "Sessão de manutenção",
+   "status": "Realizado",
+   "duracao": 30,
+   "queixa": "",
+   "regioes": [
+    "Ombro",
+    "Cervical"
+   ],
+   "dorAntes": 9,
+   "dorDepois": 6,
+   "tecnicas": [
+    "Ajuste quiroprático",
+    "Orientação postural"
+   ],
+   "materiais": [
+    {
+     "nome": "Creme de massagem 1kg",
+     "qtd": 1
+    }
+   ],
+   "pontos": [],
+   "avaliacao": 5,
+   "evolucao": "Sessão de acompanhamento.",
+   "proxima": "",
+   "encaminhamento": "Nenhum",
+   "criadoEm": "2026-09-22T16:41:20.084Z",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "solicitacoes": [
+  {
+   "id": "s_ex1",
+   "numero": "SOL-2026-0001",
+   "data": "2026-09-13",
+   "urgencia": "Normal",
+   "solicitante": "Sala de Quiropraxia",
+   "justificativa": "Montagem inicial da sala: materiais de uso diário nos atendimentos.",
+   "itens": [
+    {
+     "descricao": "Papel lençol 70cm x 50m",
+     "qtd": 6,
+     "unidade": "rolo",
+     "obs": ""
+    },
+    {
+     "descricao": "Creme de massagem 1kg",
+     "qtd": 3,
+     "unidade": "un",
+     "obs": ""
+    }
+   ],
+   "status": "Entregue",
+   "pedido": "PC-8841",
+   "previsao": "2026-09-18",
+   "resposta": "Entregue no almoxarifado em 18/09/2026.",
+   "criadoEm": "2026-09-12T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "s_ex2",
+   "numero": "SOL-2026-0002",
+   "data": "2026-09-17",
+   "urgencia": "Urgente",
+   "solicitante": "Sala de Quiropraxia",
+   "justificativa": "Luvas zeradas. Sem elas os atendimentos com contato direto precisam ser suspensos.",
+   "itens": [
+    {
+     "descricao": "Luva de procedimento M",
+     "qtd": 2,
+     "unidade": "cx",
+     "obs": "Reposição automática"
+    },
+    {
+     "descricao": "Creme de massagem 1kg",
+     "qtd": 2,
+     "unidade": "un",
+     "obs": "Reposição automática"
+    }
+   ],
+   "status": "Pendente",
+   "pedido": "",
+   "previsao": "",
+   "resposta": "",
+   "criadoEm": "2026-09-16T12:00:00.000Z",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "estoque": [
+  {
+   "id": "e_ex1",
+   "item": "Creme de massagem 1kg",
+   "categoria": "Consumível",
+   "unidade": "un",
+   "quantidade": 1,
+   "minimo": 2,
+   "validade": "2027-01-20",
+   "fornecedor": "Bioessência",
+   "local": "Armário 1",
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "e_ex2",
+   "item": "Papel lençol 70cm x 50m",
+   "categoria": "Higiene",
+   "unidade": "rolo",
+   "quantidade": 6,
+   "minimo": 3,
+   "validade": "",
+   "fornecedor": "Talge",
+   "local": "Prateleira inferior",
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "e_ex3",
+   "item": "Álcool 70% 1L",
+   "categoria": "Higiene",
+   "unidade": "L",
+   "quantidade": 2,
+   "minimo": 2,
+   "validade": "2026-10-22",
+   "fornecedor": "—",
+   "local": "Armário 2",
+   "obs": "Higienização da maca entre atendimentos",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "e_ex4",
+   "item": "Faixa elástica de resistência média",
+   "categoria": "Equipamento",
+   "unidade": "un",
+   "quantidade": 4,
+   "minimo": 2,
+   "validade": "",
+   "fornecedor": "LiveUp",
+   "local": "Gaveta",
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "e_ex5",
+   "item": "Bolsa térmica gel",
+   "categoria": "Equipamento",
+   "unidade": "un",
+   "quantidade": 3,
+   "minimo": 2,
+   "validade": "",
+   "fornecedor": "—",
+   "local": "Freezer da copa",
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "e_ex6",
+   "item": "Luva de procedimento M",
+   "categoria": "EPI",
+   "unidade": "cx",
+   "quantidade": 0,
+   "minimo": 1,
+   "validade": "",
+   "fornecedor": "Descarpack",
+   "local": "Armário 1",
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "movimentacoes": [
+  {
+   "id": "mv_ex1",
+   "itemId": "e_ex1",
+   "item": "Creme de massagem 1kg",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Atendimento",
+   "data": "2026-09-01",
+   "criadoEm": "2026-09-01T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex2",
+   "itemId": "e_ex2",
+   "item": "Papel lençol 70cm x 50m",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Atendimento",
+   "data": "2026-09-01",
+   "criadoEm": "2026-09-01T16:41:21.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex3",
+   "itemId": "e_ex2",
+   "item": "Papel lençol 70cm x 50m",
+   "tipo": "Entrada",
+   "qtd": 6,
+   "motivo": "Entrega da SOL-2026-0001",
+   "data": "2026-09-18",
+   "criadoEm": "2026-09-18T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex4",
+   "itemId": "e_ex1",
+   "item": "Creme de massagem 1kg",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Atendimento",
+   "data": "2026-09-15",
+   "criadoEm": "2026-09-15T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex5",
+   "itemId": "e_ex1",
+   "item": "Creme de massagem 1kg",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Atendimento",
+   "data": "2026-09-19",
+   "criadoEm": "2026-09-19T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex6",
+   "itemId": "e_ex5",
+   "item": "Bolsa térmica gel",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Atendimento",
+   "data": "2026-09-19",
+   "criadoEm": "2026-09-19T16:41:21.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex7",
+   "itemId": "e_ex6",
+   "item": "Luva de procedimento M",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Uso na sala",
+   "data": "2026-09-10",
+   "criadoEm": "2026-09-10T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "mv_ex8",
+   "itemId": "e_ex3",
+   "item": "Álcool 70% 1L",
+   "tipo": "Saída",
+   "qtd": 1,
+   "motivo": "Higienização da maca",
+   "data": "2026-09-07",
+   "criadoEm": "2026-09-07T16:41:20.083Z",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "afastamentos": [
+  {
+   "id": "af_ex1",
+   "pacienteId": "p_ex1",
+   "inicio": "2026-08-13",
+   "dias": 3,
+   "motivo": "Dor lombar",
+   "relacionado": true,
+   "obs": "Antes do início do acompanhamento.",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "af_ex2",
+   "pacienteId": "p_ex3",
+   "inicio": "2026-09-04",
+   "dias": 2,
+   "motivo": "Dor lombar",
+   "relacionado": true,
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "af_ex3",
+   "pacienteId": "p_ex2",
+   "inicio": "2026-09-16",
+   "dias": 1,
+   "motivo": "Dor cervical",
+   "relacionado": true,
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "af_h1",
+   "pacienteId": "p_ex1",
+   "inicio": "2026-05-12",
+   "dias": 4,
+   "motivo": "Dor lombar",
+   "relacionado": true,
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "af_h2",
+   "pacienteId": "p_ex3",
+   "inicio": "2026-06-09",
+   "dias": 3,
+   "motivo": "Dor lombar",
+   "relacionado": true,
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  },
+  {
+   "id": "af_h3",
+   "pacienteId": "p_ex2",
+   "inicio": "2026-07-20",
+   "dias": 2,
+   "motivo": "Dor cervical",
+   "relacionado": true,
+   "obs": "",
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "profissionais": [
+  {
+   "id": "pr_ex1",
+   "nome": "Bruno Salgado Amorim",
+   "registro": "Quiropraxista · registro DEMO-000",
+   "ativo": true,
+   "exemplo": true,
+   "ficticio": true
+  }
+ ],
+ "config": [
+  {
+   "id": "geral",
+   "empresa": "TS Teck",
+   "custoDia": 320,
+   "horaInicio": "07:00",
+   "horaFim": "17:00",
+   "passo": 30,
+   "duracao": 30,
+   "diasSemana": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "diasRetorno": 45,
+   "diasValidade": 45,
+   "janelaConsumo": 60
+  }
+ ],
+ "resumos": []
+}

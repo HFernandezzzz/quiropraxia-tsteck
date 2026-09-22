@@ -1,0 +1,2024 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="author" content="Henrique Fernandez">
+<meta name="description" content="Sistema da sala de quiropraxia da TS Teck">
+<!--
+  Sistema da Sala de Quiropraxia — TS Teck
+  Copyright (c) 2026 Henrique Fernandez. Todos os direitos reservados.
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Quiropraxia TS Teck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#FAF7F8; --surface:#FFFFFF; --surface-2:#F5F0F1; --surface-3:#EFE8EA;
+  --ink:#1A1215; --ink-2:#4A3E43; --muted:#7C6D72;
+  --line:#E9E1E4; --line-2:#D9CED2;
+  --red:#C8102E; --red-2:#9A0B23; --red-soft:#FCEDEF; --red-line:#F1CBD2;
+  --ok:#0E7C52; --ok-soft:#E4F3EC;
+  --warn:#9C5B00; --warn-soft:#FAEFDD;
+  --crit:#B3121F; --crit-soft:#FBE7E9;
+  --info:#2A4F86; --info-soft:#E8EEF8;
+  --on-red:#FFFFFF;
+  --shadow:0 1px 2px rgba(26,18,21,.05), 0 10px 26px -20px rgba(26,18,21,.45);
+  --r:10px;
+  --display:"Archivo","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+:root{color-scheme:light}
+html,body{height:100%}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:4px}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.app{display:grid;grid-template-columns:230px 1fr;min-height:100%}
+.side{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;position:sticky;top:0;height:100vh;height:100dvh;padding-top:env(safe-area-inset-top,0px)}
+.brand{display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:18px 16px 14px}
+.logo{display:block;width:138px;height:auto;color:var(--ink);flex:none}
+.brand .txt{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--red-2);font-weight:700;border-top:2px solid var(--red);padding-top:5px;width:138px}
+.navlabel{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:10px 18px 6px;font-weight:600}
+nav{display:flex;flex-direction:column;gap:1px;padding:0 10px;overflow-y:auto}
+.nav-i{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;background:none;border:0;cursor:pointer;text-align:left;color:var(--ink-2);font-weight:500;position:relative;width:100%}
+.nav-i svg{width:17px;height:17px;flex:none;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+.nav-i:hover{background:var(--surface-2);color:var(--ink)}
+.nav-i[aria-current="page"]{background:var(--red-soft);color:var(--red-2);font-weight:600}
+.nav-i[aria-current="page"] svg{opacity:1}
+.nav-i .tag{margin-left:auto;background:var(--red);color:var(--on-red);font-size:10.5px;font-weight:700;padding:1px 6px;border-radius:99px;min-width:19px;text-align:center}
+.side-foot{margin-top:auto;padding:12px 16px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dot{width:7px;height:7px;border-radius:99px;background:var(--ok);flex:none}
+.dot.off{background:var(--warn)}
+
+.main{min-width:0;display:flex;flex-direction:column}
+.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 22px;padding-top:calc(12px + env(safe-area-inset-top,0px));display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top h1{font-size:18px;font-weight:600}
+.top .sub{font-size:12px;color:var(--muted);margin-top:1px}
+.top .grow{flex:1 1 120px}
+.search{display:flex;align-items:center;gap:7px;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-width:180px}
+.search input{background:none;border:0;outline:0;width:100%;font-size:13px}
+.search svg{width:15px;height:15px;stroke:var(--muted);fill:none;stroke-width:1.8;flex:none}
+.wrap{padding:22px;display:flex;flex-direction:column;gap:18px;flex:1}
+@media (max-width:900px){
+  .app{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;align-items:center;gap:8px;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:0 12px;padding-top:env(safe-area-inset-top,0px)}
+  .brand{flex-direction:row;align-items:center;gap:8px;padding:9px 10px 9px 0}
+  .logo{width:92px}
+  .brand .txt{display:none}
+  .navlabel,.side-foot{display:none}
+  nav{flex-direction:row;padding:8px 0;gap:4px}
+  .nav-i{white-space:nowrap;padding:7px 11px}
+  .wrap,.top{padding-left:16px;padding-right:16px}
+}
+
+/* ---------- primitives ---------- */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.card-h{display:flex;align-items:center;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.card-h h2{font-size:14px;font-weight:600;letter-spacing:0}
+.card-h .grow{flex:1}
+.card-b{padding:16px}
+.btn{display:inline-flex;align-items:center;gap:7px;background:var(--red);color:var(--on-red);border:1px solid var(--red);padding:7px 13px;border-radius:8px;font-weight:600;font-size:13px;cursor:pointer;white-space:nowrap}
+.btn:hover{background:var(--red-2);border-color:var(--red-2)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.btn.ghost{background:var(--surface);color:var(--ink-2);border-color:var(--line-2)}
+.btn.ghost:hover{background:var(--surface-2);color:var(--ink)}
+.btn.sm{padding:4px 9px;font-size:12px;border-radius:7px}
+.btn.danger{background:var(--surface);color:var(--crit);border-color:var(--red-line)}
+.btn.danger:hover{background:var(--crit-soft)}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:2.5px 9px;border-radius:99px;border:1px solid transparent;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 30%,transparent)}
+.pill.warn{background:var(--warn-soft);color:var(--warn);border-color:color-mix(in srgb,var(--warn) 30%,transparent)}
+.pill.crit{background:var(--crit-soft);color:var(--crit);border-color:color-mix(in srgb,var(--crit) 32%,transparent)}
+.pill.info{background:var(--info-soft);color:var(--info);border-color:color-mix(in srgb,var(--info) 30%,transparent)}
+.pill.mute{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(158px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:13px 15px;display:flex;flex-direction:column;gap:3px;box-shadow:var(--shadow)}
+.tile .k{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tile .v{font-family:var(--display);font-size:26px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.tile .n{font-size:11.5px;color:var(--muted)}
+.tile.accent{border-left:3px solid var(--red)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+@media (max-width:1000px){.grid2,.grid3{grid-template-columns:1fr}}
+
+.tblwrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap;background:var(--surface-2)}
+td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:hover{background:var(--surface-2)}
+td .nm{font-weight:600}
+td .sm{font-size:11.5px;color:var(--muted)}
+.rowact{display:flex;gap:6px;justify-content:flex-end}
+.empty{padding:34px 18px;text-align:center;color:var(--muted);font-size:13px}
+.empty b{display:block;color:var(--ink-2);font-family:var(--display);font-size:14px;margin-bottom:3px}
+
+/* ---------- forms ---------- */
+.f{display:grid;gap:13px}
+.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:13px}
+label.fl{display:flex;flex-direction:column;gap:4px;font-size:11.5px;font-weight:600;color:var(--ink-2);min-width:0}
+label.fl input,label.fl select,label.fl textarea{background:var(--surface);border:1px solid var(--line-2);border-radius:8px;padding:7px 9px;font-size:13px;font-weight:400;width:100%}
+label.fl textarea{resize:vertical;min-height:62px}
+label.fl input:focus,label.fl select:focus,label.fl textarea:focus{border-color:var(--red);outline:0;box-shadow:0 0 0 3px var(--red-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:500}
+.chip input{accent-color:var(--red);margin:0}
+.chip:has(input:checked){background:var(--red-soft);border-color:var(--red-line);color:var(--red-2);font-weight:600}
+.sect{border-top:1px solid var(--line);padding-top:13px;margin-top:3px}
+.sect>.st{font-family:var(--display);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--red-2);margin-bottom:11px;display:flex;align-items:center;gap:7px}
+.sect>.st::after{content:"";height:1px;background:var(--red-line);flex:1}
+.itemrow{display:grid;grid-template-columns:2.4fr .7fr .9fr auto;gap:8px;align-items:end}
+@media (max-width:640px){.itemrow{grid-template-columns:1fr 1fr;}}
+.icon-btn{background:var(--surface);border:1px solid var(--line-2);border-radius:8px;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;color:var(--muted);flex:none}
+.icon-btn:hover{color:var(--crit);border-color:var(--red-line);background:var(--crit-soft)}
+.icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round}
+
+/* ---------- modal ---------- */
+.ov{position:fixed;inset:0;background:rgba(20,12,15,.5);backdrop-filter:blur(2px);z-index:100;display:flex;align-items:flex-start;justify-content:center;padding:22px 14px;overflow-y:auto}
+.modal{background:var(--surface);border:1px solid var(--line);border-radius:14px;width:min(780px,100%);box-shadow:0 30px 70px -30px rgba(0,0,0,.6);margin:auto}
+.modal-h{display:flex;align-items:flex-start;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface);border-radius:14px 14px 0 0;z-index:2}
+.modal-h h3{font-size:16px;font-weight:600}
+.modal-h .sub{font-size:12px;color:var(--muted)}
+.modal-b{padding:18px 20px}
+.modal-f{display:flex;gap:9px;justify-content:flex-end;padding:14px 20px;border-top:1px solid var(--line);position:sticky;bottom:0;background:var(--surface);border-radius:0 0 14px 14px;flex-wrap:wrap}
+
+/* ---------- misc ---------- */
+.alert{display:flex;gap:10px;align-items:flex-start;padding:10px 13px;border-radius:9px;border:1px solid;font-size:12.5px}
+.alert b{font-weight:600}
+.alert.crit{background:var(--crit-soft);border-color:var(--red-line);color:var(--crit)}
+.alert.warn{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 28%,transparent);color:var(--warn)}
+.alert.info{background:var(--info-soft);border-color:color-mix(in srgb,var(--info) 25%,transparent);color:var(--info)}
+.alert .grow{flex:1}
+.stack{display:flex;flex-direction:column;gap:9px}
+.bar{height:7px;border-radius:99px;background:var(--surface-3);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:99px}
+.hbars{display:flex;flex-direction:column;gap:9px}
+.hbar{display:grid;grid-template-columns:118px 1fr 38px;gap:10px;align-items:center;font-size:12.5px}
+.hbar .lb{color:var(--ink-2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hbar .vv{text-align:right;font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted)}
+@media (max-width:520px){.hbar{grid-template-columns:92px 1fr 32px}}
+.tl{display:flex;flex-direction:column;gap:0}
+.tl-i{display:grid;grid-template-columns:22px 1fr;gap:12px}
+.tl-i .rail{display:flex;flex-direction:column;align-items:center}
+.tl-i .bl{width:10px;height:10px;border-radius:99px;background:var(--red);margin-top:5px;flex:none}
+.tl-i .ln{width:1.5px;flex:1;background:var(--line);min-height:12px}
+.tl-i:last-child .ln{background:transparent}
+.tl-b{padding-bottom:16px;min-width:0}
+.mono{font-family:var(--mono);font-size:12px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:13px}
+.kv dt{color:var(--muted);font-size:11.5px;font-weight:600;padding-top:1px}
+.kv dd{margin:0}
+.banner{display:flex;gap:10px;align-items:center;padding:9px 14px;border-radius:9px;background:var(--surface-2);border:1px dashed var(--line-2);font-size:12.5px;color:var(--muted);flex-wrap:wrap}
+.banner .grow{flex:1;min-width:120px}
+.loading{padding:50px;text-align:center;color:var(--muted)}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px;flex-wrap:wrap}
+.seg button{background:none;border:0;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--red-2);box-shadow:var(--shadow)}
+.printhead{display:none}
+@page{size:A4;margin:14mm 13mm}
+@media print{
+  .printhead{display:flex!important;align-items:flex-end;gap:14px;border-bottom:2px solid var(--red);padding-bottom:8px;margin-bottom:16px}
+  .printhead .logo{width:120px}
+  .printhead .ph{font-family:var(--display);font-size:12px;font-weight:600;color:var(--ink-2);letter-spacing:.04em;text-transform:uppercase;padding-bottom:2px}
+  .side,.top,.modal-f,.modal-h,.no-print{display:none!important}
+  .app{display:block}.wrap{padding:0;gap:12px}
+  .card{border:1px solid var(--line);box-shadow:none;break-inside:avoid}
+  body{background:#fff;font-size:11.5px}
+  body.has-modal .app{display:none!important}
+  body.has-modal .ov{position:static;background:none;backdrop-filter:none;padding:0;display:block;overflow:visible}
+  body.has-modal .modal{width:100%;max-width:100%;border:0;border-radius:0;box-shadow:none;margin:0}
+  body.has-modal .modal-b{padding:0}
+  .tile,.hbars,table,svg{break-inside:avoid}
+  .repsec>.h{break-after:avoid}
+  .pbreak{break-before:page}
+  a[href]:after{content:""}
+}
+
+
+/* ---------- v3: comparativos e relatório ---------- */
+.delta{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;border:1px solid transparent;white-space:nowrap;font-variant-numeric:tabular-nums}
+.delta.up{background:var(--ok-soft);color:var(--ok);border-color:color-mix(in srgb,var(--ok) 32%,transparent)}
+.delta.down{background:var(--crit-soft);color:var(--crit);border-color:color-mix(in srgb,var(--crit) 32%,transparent)}
+.delta.flat{background:var(--surface-2);color:var(--muted);border-color:var(--line)}
+.tile .d{margin-top:5px}
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px}
+.cmp th{background:var(--surface-2);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);padding:8px 12px;border-bottom:1px solid var(--line);text-align:left}
+.cmp td{padding:8px 12px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+.cmp td:first-child{font-weight:600}
+.cmp td.n{text-align:right}
+.cmp tr:last-child td{border-bottom:0}
+.rep{max-width:780px;margin:0 auto;color:var(--ink)}
+.repsec{margin-top:18px}
+.repsec>.h{font-family:var(--display);font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--red-2);display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.repsec>.h::after{content:"";height:1px;background:var(--red-line);flex:1}
+.lead{font-size:13.5px;line-height:1.62;color:var(--ink-2)}
+.lead b{color:var(--ink)}
+.sign{display:grid;grid-template-columns:1fr 1fr;gap:34px;margin-top:34px}
+.sign div{border-top:1px solid var(--ink-2);padding-top:6px;font-size:11.5px;color:var(--muted);text-align:center}
+.repfoot{margin-top:22px;border-top:1px solid var(--line);padding-top:8px;font-size:10.5px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.metricsel{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.metricsel select{background:var(--surface);border:1px solid var(--line-2);border-radius:8px;padding:5px 9px;font-size:12.5px}
+
+/* ---------- v2 ---------- */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);padding:0 16px;overflow-x:auto}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:10px 12px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--red-2);border-bottom-color:var(--red)}
+.wk{display:grid;grid-template-columns:58px repeat(var(--cols,6),minmax(108px,1fr));min-width:700px}
+.wk .hd{position:sticky;top:0;background:var(--surface-2);border-bottom:1px solid var(--line);padding:7px 6px;text-align:center;font-size:11px;font-weight:600;color:var(--ink-2);z-index:1}
+.wk .hd small{display:block;color:var(--muted);font-weight:500;font-size:10px}
+.wk .hd.today{color:var(--red-2);background:var(--red-soft)}
+.wk .hr{border-bottom:1px solid var(--line);border-right:1px solid var(--line);padding:4px 5px;font-size:10.5px;color:var(--muted);text-align:right;font-family:var(--mono)}
+.wk .cel{border-bottom:1px solid var(--line);border-right:1px solid var(--line);min-height:38px;padding:3px;cursor:pointer;position:relative}
+.wk .cel:hover{background:var(--red-soft)}
+.wk .ap{display:block;width:100%;text-align:left;border:1px solid var(--red-line);background:var(--red-soft);color:var(--red-2);border-radius:6px;padding:3px 6px;font-size:11px;font-weight:600;cursor:pointer;line-height:1.25;overflow:hidden}
+.wk .ap small{display:block;font-weight:500;opacity:.85;font-size:10px}
+.wk .ap.done{background:var(--ok-soft);border-color:color-mix(in srgb,var(--ok) 30%,transparent);color:var(--ok)}
+.wk .ap.miss{background:var(--warn-soft);border-color:color-mix(in srgb,var(--warn) 30%,transparent);color:var(--warn)}
+.wk .ap.canc{background:var(--surface-2);border-color:var(--line-2);color:var(--muted);text-decoration:line-through}
+.bodymap{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start}
+.bodymap svg{background:var(--surface-2);border:1px solid var(--line);border-radius:10px;touch-action:manipulation;max-width:100%;height:auto}
+.bodymap .cap{text-align:center;font-size:11px;color:var(--muted);font-weight:600;margin-top:4px;letter-spacing:.06em;text-transform:uppercase}
+.intsel{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.intsel button{border:1px solid var(--line-2);background:var(--surface);border-radius:99px;padding:3px 11px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink-2)}
+.intsel button[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:var(--on-red)}
+.sigpad{border:1px dashed var(--line-2);border-radius:10px;background:var(--surface);touch-action:none;width:100%;max-width:420px;height:150px;display:block}
+.filechip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line-2);border-radius:8px;padding:5px 9px;font-size:12px;background:var(--surface);max-width:100%}
+.filechip a{color:var(--red-2);font-weight:600;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.filechip a:hover{text-decoration:underline}
+.mini{font-size:11px;color:var(--muted)}
+.swatch{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+.kiosk .modal{width:min(620px,100%)}
+.lock{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:10px;background:var(--surface-2);border:1px solid var(--line);font-size:13px;color:var(--ink-2)}
+.lock svg{width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:1.8;flex:none;margin-top:1px}
+.avat{width:20px;height:20px;border-radius:99px;vertical-align:-5px;margin-right:5px;object-fit:cover}
+.sw{position:relative;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;font-weight:500}
+.sw input{appearance:none;width:34px;height:19px;border-radius:99px;background:var(--line-2);position:relative;cursor:pointer;flex:none;margin:0;transition:background .15s}
+.sw input::after{content:"";position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:99px;background:var(--surface);transition:transform .15s}
+.sw input:checked{background:var(--red)}
+.sw input:checked::after{transform:translateX(15px)}
+.rep{max-width:760px;margin:0 auto}
+.rep h2{font-size:17px;margin-bottom:2px}
+.repgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+@media print{ .wk{min-width:0} .tabs{display:none} }
+</style>
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+
+<script>
+/* =====================================================================
+   ADAPTADOR DE PERSISTÊNCIA — SUBSTITUIR PELA API DA TS TECK
+   ---------------------------------------------------------------------
+   O aplicativo NÃO conhece banco de dados. Ele conversa apenas com o
+   objeto window.Sistema.servico(nome), que devolve quatro serviços:
+
+     "db"        -> banco de documentos (obrigatório)
+     "user"      -> identidade e nível de acesso do usuário logado
+     "downloads" -> entrega de arquivo (CSV/JSON) ao usuário
+     "assets"    -> upload de anexos e assinatura (opcional)
+
+   A implementação abaixo é um STUB que grava no localStorage do
+   navegador, apenas para o sistema abrir e ser navegado sem backend.
+   Para produção, troque o corpo das funções por chamadas HTTP à API.
+   A documentação técnica descreve o contrato de cada método.
+   ===================================================================== */
+(function(){
+  var KEY="tsteck_quiro_v1";
+  var mem={}; try{ mem=JSON.parse(localStorage.getItem(KEY)||"{}"); }catch(e){ mem={}; }
+  var listeners={};
+  function persist(){ try{ localStorage.setItem(KEY,JSON.stringify(mem)); }catch(e){} }
+  function emit(col){ (listeners[col]||[]).forEach(function(cb){ cb(snapshot(col)); }); }
+  function snapshot(col){
+    var o=mem[col]||{};
+    return { docs:Object.keys(o).map(function(id){ return { id:id, exists:true, data:function(){ return o[id]; }, metadata:{fromCache:false,hasPendingWrites:false} }; }) };
+  }
+  var db={
+    collection:function(col){
+      return {
+        /* GET /api/<col>  + stream (SSE/WebSocket) ou polling */
+        onSnapshot:function(next,err){
+          (listeners[col]=listeners[col]||[]).push(next);
+          setTimeout(function(){ next(snapshot(col)); },0);
+          return function(){ listeners[col]=(listeners[col]||[]).filter(function(f){ return f!==next; }); };
+        },
+        doc:function(id){
+          return {
+            /* PUT /api/<col>/<id> */
+            set:function(data){ mem[col]=mem[col]||{}; mem[col][id]=data; persist(); emit(col); return Promise.resolve(); },
+            /* DELETE /api/<col>/<id> */
+            delete:function(){ if(mem[col]) delete mem[col][id]; persist(); emit(col); return Promise.resolve(); },
+            get:function(){ return Promise.resolve({exists:!!(mem[col]&&mem[col][id]),data:function(){ return mem[col]&&mem[col][id]; }}); }
+          };
+        }
+      };
+    }
+  };
+  var user={
+    /* GET /api/me -> { id, nome, perfil: "clinico" | "operacional" } */
+    me:function(){ return Promise.resolve({id:"u_local",name:"Usuário local",canEdit:true,isOwner:true,avatarUrl:"",color:"#C8102E",email:null}); },
+    id:function(){ return Promise.resolve("u_local"); },
+    canEdit:function(){ return Promise.resolve(true); },
+    isOwner:function(){ return Promise.resolve(true); },
+    can:function(){ return Promise.resolve(true); },
+    profiles:function(ids){ var r={}; (Array.isArray(ids)?ids:[ids]).forEach(function(i){ r[i]={id:i,name:"Usuário local",avatarUrl:"",color:"#C8102E",email:null,isMe:true}; }); return Promise.resolve(r); }
+  };
+  var downloads={
+    save:function(req){
+      var blob=new Blob([req.data],{type:"application/octet-stream"});
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(blob); a.download=req.filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); },4000);
+      return Promise.resolve({status:"saved"});
+    }
+  };
+  /* assets: exige armazenamento de arquivos (disco, S3, MinIO).
+     Enquanto for null, o sistema esconde anexo e assinatura. */
+  var assets=null;
+
+  window.Sistema={ servico:function(n){
+    return Promise.resolve(n==="db"?db:n==="user"?user:n==="downloads"?downloads:n==="assets"?assets:null);
+  }};
+})();
+</script>
+
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="tsteck" viewBox="139.28 312.80 801.44 455.12"><path fill-rule="nonzero" fill="currentColor" d="M 285.953125 508.464844 L 285.953125 558.285156 L 247.804688 558.285156 L 247.804688 757.867188 L 182.851562 757.867188 L 182.851562 558.285156 L 144.386719 558.285156 L 144.386719 508.464844 Z M 437.929688 584.136719 L 377.707031 584.136719 L 377.707031 565.691406 C 377.707031 557.074219 376.917969 551.558594 375.394531 549.191406 C 373.871094 546.828125 371.347656 545.671875 367.773438 545.671875 C 363.886719 545.671875 360.941406 547.246094 358.945312 550.453125 C 356.949219 553.605469 355.949219 558.390625 355.949219 564.851562 C 355.949219 573.15625 357.105469 579.40625 359.367188 583.613281 C 361.574219 587.765625 367.667969 592.859375 377.707031 598.851562 C 406.449219 616.035156 424.582031 630.171875 432.042969 641.152344 C 439.558594 652.136719 443.289062 669.847656 443.289062 694.230469 C 443.289062 711.992188 441.1875 725.078125 437.035156 733.535156 C 432.882812 741.945312 424.894531 748.988281 412.96875 754.664062 C 401.089844 760.390625 387.269531 763.226562 371.453125 763.226562 C 354.109375 763.226562 339.34375 759.917969 327.046875 753.347656 C 314.804688 746.78125 306.816406 738.421875 302.980469 728.28125 C 299.195312 718.085938 297.304688 703.636719 297.304688 684.980469 L 297.304688 668.636719 L 357.527344 668.636719 L 357.527344 698.960938 C 357.527344 708.3125 358.367188 714.304688 360.050781 716.984375 C 361.730469 719.664062 364.726562 720.976562 369.035156 720.976562 C 373.34375 720.976562 376.550781 719.296875 378.652344 715.878906 C 380.753906 712.515625 381.804688 707.472656 381.804688 700.851562 C 381.804688 686.191406 379.808594 676.574219 375.8125 672.105469 C 371.664062 667.585938 361.574219 660.019531 345.492188 649.40625 C 329.414062 638.738281 318.796875 630.960938 313.542969 626.125 C 308.339844 621.289062 303.976562 614.617188 300.5625 606.105469 C 297.148438 597.589844 295.414062 586.710938 295.414062 573.46875 C 295.414062 554.394531 297.832031 540.417969 302.71875 531.585938 C 307.605469 522.761719 315.433594 515.875 326.3125 510.882812 C 337.191406 505.890625 350.273438 503.421875 365.671875 503.421875 C 382.488281 503.421875 396.78125 506.152344 408.660156 511.566406 C 420.480469 517.03125 428.3125 523.863281 432.148438 532.164062 C 435.984375 540.417969 437.929688 554.445312 437.929688 574.257812 Z M 437.929688 584.136719 "/><path fill-rule="nonzero" fill="currentColor" d="M 551.953125 509.640625 L 551.953125 545.167969 L 524.742188 545.167969 L 524.742188 687.511719 L 478.421875 687.511719 L 478.421875 545.167969 L 450.988281 545.167969 L 450.988281 509.640625 Z M 562.523438 509.640625 L 639.652344 509.640625 L 639.652344 545.167969 L 608.84375 545.167969 L 608.84375 579.125 L 637.628906 579.125 L 637.628906 612.855469 L 608.84375 612.855469 L 608.84375 651.980469 L 642.800781 651.980469 L 642.800781 687.511719 L 562.523438 687.511719 Z M 763.890625 587.21875 L 717.566406 587.21875 L 717.566406 556.335938 C 717.566406 547.34375 717.082031 541.757812 716.105469 539.511719 C 715.132812 537.300781 712.957031 536.175781 709.621094 536.175781 C 705.875 536.175781 703.476562 537.523438 702.464844 540.222656 C 701.453125 542.957031 700.925781 548.804688 700.925781 557.800781 L 700.925781 640.328125 C 700.925781 648.984375 701.453125 654.605469 702.464844 657.265625 C 703.476562 659.890625 705.761719 661.203125 709.285156 661.203125 C 712.695312 661.203125 714.945312 659.890625 715.992188 657.226562 C 717.042969 654.605469 717.566406 648.382812 717.566406 638.601562 L 717.566406 616.226562 L 763.890625 616.226562 L 763.890625 623.160156 C 763.890625 641.601562 762.578125 654.679688 759.992188 662.363281 C 757.40625 670.082031 751.636719 676.828125 742.753906 682.640625 C 733.832031 688.449219 722.890625 691.332031 709.847656 691.332031 C 696.316406 691.332031 685.148438 688.898438 676.34375 683.988281 C 667.574219 679.078125 661.726562 672.292969 658.878906 663.597656 C 656.027344 654.90625 654.605469 641.863281 654.605469 624.433594 L 654.605469 572.492188 C 654.605469 559.671875 655.054688 550.078125 655.917969 543.671875 C 656.816406 537.261719 659.402344 531.078125 663.789062 525.15625 C 668.132812 519.234375 674.167969 514.550781 681.890625 511.140625 C 689.609375 507.730469 698.492188 506.042969 708.535156 506.042969 C 722.140625 506.042969 733.382812 508.667969 742.265625 513.949219 C 751.109375 519.199219 756.917969 525.753906 759.730469 533.625 C 762.503906 541.496094 763.890625 553.714844 763.890625 570.316406 Z M 890.753906 509.640625 L 864.332031 589.957031 L 893.226562 687.511719 L 845.554688 687.511719 L 826.777344 611.28125 L 826.777344 687.511719 L 780.457031 687.511719 L 780.457031 509.640625 L 826.777344 509.640625 L 826.777344 578.75 L 847.578125 509.640625 Z M 890.753906 509.640625 "/><path fill-rule="nonzero" fill="currentColor" d="M 936 511.878906 C 936 521.46875 928.308594 529.144531 918.324219 529.144531 C 908.535156 529.144531 900.546875 521.46875 900.546875 511.878906 C 900.546875 502.402344 908.535156 494.609375 918.421875 494.609375 C 928.308594 494.609375 936 502.402344 936 511.878906 M 905.851562 511.988281 C 905.851562 519.066406 911.132812 524.851562 918.324219 524.851562 C 925.511719 524.960938 930.804688 519.066406 930.804688 511.878906 C 930.804688 504.796875 925.511719 498.910156 918.222656 498.910156 C 911.132812 498.910156 905.851562 504.796875 905.851562 511.988281 M 916.128906 519.976562 L 911.238281 519.976562 L 911.238281 504.296875 C 912.34375 504.085938 915.039062 503.699219 918.222656 503.699219 C 921.921875 503.699219 923.417969 504.195312 924.613281 504.996094 C 925.609375 505.589844 926.304688 506.792969 926.304688 508.382812 C 926.304688 509.984375 924.816406 511.382812 922.714844 511.988281 L 922.714844 512.175781 C 924.421875 512.683594 925.414062 513.980469 925.902344 516.167969 C 926.414062 518.472656 926.710938 519.472656 927.011719 519.976562 L 921.605469 519.976562 C 921.117188 519.367188 920.824219 518.074219 920.421875 516.574219 C 920.125 514.976562 919.324219 514.28125 917.730469 514.28125 L 916.128906 514.28125 Z M 916.332031 510.976562 L 917.730469 510.976562 C 919.617188 510.976562 920.71875 510.285156 920.71875 509.089844 C 920.71875 507.785156 919.617188 507.097656 917.929688 507.097656 C 917.324219 507.097656 916.726562 507.1875 916.332031 507.1875 Z M 916.332031 510.976562 "/><path fill-rule="nonzero" fill="currentColor" d="M 485.167969 711.640625 L 487.886719 714.570312 C 488.671875 713.949219 489.277344 713.167969 489.695312 712.222656 C 490.121094 711.273438 490.332031 710.238281 490.332031 709.117188 C 490.332031 708.367188 490.246094 707.648438 490.070312 706.964844 C 489.894531 706.28125 489.636719 705.664062 489.304688 705.113281 C 488.609375 703.964844 487.703125 703.078125 486.585938 702.449219 C 485.460938 701.820312 484.222656 701.507812 482.859375 701.507812 C 481.847656 701.507812 480.882812 701.695312 479.96875 702.074219 C 479.054688 702.449219 478.246094 702.992188 477.542969 703.695312 C 476.839844 704.398438 476.300781 705.207031 475.925781 706.125 C 475.550781 707.042969 475.363281 708.007812 475.363281 709.019531 C 475.363281 710.316406 475.625 711.484375 476.144531 712.519531 C 476.667969 713.5625 477.449219 714.457031 478.496094 715.210938 C 479.089844 715.644531 479.742188 715.976562 480.449219 716.195312 C 481.164062 716.417969 481.90625 716.527344 482.683594 716.527344 C 483.371094 716.527344 484.003906 716.460938 484.589844 716.328125 C 485.175781 716.195312 485.71875 715.984375 486.21875 715.703125 L 482.46875 711.640625 Z M 492.914062 719.96875 L 490.210938 719.96875 L 487.761719 717.34375 C 487.035156 717.773438 486.238281 718.089844 485.371094 718.300781 C 484.507812 718.511719 483.5625 718.613281 482.542969 718.613281 C 481.503906 718.613281 480.519531 718.457031 479.578125 718.152344 C 478.636719 717.851562 477.765625 717.398438 476.972656 716.804688 C 475.6875 715.855469 474.710938 714.71875 474.046875 713.394531 C 473.382812 712.066406 473.046875 710.609375 473.046875 709.019531 C 473.046875 707.738281 473.296875 706.511719 473.789062 705.339844 C 474.28125 704.164062 474.992188 703.117188 475.917969 702.199219 C 476.859375 701.292969 477.921875 700.601562 479.109375 700.117188 C 480.296875 699.636719 481.546875 699.398438 482.859375 699.398438 C 484.167969 699.398438 485.390625 699.613281 486.539062 700.035156 C 487.683594 700.464844 488.71875 701.101562 489.648438 701.949219 C 490.636719 702.84375 491.390625 703.898438 491.914062 705.117188 C 492.4375 706.339844 492.699219 707.648438 492.699219 709.042969 C 492.699219 710.519531 492.417969 711.863281 491.859375 713.082031 C 491.296875 714.300781 490.476562 715.335938 489.40625 716.191406 Z M 499.234375 699.808594 L 501.449219 699.808594 L 501.449219 711.257812 C 501.449219 713.117188 501.84375 714.480469 502.636719 715.351562 C 503.429688 716.21875 504.667969 716.65625 506.359375 716.65625 C 508.054688 716.65625 509.292969 716.21875 510.085938 715.351562 C 510.878906 714.480469 511.273438 713.117188 511.273438 711.257812 L 511.273438 699.808594 L 513.484375 699.808594 L 513.484375 711.257812 C 513.484375 713.742188 512.894531 715.601562 511.710938 716.839844 C 510.523438 718.070312 508.738281 718.691406 506.355469 718.691406 C 503.976562 718.691406 502.199219 718.070312 501.011719 716.839844 C 499.828125 715.601562 499.234375 713.742188 499.234375 711.257812 Z M 526.230469 703.925781 L 523.308594 710.691406 L 529.160156 710.691406 Z M 526.230469 699.089844 L 534.59375 718.199219 L 532.226562 718.199219 L 529.835938 712.566406 L 522.65625 712.566406 L 520.269531 718.199219 L 517.902344 718.199219 Z M 539.535156 718.199219 L 539.535156 699.808594 L 541.71875 699.808594 L 541.71875 716.117188 L 548.664062 716.117188 L 548.664062 718.199219 Z M 554.324219 699.808594 L 556.511719 699.808594 L 556.511719 718.199219 L 554.324219 718.199219 Z M 566.203125 716.144531 L 567.597656 716.144531 C 569.855469 716.144531 571.421875 716.046875 572.292969 715.847656 C 573.164062 715.648438 573.886719 715.316406 574.464844 714.835938 C 575.21875 714.210938 575.792969 713.398438 576.183594 712.410156 C 576.578125 711.414062 576.773438 710.277344 576.773438 708.996094 C 576.773438 707.710938 576.582031 706.578125 576.191406 705.601562 C 575.800781 704.628906 575.226562 703.824219 574.464844 703.183594 C 573.886719 702.699219 573.152344 702.355469 572.261719 702.152344 C 571.371094 701.945312 569.816406 701.84375 567.597656 701.84375 L 566.203125 701.84375 Z M 563.992188 718.199219 L 563.992188 699.808594 L 567.523438 699.808594 C 570.136719 699.808594 571.972656 699.941406 573.042969 700.203125 C 574.109375 700.46875 575.046875 700.910156 575.851562 701.527344 C 576.902344 702.34375 577.707031 703.382812 578.25 704.644531 C 578.796875 705.910156 579.066406 707.367188 579.066406 709.019531 C 579.066406 710.660156 578.796875 712.109375 578.253906 713.367188 C 577.714844 714.628906 576.914062 715.667969 575.851562 716.480469 C 575.042969 717.101562 574.128906 717.539062 573.105469 717.808594 C 572.078125 718.066406 570.480469 718.199219 568.3125 718.199219 Z M 591.039062 703.925781 L 588.113281 710.691406 L 593.96875 710.691406 Z M 591.039062 699.089844 L 599.402344 718.199219 L 597.03125 718.199219 L 594.644531 712.566406 L 587.464844 712.566406 L 585.074219 718.199219 L 582.710938 718.199219 Z M 606.554688 716.144531 L 607.945312 716.144531 C 610.207031 716.144531 611.769531 716.046875 612.640625 715.847656 C 613.511719 715.648438 614.234375 715.316406 614.8125 714.835938 C 615.570312 714.210938 616.144531 713.398438 616.53125 712.410156 C 616.929688 711.414062 617.125 710.277344 617.125 708.996094 C 617.125 707.710938 616.933594 706.578125 616.542969 705.601562 C 616.152344 704.628906 615.578125 703.824219 614.8125 703.183594 C 614.234375 702.699219 613.503906 702.355469 612.609375 702.152344 C 611.71875 701.945312 610.167969 701.84375 607.945312 701.84375 L 606.554688 701.84375 Z M 604.339844 718.199219 L 604.339844 699.808594 L 607.875 699.808594 C 610.484375 699.808594 612.324219 699.941406 613.390625 700.203125 C 614.457031 700.46875 615.398438 700.910156 616.199219 701.527344 C 617.253906 702.34375 618.054688 703.382812 618.601562 704.644531 C 619.144531 705.910156 619.414062 707.367188 619.414062 709.019531 C 619.414062 710.660156 619.144531 712.109375 618.605469 713.367188 C 618.0625 714.628906 617.261719 715.667969 616.199219 716.480469 C 615.394531 717.101562 614.480469 717.539062 613.457031 717.808594 C 612.425781 718.066406 610.832031 718.199219 608.664062 718.199219 Z M 626.027344 718.199219 L 626.027344 699.808594 L 635.726562 699.808594 L 635.726562 701.816406 L 628.214844 701.816406 L 628.214844 707.089844 L 635.726562 707.089844 L 635.726562 709.121094 L 628.214844 709.121094 L 628.214844 716.167969 L 635.726562 716.167969 L 635.726562 718.199219 Z M 654.605469 718.199219 L 654.605469 699.808594 L 664.304688 699.808594 L 664.304688 701.816406 L 656.792969 701.816406 L 656.792969 707.089844 L 664.304688 707.089844 L 664.304688 709.121094 L 656.792969 709.121094 L 656.792969 716.167969 L 664.304688 716.167969 L 664.304688 718.199219 Z M 671.042969 718.199219 L 671.042969 699.808594 L 673.230469 699.808594 L 673.230469 716.117188 L 680.175781 716.117188 L 680.175781 718.199219 Z M 685.808594 718.199219 L 685.808594 699.808594 L 695.503906 699.808594 L 695.503906 701.816406 L 687.996094 701.816406 L 687.996094 707.089844 L 695.503906 707.089844 L 695.503906 709.121094 L 687.996094 709.121094 L 687.996094 716.167969 L 695.503906 716.167969 L 695.503906 718.199219 Z M 707.496094 718.921875 L 699.722656 699.808594 L 702.09375 699.808594 L 707.496094 713.878906 L 712.871094 699.808594 L 715.234375 699.808594 Z M 725.554688 703.925781 L 722.632812 710.691406 L 728.484375 710.691406 Z M 725.554688 699.089844 L 733.921875 718.199219 L 731.550781 718.199219 L 729.164062 712.566406 L 721.980469 712.566406 L 719.59375 718.199219 L 717.226562 718.199219 Z M 741.070312 716.144531 L 742.464844 716.144531 C 744.722656 716.144531 746.289062 716.046875 747.160156 715.847656 C 748.027344 715.648438 748.753906 715.316406 749.332031 714.835938 C 750.085938 714.210938 750.664062 713.398438 751.050781 712.410156 C 751.445312 711.414062 751.644531 710.277344 751.644531 708.996094 C 751.644531 707.710938 751.449219 706.578125 751.058594 705.601562 C 750.671875 704.628906 750.09375 703.824219 749.332031 703.183594 C 748.753906 702.699219 748.019531 702.355469 747.128906 702.152344 C 746.238281 701.945312 744.683594 701.84375 742.464844 701.84375 L 741.070312 701.84375 Z M 738.859375 718.199219 L 738.859375 699.808594 L 742.390625 699.808594 C 745.003906 699.808594 746.839844 699.941406 747.910156 700.203125 C 748.976562 700.46875 749.914062 700.910156 750.71875 701.527344 C 751.773438 702.34375 752.574219 703.382812 753.117188 704.644531 C 753.664062 705.910156 753.933594 707.367188 753.933594 709.019531 C 753.933594 710.660156 753.664062 712.109375 753.121094 713.367188 C 752.582031 714.628906 751.78125 715.667969 750.71875 716.480469 C 749.910156 717.101562 749 717.539062 747.972656 717.808594 C 746.945312 718.066406 745.351562 718.199219 743.179688 718.199219 Z M 765.90625 703.925781 L 762.980469 710.691406 L 768.835938 710.691406 Z M 765.90625 699.089844 L 774.269531 718.199219 L 771.898438 718.199219 L 769.511719 712.566406 L 762.332031 712.566406 L 759.941406 718.199219 L 757.578125 718.199219 Z M 798.046875 707.992188 C 799.242188 708.503906 800.148438 709.179688 800.75 710.027344 C 801.359375 710.871094 801.664062 711.875 801.664062 713.027344 C 801.664062 714.714844 801.125 716.078125 800.046875 717.113281 C 798.972656 718.144531 797.550781 718.664062 795.769531 718.664062 C 794.320312 718.664062 793.105469 718.296875 792.125 717.554688 C 791.148438 716.8125 790.488281 715.761719 790.140625 714.398438 L 792.125 713.417969 C 792.394531 714.53125 792.835938 715.375 793.457031 715.949219 C 794.066406 716.523438 794.839844 716.8125 795.769531 716.8125 C 796.867188 716.8125 797.753906 716.496094 798.4375 715.863281 C 799.113281 715.230469 799.453125 714.40625 799.453125 713.394531 C 799.453125 712.570312 799.214844 711.859375 798.738281 711.253906 C 798.269531 710.644531 797.558594 710.132812 796.601562 709.714844 L 794.363281 708.757812 C 793.140625 708.246094 792.226562 707.589844 791.632812 706.785156 C 791.03125 705.984375 790.730469 705.019531 790.730469 703.894531 C 790.730469 702.589844 791.21875 701.507812 792.191406 700.652344 C 793.164062 699.800781 794.402344 699.371094 795.910156 699.371094 C 797.011719 699.371094 797.972656 699.609375 798.777344 700.074219 C 799.589844 700.546875 800.21875 701.238281 800.667969 702.15625 L 798.859375 703.308594 C 798.453125 702.597656 797.988281 702.070312 797.480469 701.722656 C 796.96875 701.375 796.390625 701.199219 795.75 701.199219 C 794.925781 701.199219 794.253906 701.453125 793.730469 701.953125 C 793.207031 702.453125 792.945312 703.09375 792.945312 703.875 C 792.945312 704.523438 793.144531 705.09375 793.550781 705.566406 C 793.949219 706.046875 794.574219 706.46875 795.417969 706.835938 Z M 807.609375 718.199219 L 807.609375 699.808594 L 817.308594 699.808594 L 817.308594 701.816406 L 809.796875 701.816406 L 809.796875 707.089844 L 817.308594 707.089844 L 817.308594 709.121094 L 809.796875 709.121094 L 809.796875 716.167969 L 817.308594 716.167969 L 817.308594 718.199219 Z M 832.613281 718.921875 L 826.898438 705.710938 L 824.585938 718.199219 L 822.453125 718.199219 L 826.179688 699.089844 L 832.613281 714.296875 L 839.042969 699.089844 L 842.773438 718.199219 L 840.636719 718.199219 L 838.300781 705.710938 Z M 850.769531 709.945312 L 850.769531 718.199219 L 848.632812 718.199219 L 848.632812 699.808594 L 852.488281 699.808594 C 853.835938 699.808594 854.832031 699.882812 855.464844 700.023438 C 856.105469 700.164062 856.65625 700.402344 857.125 700.726562 C 857.714844 701.144531 858.171875 701.71875 858.503906 702.445312 C 858.832031 703.175781 859 703.980469 859 704.867188 C 859 705.761719 858.832031 706.566406 858.503906 707.296875 C 858.171875 708.023438 857.714844 708.597656 857.125 709.015625 C 856.65625 709.347656 856.105469 709.589844 855.476562 709.730469 C 854.839844 709.871094 853.847656 709.945312 852.488281 709.945312 Z M 850.769531 707.964844 L 851.875 707.964844 C 853.746094 707.964844 855.011719 707.746094 855.660156 707.304688 C 856.304688 706.867188 856.632812 706.097656 856.632812 705.003906 C 856.632812 703.832031 856.296875 703.007812 855.632812 702.53125 C 854.96875 702.054688 853.714844 701.816406 851.875 701.816406 L 850.769531 701.816406 Z M 864.730469 718.199219 L 864.730469 699.808594 L 869.050781 699.808594 C 870.28125 699.808594 871.1875 699.878906 871.757812 700.015625 C 872.332031 700.15625 872.835938 700.394531 873.273438 700.726562 C 873.820312 701.152344 874.238281 701.726562 874.539062 702.441406 C 874.84375 703.15625 874.996094 703.949219 874.996094 704.820312 C 874.996094 706.324219 874.574219 707.476562 873.734375 708.253906 C 872.890625 709.039062 871.65625 709.429688 870.035156 709.429688 L 869.644531 709.429688 L 876.667969 718.199219 L 873.886719 718.199219 L 867.175781 709.429688 L 866.863281 709.429688 L 866.863281 718.199219 Z M 866.863281 701.660156 L 866.863281 707.808594 L 868.53125 707.808594 C 870.246094 707.808594 871.386719 707.589844 871.96875 707.148438 C 872.546875 706.710938 872.832031 705.945312 872.832031 704.847656 C 872.832031 703.667969 872.539062 702.84375 871.941406 702.367188 C 871.347656 701.898438 870.210938 701.660156 868.53125 701.660156 Z M 881.53125 718.199219 L 881.53125 699.808594 L 891.230469 699.808594 L 891.230469 701.816406 L 883.71875 701.816406 L 883.71875 707.089844 L 891.230469 707.089844 L 891.230469 709.121094 L 883.71875 709.121094 L 883.71875 716.167969 L 891.230469 716.167969 L 891.230469 718.199219 Z M 881.53125 718.199219 "/><path fill-rule="nonzero" fill="currentColor" d="M 485.167969 711.640625 L 487.886719 714.570312 C 488.671875 713.949219 489.277344 713.167969 489.695312 712.222656 C 490.121094 711.273438 490.332031 710.238281 490.332031 709.117188 C 490.332031 708.367188 490.246094 707.648438 490.070312 706.964844 C 489.894531 706.28125 489.636719 705.664062 489.304688 705.113281 C 488.609375 703.964844 487.703125 703.078125 486.585938 702.449219 C 485.460938 701.820312 484.222656 701.507812 482.859375 701.507812 C 481.847656 701.507812 480.882812 701.695312 479.96875 702.074219 C 479.054688 702.449219 478.246094 702.992188 477.542969 703.695312 C 476.839844 704.398438 476.300781 705.207031 475.925781 706.125 C 475.550781 707.042969 475.363281 708.007812 475.363281 709.019531 C 475.363281 710.316406 475.625 711.484375 476.144531 712.519531 C 476.667969 713.5625 477.449219 714.457031 478.496094 715.210938 C 479.089844 715.644531 479.742188 715.976562 480.449219 716.195312 C 481.164062 716.417969 481.90625 716.527344 482.683594 716.527344 C 483.371094 716.527344 484.003906 716.460938 484.589844 716.328125 C 485.175781 716.195312 485.71875 715.984375 486.21875 715.703125 L 482.46875 711.640625 Z M 492.914062 719.96875 L 490.210938 719.96875 L 487.761719 717.34375 C 487.035156 717.773438 486.238281 718.089844 485.371094 718.300781 C 484.507812 718.511719 483.5625 718.613281 482.542969 718.613281 C 481.503906 718.613281 480.519531 718.457031 479.578125 718.152344 C 478.636719 717.851562 477.765625 717.398438 476.972656 716.804688 C 475.6875 715.855469 474.710938 714.71875 474.046875 713.394531 C 473.382812 712.066406 473.046875 710.609375 473.046875 709.019531 C 473.046875 707.738281 473.296875 706.511719 473.789062 705.339844 C 474.28125 704.164062 474.992188 703.117188 475.917969 702.199219 C 476.859375 701.292969 477.921875 700.601562 479.109375 700.117188 C 480.296875 699.636719 481.546875 699.398438 482.859375 699.398438 C 484.167969 699.398438 485.390625 699.613281 486.539062 700.035156 C 487.683594 700.464844 488.71875 701.101562 489.648438 701.949219 C 490.636719 702.84375 491.390625 703.898438 491.914062 705.117188 C 492.4375 706.339844 492.699219 707.648438 492.699219 709.042969 C 492.699219 710.519531 492.417969 711.863281 491.859375 713.082031 C 491.296875 714.300781 490.476562 715.335938 489.40625 716.191406 Z M 499.234375 699.808594 L 501.449219 699.808594 L 501.449219 711.257812 C 501.449219 713.117188 501.84375 714.480469 502.636719 715.351562 C 503.429688 716.21875 504.667969 716.65625 506.359375 716.65625 C 508.054688 716.65625 509.292969 716.21875 510.085938 715.351562 C 510.878906 714.480469 511.273438 713.117188 511.273438 711.257812 L 511.273438 699.808594 L 513.484375 699.808594 L 513.484375 711.257812 C 513.484375 713.742188 512.894531 715.601562 511.710938 716.839844 C 510.523438 718.070312 508.738281 718.691406 506.355469 718.691406 C 503.976562 718.691406 502.199219 718.070312 501.011719 716.839844 C 499.828125 715.601562 499.234375 713.742188 499.234375 711.257812 Z M 526.230469 703.925781 L 523.308594 710.691406 L 529.160156 710.691406 Z M 526.230469 699.089844 L 534.59375 718.199219 L 532.226562 718.199219 L 529.835938 712.566406 L 522.65625 712.566406 L 520.269531 718.199219 L 517.902344 718.199219 Z M 539.535156 718.199219 L 539.535156 699.808594 L 541.71875 699.808594 L 541.71875 716.117188 L 548.664062 716.117188 L 548.664062 718.199219 Z M 554.324219 699.808594 L 556.511719 699.808594 L 556.511719 718.199219 L 554.324219 718.199219 Z M 566.203125 716.144531 L 567.597656 716.144531 C 569.855469 716.144531 571.421875 716.046875 572.292969 715.847656 C 573.164062 715.648438 573.886719 715.316406 574.464844 714.835938 C 575.21875 714.210938 575.792969 713.398438 576.183594 712.410156 C 576.578125 711.414062 576.773438 710.277344 576.773438 708.996094 C 576.773438 707.710938 576.582031 706.578125 576.191406 705.601562 C 575.800781 704.628906 575.226562 703.824219 574.464844 703.183594 C 573.886719 702.699219 573.152344 702.355469 572.261719 702.152344 C 571.371094 701.945312 569.816406 701.84375 567.597656 701.84375 L 566.203125 701.84375 Z M 563.992188 718.199219 L 563.992188 699.808594 L 567.523438 699.808594 C 570.136719 699.808594 571.972656 699.941406 573.042969 700.203125 C 574.109375 700.46875 575.046875 700.910156 575.851562 701.527344 C 576.902344 702.34375 577.707031 703.382812 578.25 704.644531 C 578.796875 705.910156 579.066406 707.367188 579.066406 709.019531 C 579.066406 710.660156 578.796875 712.109375 578.253906 713.367188 C 577.714844 714.628906 576.914062 715.667969 575.851562 716.480469 C 575.042969 717.101562 574.128906 717.539062 573.105469 717.808594 C 572.078125 718.066406 570.480469 718.199219 568.3125 718.199219 Z M 591.039062 703.925781 L 588.113281 710.691406 L 593.96875 710.691406 Z M 591.039062 699.089844 L 599.402344 718.199219 L 597.03125 718.199219 L 594.644531 712.566406 L 587.464844 712.566406 L 585.074219 718.199219 L 582.710938 718.199219 Z M 606.554688 716.144531 L 607.945312 716.144531 C 610.207031 716.144531 611.769531 716.046875 612.640625 715.847656 C 613.511719 715.648438 614.234375 715.316406 614.8125 714.835938 C 615.570312 714.210938 616.144531 713.398438 616.53125 712.410156 C 616.929688 711.414062 617.125 710.277344 617.125 708.996094 C 617.125 707.710938 616.933594 706.578125 616.542969 705.601562 C 616.152344 704.628906 615.578125 703.824219 614.8125 703.183594 C 614.234375 702.699219 613.503906 702.355469 612.609375 702.152344 C 611.71875 701.945312 610.167969 701.84375 607.945312 701.84375 L 606.554688 701.84375 Z M 604.339844 718.199219 L 604.339844 699.808594 L 607.875 699.808594 C 610.484375 699.808594 612.324219 699.941406 613.390625 700.203125 C 614.457031 700.46875 615.398438 700.910156 616.199219 701.527344 C 617.253906 702.34375 618.054688 703.382812 618.601562 704.644531 C 619.144531 705.910156 619.414062 707.367188 619.414062 709.019531 C 619.414062 710.660156 619.144531 712.109375 618.605469 713.367188 C 618.0625 714.628906 617.261719 715.667969 616.199219 716.480469 C 615.394531 717.101562 614.480469 717.539062 613.457031 717.808594 C 612.425781 718.066406 610.832031 718.199219 608.664062 718.199219 Z M 626.027344 718.199219 L 626.027344 699.808594 L 635.726562 699.808594 L 635.726562 701.816406 L 628.214844 701.816406 L 628.214844 707.089844 L 635.726562 707.089844 L 635.726562 709.121094 L 628.214844 709.121094 L 628.214844 716.167969 L 635.726562 716.167969 L 635.726562 718.199219 Z M 654.605469 718.199219 L 654.605469 699.808594 L 664.304688 699.808594 L 664.304688 701.816406 L 656.792969 701.816406 L 656.792969 707.089844 L 664.304688 707.089844 L 664.304688 709.121094 L 656.792969 709.121094 L 656.792969 716.167969 L 664.304688 716.167969 L 664.304688 718.199219 Z M 671.042969 718.199219 L 671.042969 699.808594 L 673.230469 699.808594 L 673.230469 716.117188 L 680.175781 716.117188 L 680.175781 718.199219 Z M 685.808594 718.199219 L 685.808594 699.808594 L 695.503906 699.808594 L 695.503906 701.816406 L 687.996094 701.816406 L 687.996094 707.089844 L 695.503906 707.089844 L 695.503906 709.121094 L 687.996094 709.121094 L 687.996094 716.167969 L 695.503906 716.167969 L 695.503906 718.199219 Z M 707.496094 718.921875 L 699.722656 699.808594 L 702.09375 699.808594 L 707.496094 713.878906 L 712.871094 699.808594 L 715.234375 699.808594 Z M 725.554688 703.925781 L 722.632812 710.691406 L 728.484375 710.691406 Z M 725.554688 699.089844 L 733.921875 718.199219 L 731.550781 718.199219 L 729.164062 712.566406 L 721.980469 712.566406 L 719.59375 718.199219 L 717.226562 718.199219 Z M 741.070312 716.144531 L 742.464844 716.144531 C 744.722656 716.144531 746.289062 716.046875 747.160156 715.847656 C 748.027344 715.648438 748.753906 715.316406 749.332031 714.835938 C 750.085938 714.210938 750.664062 713.398438 751.050781 712.410156 C 751.445312 711.414062 751.644531 710.277344 751.644531 708.996094 C 751.644531 707.710938 751.449219 706.578125 751.058594 705.601562 C 750.671875 704.628906 750.09375 703.824219 749.332031 703.183594 C 748.753906 702.699219 748.019531 702.355469 747.128906 702.152344 C 746.238281 701.945312 744.683594 701.84375 742.464844 701.84375 L 741.070312 701.84375 Z M 738.859375 718.199219 L 738.859375 699.808594 L 742.390625 699.808594 C 745.003906 699.808594 746.839844 699.941406 747.910156 700.203125 C 748.976562 700.46875 749.914062 700.910156 750.71875 701.527344 C 751.773438 702.34375 752.574219 703.382812 753.117188 704.644531 C 753.664062 705.910156 753.933594 707.367188 753.933594 709.019531 C 753.933594 710.660156 753.664062 712.109375 753.121094 713.367188 C 752.582031 714.628906 751.78125 715.667969 750.71875 716.480469 C 749.910156 717.101562 749 717.539062 747.972656 717.808594 C 746.945312 718.066406 745.351562 718.199219 743.179688 718.199219 Z M 765.90625 703.925781 L 762.980469 710.691406 L 768.835938 710.691406 Z M 765.90625 699.089844 L 774.269531 718.199219 L 771.898438 718.199219 L 769.511719 712.566406 L 762.332031 712.566406 L 759.941406 718.199219 L 757.578125 718.199219 Z M 798.046875 707.992188 C 799.242188 708.503906 800.148438 709.179688 800.75 710.027344 C 801.359375 710.871094 801.664062 711.875 801.664062 713.027344 C 801.664062 714.714844 801.125 716.078125 800.046875 717.113281 C 798.972656 718.144531 797.550781 718.664062 795.769531 718.664062 C 794.320312 718.664062 793.105469 718.296875 792.125 717.554688 C 791.148438 716.8125 790.488281 715.761719 790.140625 714.398438 L 792.125 713.417969 C 792.394531 714.53125 792.835938 715.375 793.457031 715.949219 C 794.066406 716.523438 794.839844 716.8125 795.769531 716.8125 C 796.867188 716.8125 797.753906 716.496094 798.4375 715.863281 C 799.113281 715.230469 799.453125 714.40625 799.453125 713.394531 C 799.453125 712.570312 799.214844 711.859375 798.738281 711.253906 C 798.269531 710.644531 797.558594 710.132812 796.601562 709.714844 L 794.363281 708.757812 C 793.140625 708.246094 792.226562 707.589844 791.632812 706.785156 C 791.03125 705.984375 790.730469 705.019531 790.730469 703.894531 C 790.730469 702.589844 791.21875 701.507812 792.191406 700.652344 C 793.164062 699.800781 794.402344 699.371094 795.910156 699.371094 C 797.011719 699.371094 797.972656 699.609375 798.777344 700.074219 C 799.589844 700.546875 800.21875 701.238281 800.667969 702.15625 L 798.859375 703.308594 C 798.453125 702.597656 797.988281 702.070312 797.480469 701.722656 C 796.96875 701.375 796.390625 701.199219 795.75 701.199219 C 794.925781 701.199219 794.253906 701.453125 793.730469 701.953125 C 793.207031 702.453125 792.945312 703.09375 792.945312 703.875 C 792.945312 704.523438 793.144531 705.09375 793.550781 705.566406 C 793.949219 706.046875 794.574219 706.46875 795.417969 706.835938 Z M 807.609375 718.199219 L 807.609375 699.808594 L 817.308594 699.808594 L 817.308594 701.816406 L 809.796875 701.816406 L 809.796875 707.089844 L 817.308594 707.089844 L 817.308594 709.121094 L 809.796875 709.121094 L 809.796875 716.167969 L 817.308594 716.167969 L 817.308594 718.199219 Z M 832.613281 718.921875 L 826.898438 705.710938 L 824.585938 718.199219 L 822.453125 718.199219 L 826.179688 699.089844 L 832.613281 714.296875 L 839.042969 699.089844 L 842.773438 718.199219 L 840.636719 718.199219 L 838.300781 705.710938 Z M 850.769531 709.945312 L 850.769531 718.199219 L 848.632812 718.199219 L 848.632812 699.808594 L 852.488281 699.808594 C 853.835938 699.808594 854.832031 699.882812 855.464844 700.023438 C 856.105469 700.164062 856.65625 700.402344 857.125 700.726562 C 857.714844 701.144531 858.171875 701.71875 858.503906 702.445312 C 858.832031 703.175781 859 703.980469 859 704.867188 C 859 705.761719 858.832031 706.566406 858.503906 707.296875 C 858.171875 708.023438 857.714844 708.597656 857.125 709.015625 C 856.65625 709.347656 856.105469 709.589844 855.476562 709.730469 C 854.839844 709.871094 853.847656 709.945312 852.488281 709.945312 Z M 850.769531 707.964844 L 851.875 707.964844 C 853.746094 707.964844 855.011719 707.746094 855.660156 707.304688 C 856.304688 706.867188 856.632812 706.097656 856.632812 705.003906 C 856.632812 703.832031 856.296875 703.007812 855.632812 702.53125 C 854.96875 702.054688 853.714844 701.816406 851.875 701.816406 L 850.769531 701.816406 Z M 864.730469 718.199219 L 864.730469 699.808594 L 869.050781 699.808594 C 870.28125 699.808594 871.1875 699.878906 871.757812 700.015625 C 872.332031 700.15625 872.835938 700.394531 873.273438 700.726562 C 873.820312 701.152344 874.238281 701.726562 874.539062 702.441406 C 874.84375 703.15625 874.996094 703.949219 874.996094 704.820312 C 874.996094 706.324219 874.574219 707.476562 873.734375 708.253906 C 872.890625 709.039062 871.65625 709.429688 870.035156 709.429688 L 869.644531 709.429688 L 876.667969 718.199219 L 873.886719 718.199219 L 867.175781 709.429688 L 866.863281 709.429688 L 866.863281 718.199219 Z M 866.863281 701.660156 L 866.863281 707.808594 L 868.53125 707.808594 C 870.246094 707.808594 871.386719 707.589844 871.96875 707.148438 C 872.546875 706.710938 872.832031 705.945312 872.832031 704.847656 C 872.832031 703.667969 872.539062 702.84375 871.941406 702.367188 C 871.347656 701.898438 870.210938 701.660156 868.53125 701.660156 Z M 881.53125 718.199219 L 881.53125 699.808594 L 891.230469 699.808594 L 891.230469 701.816406 L 883.71875 701.816406 L 883.71875 707.089844 L 891.230469 707.089844 L 891.230469 709.121094 L 883.71875 709.121094 L 883.71875 716.167969 L 891.230469 716.167969 L 891.230469 718.199219 Z M 881.53125 718.199219 "/><path fill-rule="nonzero" fill="currentColor" d="M 662.851562 349.410156 L 661.222656 350.003906 C 659.832031 350.527344 658.699219 352.082031 658.699219 353.476562 L 658.699219 477.585938 C 658.699219 478.980469 659.832031 480.125 661.222656 480.125 L 662.851562 480.125 C 664.246094 480.125 665.378906 478.980469 665.378906 477.585938 L 665.378906 351.003906 C 665.378906 349.597656 664.246094 348.886719 662.851562 349.410156 M 576.621094 405.335938 L 574.988281 405.929688 C 573.601562 406.449219 572.46875 408.003906 572.46875 409.402344 L 572.46875 477.585938 C 572.46875 478.980469 573.601562 480.125 574.988281 480.125 L 576.621094 480.125 C 578.015625 480.125 579.148438 478.980469 579.148438 477.585938 L 579.148438 406.925781 C 579.148438 405.523438 578.015625 404.8125 576.621094 405.335938 M 597.972656 397.421875 L 596.34375 398.023438 C 594.949219 398.539062 593.820312 400.089844 593.820312 401.488281 L 593.820312 477.585938 C 593.820312 478.980469 594.949219 480.125 596.34375 480.125 L 597.972656 480.125 C 599.367188 480.125 600.5 478.980469 600.5 477.585938 L 600.5 399.007812 C 600.5 397.613281 599.367188 396.902344 597.972656 397.421875 M 764.496094 428.546875 L 762.867188 429.144531 C 761.476562 429.664062 760.34375 431.21875 760.34375 432.617188 L 760.34375 477.585938 C 760.34375 478.980469 761.476562 480.125 762.867188 480.125 L 764.496094 480.125 C 765.890625 480.125 767.023438 478.980469 767.023438 477.585938 L 767.023438 430.140625 C 767.023438 428.738281 765.890625 428.027344 764.496094 428.546875 M 785.847656 420.632812 L 784.222656 421.238281 C 782.824219 421.753906 781.695312 423.304688 781.695312 424.703125 L 781.695312 477.585938 C 781.695312 478.980469 782.824219 480.125 784.222656 480.125 L 785.847656 480.125 C 787.242188 480.125 788.378906 478.980469 788.378906 477.585938 L 788.378906 422.222656 C 788.378906 420.828125 787.242188 420.117188 785.847656 420.632812 M 550.800781 468.742188 C 550.609375 471.355469 548.414062 473.429688 545.761719 473.429688 L 538.949219 473.457031 L 538.949219 473.429688 L 146.527344 473.429688 C 145.132812 473.429688 144 474.570312 144 475.960938 L 144 477.585938 C 144 478.980469 145.132812 480.125 146.527344 480.125 L 533.152344 480.125 L 533.152344 480.171875 L 547.382812 480.125 C 552.953125 480.125 557.5 475.570312 557.5 469.996094 L 557.5 461.046875 L 557.484375 461.046875 L 557.484375 403.96875 C 557.484375 401.808594 558.757812 399.984375 560.777344 399.226562 L 612.671875 379.785156 C 613.46875 379.480469 614.292969 379.585938 614.992188 380.082031 C 615.695312 380.566406 616.085938 381.296875 616.085938 382.160156 L 616.085938 480.175781 L 631.328125 480.175781 L 631.386719 480.136719 L 635.3125 480.125 C 640.882812 480.125 645.425781 475.570312 645.425781 469.996094 L 645.425781 348.242188 C 645.425781 346.078125 646.699219 344.253906 648.71875 343.496094 L 700.617188 324.058594 C 701.414062 323.75 702.238281 323.859375 702.933594 324.351562 C 703.640625 324.835938 704.03125 325.566406 704.03125 326.429688 L 704.03125 475.058594 C 704.03125 477.851562 706.308594 480.125 709.09375 480.125 L 744.273438 480.125 C 747.058594 480.125 749.335938 477.851562 749.335938 475.058594 L 749.335938 426.792969 C 749.335938 424.316406 751.070312 422.242188 753.503906 421.804688 L 796.15625 406.917969 C 796.917969 406.792969 797.621094 406.980469 798.21875 407.476562 C 798.8125 407.964844 799.128906 408.632812 799.128906 409.410156 L 799.128906 475.058594 C 799.128906 477.851562 801.398438 480.125 804.183594 480.125 L 890.347656 480.125 C 891.742188 480.125 892.875 478.980469 892.875 477.585938 L 892.875 475.960938 C 892.875 474.570312 891.742188 473.429688 890.347656 473.429688 L 843.25 473.429688 C 840.464844 473.429688 838.1875 471.15625 838.1875 468.371094 L 838.1875 432.59375 C 838.1875 429.914062 836.914062 427.601562 834.640625 426.171875 L 802.523438 400.941406 C 800.25 399.507812 797.828125 399.058594 795.195312 399.570312 L 766.710938 410.097656 L 766.710938 361.152344 C 766.710938 357.589844 765.023438 354.527344 762.023438 352.621094 L 708.28125 318.382812 C 705.511719 316.625 702.371094 316.296875 699.300781 317.445312 C 681.265625 324.191406 663.332031 330.894531 645.328125 337.628906 C 641.292969 339.132812 638.746094 342.804688 638.746094 347.109375 L 638.746094 385.839844 L 620.339844 374.113281 C 617.570312 372.355469 614.425781 372.023438 611.359375 373.171875 C 593.320312 379.921875 575.390625 386.621094 557.386719 393.359375 C 553.351562 394.863281 550.800781 398.53125 550.800781 402.839844 Z M 684.203125 341.496094 L 682.578125 342.097656 C 681.183594 342.613281 680.050781 344.167969 680.050781 345.566406 L 680.050781 477.585938 C 680.050781 478.980469 681.183594 480.125 682.578125 480.125 L 684.203125 480.125 C 685.601562 480.125 686.734375 478.980469 686.734375 477.585938 L 686.734375 343.085938 C 686.734375 341.6875 685.601562 340.980469 684.203125 341.496094 "/></symbol></svg>
+<div class="app">
+  <aside class="side">
+    <div class="brand">
+      <svg class="logo"><use href="#tsteck"/></svg>
+      <span class="txt">Quiropraxia</span>
+    </div>
+    <div class="navlabel">Menu</div>
+    <nav id="nav"></nav>
+    <div class="side-foot"><span class="dot" id="conn-dot"></span><span id="conn-txt">Conectando…</span></div>
+  </aside>
+  <main class="main">
+    <header class="top">
+      <div><h1 id="pg-title">Painel</h1><div class="sub" id="pg-sub"></div></div>
+      <div class="grow"></div>
+      <div class="search no-print"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.2-3.2"/></svg><input id="q" type="text" placeholder="Buscar…  (tecla /)" autocomplete="off"></div>
+      <div id="pg-act" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    </header>
+    <div class="printhead"><svg class="logo"><use href="#tsteck"/></svg><span class="ph">Sala de Quiropraxia</span></div>
+    <div class="wrap" id="view"><div class="loading">Carregando…</div></div>
+  </main>
+</div>
+<div id="modal-root"></div>
+<script>
+/* ===================== CONSTANTES ===================== */
+const SETORES=["Administrativo","Suprimentos / Compras","Produção","Engenharia","Almoxarifado","Comercial","Qualidade","Manutenção","Logística","RH","TI","Financeiro","Outro"];
+const REGIOES=["Cervical","Torácica","Lombar","Sacroilíaca","Ombro","Quadril","Joelho","Punho/Mão"];
+const TECNICAS=["Ajuste quiroprático","Mobilização articular","Liberação miofascial","Alongamento assistido","Termoterapia","Crioterapia","Orientação postural","Exercícios terapêuticos","Ventosaterapia"];
+const TIPOS=["Avaliação inicial","Sessão de manutenção","Retorno","Urgência / dor aguda","Orientação ergonômica"];
+const STATUS_AT=["Agendado","Realizado","Faltou","Cancelado"];
+const STATUS_SOL=["Pendente","Aprovado","Comprado","Entregue","Recusado"];
+const CATEG=["Consumível","EPI","Equipamento","Higiene","Escritório","Outro"];
+const UNID=["un","cx","pct","par","rolo","L","mL","kg","g"];
+const TURNOS=["Administrativo","1º turno","2º turno","3º turno"];
+const TIPOS_MOV=["Saída","Entrada","Descarte","Ajuste de inventário"];
+const MOTIVOS_AFAST=["Dor lombar","Dor cervical","Dor torácica","Lesão de ombro","Outra queixa musculoesquelética","Não relacionado à coluna"];
+const DIAS_SEM=["Dom","Seg","Ter","Qua","Qui","Sex","Sáb"];
+const CFG_PADRAO={horaInicio:"07:00",horaFim:"17:00",passo:30,duracao:30,diasSemana:[1,2,3,4,5],diasRetorno:45,diasValidade:45,custoDia:320,empresa:"TS Teck",janelaConsumo:60};
+
+const ICON={
+  painel:'<path d="M3 13h8V3H3zM13 21h8V11h-8zM13 7h8V3h-8zM3 21h8v-4H3z"/>',
+  pacientes:'<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/>',
+  agenda:'<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  solic:'<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><path d="M9 13h6M9 17h4"/>',
+  estoque:'<path d="M3 7.5 12 3l9 4.5v9L12 21l-9-4.5z"/><path d="m3 7.5 9 4.5 9-4.5M12 12v9"/>',
+  indic:'<path d="M3 3v18h18"/><path d="m7 14 4-4 3 3 5-6"/>',
+  cfg:'<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .33 1.76l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.6 1.6 0 0 0-1.76-.33 1.6 1.6 0 0 0-1 1.47V21a2 2 0 1 1-4 0v-.11a1.6 1.6 0 0 0-1.05-1.46 1.6 1.6 0 0 0-1.76.32l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.6 1.6 0 0 0 4.6 15a1.6 1.6 0 0 0-1.47-1H3a2 2 0 1 1 0-4h.11A1.6 1.6 0 0 0 4.6 8.9a1.6 1.6 0 0 0-.33-1.76l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.6 1.6 0 0 0 9 4.6a1.6 1.6 0 0 0 1-1.47V3a2 2 0 1 1 4 0v.11a1.6 1.6 0 0 0 1 1.47 1.6 1.6 0 0 0 1.76-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.6 1.6 0 0 0 19.4 9v0a1.6 1.6 0 0 0 1.47 1H21a2 2 0 1 1 0 4h-.11a1.6 1.6 0 0 0-1.49 1z"/>'
+};
+
+/* ===================== UTIL ===================== */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.prototype.slice.call(r.querySelectorAll(s));
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const todayISO=()=>new Date().toLocaleDateString("en-CA");
+const isoOf=dt=>dt.toLocaleDateString("en-CA");
+function fdate(d){ if(!d) return "—"; const p=String(d).slice(0,10).split("-"); return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:d; }
+function fdateShort(d){ if(!d) return "—"; const p=String(d).slice(0,10).split("-"); return p.length===3?`${p[2]}/${p[1]}`:d; }
+function daysBetween(a,b){ return Math.round((new Date(b+"T00:00")-new Date(a+"T00:00"))/86400000); }
+function addDays(iso,n){ const d=new Date(iso+"T00:00"); d.setDate(d.getDate()+n); return isoOf(d); }
+function idade(nasc){ if(!nasc) return null; const n=new Date(nasc+"T00:00"),h=new Date(); let a=h.getFullYear()-n.getFullYear(); const m=h.getMonth()-n.getMonth(); if(m<0||(m===0&&h.getDate()<n.getDate()))a--; return a; }
+function brl(v){ return "R$ "+Number(v||0).toLocaleString("pt-BR",{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function mesLabel(m){ const p=String(m).split("-"); return p[1]+"/"+p[0]; }
+function mesCurto(m){ return String(m).slice(5)+"/"+String(m).slice(2,4); }
+function plural(n,s,p){ return n+" "+(Number(n)===1?s:(p||s+"s")); }
+function inicioSemana(iso){ const d=new Date(iso+"T00:00"); d.setDate(d.getDate()-d.getDay()); return isoOf(d); }
+function toast(msg,kind){
+  const t=document.createElement("div");
+  t.textContent=msg;
+  t.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:300;background:var(--surface);border:1px solid var(--line-2);border-left:3px solid "+(kind==="crit"?"var(--crit)":"var(--ok)")+";color:var(--ink);padding:10px 16px;border-radius:9px;box-shadow:0 14px 34px -14px rgba(0,0,0,.5);font-size:13px;font-weight:500;max-width:90vw";
+  document.body.appendChild(t); setTimeout(()=>t.remove(),3400);
+}
+
+/* ===================== ESTADO ===================== */
+const COLS=["pacientes","atendimentos","solicitacoes","estoque","movimentacoes","afastamentos","profissionais","resumos","config"];
+const COLS_CLINICAS=["pacientes","atendimentos","afastamentos"];
+const state={pacientes:[],atendimentos:[],solicitacoes:[],estoque:[],movimentacoes:[],afastamentos:[],profissionais:[],resumos:[],config:[]};
+let DB=null,USER=null,DOWNLOADS=null,ASSETS=null;
+let ready=false,route="painel",busca="",ctx={aba:{},semana:inicioSemana(todayISO())};
+let EU={id:null,nome:"",admin:false,podeEscrever:true};
+let perfis={};
+
+function byId(col,id){ return state[col].find(x=>x.id===id); }
+function cfg(){ const c=byId("config","geral")||{}; return Object.assign({},CFG_PADRAO,c); }
+
+async function put(col,id,data,silencioso){
+  const body=Object.assign({},data);
+  delete body.id;
+  body.atualizadoEm=new Date().toISOString();
+  if(EU.id) body.alteradoPor=EU.id;
+  if(!body.criadoPor&&EU.id) body.criadoPor=EU.id;
+  if(DB){ try{ await DB.collection(col).doc(id).set(body); }catch(e){ if(!silencioso) toast("Não foi possível salvar ("+((e&&e.code)||"erro")+")","crit"); throw e; } }
+  else{ const i=state[col].findIndex(x=>x.id===id); const rec=Object.assign({id},body); if(i<0)state[col].push(rec); else state[col][i]=rec; render(); }
+  return id;
+}
+async function del(col,id){
+  if(DB){ try{ await DB.collection(col).doc(id).delete(); }catch(e){ toast("Não foi possível excluir","crit"); } }
+  else{ state[col]=state[col].filter(x=>x.id!==id); render(); }
+}
+
+async function boot(){
+  const use=n=>{ try{ return window.Sistema&&Sistema.servico?Sistema.servico(n):Promise.resolve(null); }catch(e){ return Promise.resolve(null); } };
+  const [db,u,dl,as]=await Promise.all([use("db"),use("user"),use("downloads"),use("assets")]);
+  DB=db; USER=u; DOWNLOADS=dl; ASSETS=as;
+  if(USER){
+    try{ const me=await USER.me(); EU.id=me.id; EU.nome=me.name||""; EU.admin=!!me.canEdit; }catch(e){}
+    try{ const w=await USER.can("data.write"); EU.podeEscrever=(w===null?true:w); }catch(e){}
+  }
+  if(DB){
+    COLS.forEach(col=>{
+      if(COLS_CLINICAS.indexOf(col)>=0&&!EU.admin&&USER) { /* sem permissão: assina mesmo assim, volta vazio */ }
+      DB.collection(col).onSnapshot(snap=>{
+        state[col]=snap.docs.map(d=>Object.assign({id:d.id},d.data()));
+        ready=true; render();
+      },err=>{ ready=true; render(); });
+    });
+    setConn(true,EU.admin?"Sincronizado":"Sincronizado · acesso operacional");
+  }else{ setConn(false,"Modo local (sem salvar)"); }
+  ready=true; render();
+  setTimeout(()=>{ ready=true; render(); },3500);
+}
+function setConn(on,txt){ $("#conn-dot").className="dot"+(on?"":" off"); $("#conn-txt").textContent=txt; }
+async function nomesDe(ids){
+  const u=Array.from(new Set(ids.filter(Boolean)));
+  if(!u.length||!USER) return {};
+  try{ const ps=await USER.profiles(u); perfis=Object.assign(perfis,ps); return ps; }catch(e){ return {}; }
+}
+function nomeDe(id){ const p=perfis[id]; return (p&&p.name)||""; }
+
+/* ===================== DERIVADOS ===================== */
+function estoqueBaixo(){ return state.estoque.filter(i=>Number(i.quantidade||0)<=Number(i.minimo||0)); }
+function validadeProxima(){ const h=todayISO(),d=cfg().diasValidade; return state.estoque.filter(i=>i.validade&&daysBetween(h,i.validade)<=d); }
+function solPendentes(){ return state.solicitacoes.filter(s=>s.status==="Pendente"); }
+function sessoesDe(d){ return state.atendimentos.filter(a=>a.data===d).sort((a,b)=>String(a.hora).localeCompare(String(b.hora))); }
+function atendDoPaciente(id){ return state.atendimentos.filter(a=>a.pacienteId===id).sort((a,b)=>String(b.data+(b.hora||"")).localeCompare(String(a.data+(a.hora||"")))); }
+function anamnesesPendentes(){ return state.pacientes.filter(p=>p.origem==="autoatendimento"&&!p.revisado); }
+function semRetorno(){
+  const h=todayISO(),lim=cfg().diasRetorno;
+  return state.pacientes.filter(p=>{
+    if(p.ativo===false) return false;
+    if(state.atendimentos.some(a=>a.pacienteId===p.id&&a.status==="Agendado"&&a.data>=h)) return false;
+    const ats=atendDoPaciente(p.id).filter(a=>a.status==="Realizado");
+    if(!ats.length) return true;
+    return daysBetween(ats[0].data,h)>=lim;
+  });
+}
+function proxNumeroSol(){
+  const ano=new Date().getFullYear();
+  const n=state.solicitacoes.filter(s=>String(s.numero||"").indexOf(String(ano))>=0).map(s=>parseInt(String(s.numero).split("-").pop(),10)||0);
+  return "SOL-"+ano+"-"+String((n.length?Math.max.apply(null,n):0)+1).padStart(4,"0");
+}
+function consumoMedio(itemId){
+  const jan=cfg().janelaConsumo, lim=addDays(todayISO(),-jan);
+  const saidas=state.movimentacoes.filter(m=>m.itemId===itemId&&(m.tipo==="Saída"||m.tipo==="Descarte")&&m.data>=lim);
+  if(!saidas.length) return 0;
+  const total=saidas.reduce((s,m)=>s+Number(m.qtd||0),0);
+  return total/jan;
+}
+function previsaoDias(item){
+  const c=consumoMedio(item.id);
+  if(!c) return null;
+  return Math.floor(Number(item.quantidade||0)/c);
+}
+function itensAcabando(){
+  return state.estoque.map(i=>({i,d:previsaoDias(i)})).filter(x=>x.d!=null&&x.d<=14&&Number(x.i.quantidade||0)>Number(x.i.minimo||0));
+}
+function alertaErgonomico(){
+  const m={};
+  state.pacientes.filter(p=>p.ativo!==false&&String(p.problemaColuna||"").indexOf("Sim")===0).forEach(p=>{
+    (p.regioes&&p.regioes.length?p.regioes:["Não especificada"]).forEach(r=>{
+      const k=(p.setor||"Sem setor")+"||"+r; m[k]=(m[k]||0)+1;
+    });
+  });
+  return Object.entries(m).filter(([k,v])=>v>=3).map(([k,v])=>({setor:k.split("||")[0],regiao:k.split("||")[1],n:v})).sort((a,b)=>b.n-a.n);
+}
+function afastMes(mes){ return state.afastamentos.filter(a=>String(a.inicio).slice(0,7)===mes); }
+function diasPerdidos(lista){ return lista.reduce((s,a)=>s+Number(a.dias||0),0); }
+function ultimos(n){ const out=[],d=new Date(); for(let i=n-1;i>=0;i--){ const m=new Date(d.getFullYear(),d.getMonth()-i,1); out.push(m.getFullYear()+"-"+String(m.getMonth()+1).padStart(2,"0")); } return out; }
+function pillSol(st){ const m={"Pendente":"warn","Aprovado":"info","Comprado":"info","Entregue":"ok","Recusado":"crit"}; return '<span class="pill '+(m[st]||"mute")+'">'+esc(st||"—")+'</span>'; }
+function pillAt(st){ const m={"Agendado":"info","Realizado":"ok","Faltou":"warn","Cancelado":"mute"}; return '<span class="pill '+(m[st]||"mute")+'">'+esc(st||"—")+'</span>'; }
+function pillEst(i){ const q=Number(i.quantidade||0),mn=Number(i.minimo||0);
+  if(q<=0) return '<span class="pill crit">Sem estoque</span>';
+  if(q<=mn) return '<span class="pill warn">Abaixo do mínimo</span>';
+  const d=previsaoDias(i); if(d!=null&&d<=14) return '<span class="pill warn">Acaba em ~'+d+'d</span>';
+  return '<span class="pill ok">Ok</span>'; }
+function contar(arr,fn){ const m={}; arr.forEach(x=>{ const vs=fn(x); (Array.isArray(vs)?vs:[vs]).filter(Boolean).forEach(v=>{m[v]=(m[v]||0)+1;}); }); return Object.entries(m).sort((a,b)=>b[1]-a[1]); }
+function tile(k,v,n,accent){ return `<div class="tile${accent?" accent":""}"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="n">${esc(n||"")}</div></div>`; }
+function tileD(k,v,n,delta,accent){ return `<div class="tile${accent?" accent":""}"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="n">${esc(n||"")}</div><div class="d">${delta||""}</div></div>`; }
+function hbars(pairs,emptyMsg,limit){
+  if(!pairs.length) return `<div class="empty">${esc(emptyMsg||"Sem dados")}</div>`;
+  const list=pairs.slice(0,limit||8),max=list[0][1];
+  return `<div class="hbars">${list.map(([k,v])=>`<div class="hbar"><span class="lb" title="${esc(k)}">${esc(k)}</span><span class="bar"><i style="width:${Math.max(4,v/max*100)}%"></i></span><span class="vv">${v}</span></div>`).join("")}</div>`;
+}
+function barras(pares,fmt){
+  const W=520,H=170,pad=28,max=Math.max(1,...pares.map(x=>x[1])),bw=W/Math.max(1,pares.length);
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;min-width:300px;height:auto" role="img">
+    <line x1="0" y1="${H-pad}" x2="${W}" y2="${H-pad}" stroke="var(--line-2)" stroke-width="1"/>
+    ${pares.map(([k,v],i)=>{const h=v/max*(H-pad-26),x=i*bw+bw*0.22,w=bw*0.56,y=H-pad-h;return `
+      ${v>0?`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="var(--red)" opacity="${i===pares.length-1?1:.72}"/>`:""}
+      <text x="${x+w/2}" y="${y-6}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink)" font-family="IBM Plex Mono, monospace">${esc(fmt?fmt(v):v)}</text>
+      <text x="${x+w/2}" y="${H-pad+15}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${esc(k)}</text>`;}).join("")}
+  </svg>`;
+}
+function linhaDor(ats){
+  const pts=ats.slice().reverse().filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  if(pts.length<2) return `<div class="empty">São necessárias pelo menos duas sessões com a escala preenchida.</div>`;
+  const W=520,H=160,L=30,R=10,T=14,B=26,iw=W-L-R,ih=H-T-B;
+  const x=i=>L+(pts.length===1?iw/2:i*iw/(pts.length-1)), y=v=>T+ih-(v/10)*ih;
+  const path=arr=>arr.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(" ");
+  const antes=pts.map(p=>Number(p.dorAntes)),depois=pts.map(p=>Number(p.dorDepois));
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;min-width:300px;height:auto" role="img" aria-label="Evolução da dor">
+    ${[0,5,10].map(v=>`<line x1="${L}" y1="${y(v)}" x2="${W-R}" y2="${y(v)}" stroke="var(--line)" stroke-width="1"/><text x="${L-6}" y="${y(v)+3.5}" text-anchor="end" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono, monospace">${v}</text>`).join("")}
+    <path d="${path(antes)}" fill="none" stroke="var(--red)" stroke-width="2" stroke-linejoin="round"/>
+    <path d="${path(depois)}" fill="none" stroke="var(--ok)" stroke-width="2" stroke-dasharray="4 3" stroke-linejoin="round"/>
+    ${pts.map((p,i)=>`<circle cx="${x(i)}" cy="${y(Number(p.dorAntes))}" r="3" fill="var(--red)"/><circle cx="${x(i)}" cy="${y(Number(p.dorDepois))}" r="3" fill="var(--ok)"/>
+      <text x="${x(i)}" y="${H-8}" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${fdateShort(p.data)}</text>`).join("")}
+  </svg>
+  <div class="mini" style="margin-top:6px"><span class="swatch" style="background:var(--red)"></span>Chegada <span class="swatch" style="background:var(--ok);margin-left:12px"></span>Saída</div>`;
+}
+function bannerExemplo(){
+  const n=COLS.reduce((s,c)=>s+state[c].filter(x=>x.exemplo).length,0);
+  if(!n||!EU.admin) return "";
+  return `<div class="banner no-print"><span class="pill mute">Exemplo</span><span class="grow">${n} registros <b>fictícios</b> de demonstração. Nenhum dado real de colaborador. Apague antes de começar o uso.</span><button class="btn sm danger" data-act="limpar-exemplos">Apagar dados de exemplo</button></div>`;
+}
+
+/* ===================== MAPA CORPORAL ===================== */
+function corpoSVG(face,pontos,editavel){
+  const P=(pontos||[]).filter(p=>p.f===face);
+  const corpo=`
+    <circle cx="60" cy="24" r="15" />
+    <rect x="53" y="38" width="14" height="9" rx="3"/>
+    <path d="M38 50 q22-8 44 0 l4 42 q-26 6 -52 0 z"/>
+    <path d="M38 50 q-10 4 -12 14 l-6 36 q6 3 10 0 l8-34z"/>
+    <path d="M82 50 q10 4 12 14 l6 36 q-6 3 -10 0 l-8-34z"/>
+    <path d="M42 92 q18 5 36 0 l-3 44 -5 44 q-6 2 -11 0 l-2-46 -3 46 q-6 2 -11 0 l-5-44z"/>`;
+  return `<div><svg viewBox="0 0 120 190" width="150" data-corpo="${face}" ${editavel?'style="cursor:crosshair"':''} role="img" aria-label="Mapa corporal ${face==="f"?"frente":"costas"}">
+    <g fill="var(--surface-3)" stroke="var(--line-2)" stroke-width="1" stroke-linejoin="round">${corpo}</g>
+    ${face==="b"?'<line x1="60" y1="50" x2="60" y2="92" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 3"/>':""}
+    ${P.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="${3+p.i}" fill="var(--red)" opacity="${.3+p.i*.23}" stroke="var(--surface)" stroke-width="1" data-pt="${face}:${i}"/>`).join("")}
+  </svg><div class="cap">${face==="f"?"Frente":"Costas"}</div></div>`;
+}
+let pontosAtuais=[],intensidade=2;
+function montarMapa(cont,pontos,editavel){
+  pontosAtuais=(pontos||[]).slice();
+  const desenhar=()=>{
+    cont.innerHTML=`<div class="bodymap">${corpoSVG("f",pontosAtuais,editavel)}${corpoSVG("b",pontosAtuais,editavel)}
+      <div style="flex:1;min-width:150px">
+        ${editavel?`<div class="intsel" style="margin-bottom:10px"><span>Intensidade:</span>
+          <button type="button" data-int="1" aria-pressed="${intensidade===1}">Leve</button>
+          <button type="button" data-int="2" aria-pressed="${intensidade===2}">Moderada</button>
+          <button type="button" data-int="3" aria-pressed="${intensidade===3}">Forte</button></div>
+          <div class="mini">Clique no corpo para marcar o ponto de dor. Clique de novo em cima do ponto para remover.</div>`:""}
+        <div class="mini" style="margin-top:8px">${pontosAtuais.length} ponto(s) marcado(s)</div>
+      </div></div>`;
+  };
+  desenhar();
+  if(!editavel) return;
+  cont.addEventListener("click",ev=>{
+    const bt=ev.target.closest("[data-int]");
+    if(bt){ intensidade=Number(bt.dataset.int); desenhar(); return; }
+    const pt=ev.target.closest("[data-pt]");
+    if(pt){ const [f,i]=pt.dataset.pt.split(":"); const alvo=pontosAtuais.filter(p=>p.f===f)[Number(i)]; pontosAtuais=pontosAtuais.filter(p=>p!==alvo); desenhar(); return; }
+    const svg=ev.target.closest("[data-corpo]");
+    if(!svg) return;
+    const r=svg.getBoundingClientRect();
+    const x=(ev.clientX-r.left)/r.width*120, y=(ev.clientY-r.top)/r.height*190;
+    if(y>188) return;
+    pontosAtuais.push({f:svg.dataset.corpo,x:Math.round(x*10)/10,y:Math.round(y*10)/10,i:intensidade});
+    desenhar();
+  });
+}
+
+/* ===================== NAV / RENDER ===================== */
+function menu(){
+  const m=[{id:"painel",lb:"Painel",ic:"painel"}];
+  if(EU.admin){ m.push({id:"pacientes",lb:"Colaboradores",ic:"pacientes"},{id:"agenda",lb:"Agenda",ic:"agenda"}); }
+  m.push({id:"solicitacoes",lb:"Solicitações",ic:"solic"},{id:"estoque",lb:"Estoque",ic:"estoque"},{id:"indicadores",lb:"Indicadores",ic:"indic"});
+  if(EU.admin) m.push({id:"config",lb:"Configurações",ic:"cfg"});
+  return m;
+}
+function renderNav(){
+  const pend=solPendentes().length,baixo=estoqueBaixo().length,anam=anamnesesPendentes().length;
+  $("#nav").innerHTML=menu().map(m=>{
+    let tag="";
+    if(m.id==="solicitacoes"&&pend) tag='<span class="tag num">'+pend+'</span>';
+    if(m.id==="estoque"&&baixo) tag='<span class="tag num">'+baixo+'</span>';
+    if(m.id==="pacientes"&&anam) tag='<span class="tag num">'+anam+'</span>';
+    return '<button class="nav-i" data-go="'+m.id+'"'+(route===m.id?' aria-current="page"':'')+'><svg viewBox="0 0 24 24">'+ICON[m.ic]+'</svg><span>'+m.lb+'</span>'+tag+'</button>';
+  }).join("");
+}
+const TITLES={
+  painel:["Painel","Visão geral da sala de quiropraxia"],
+  pacientes:["Colaboradores","Fichas clínicas, anexos e histórico"],
+  agenda:["Agenda","Semana, sessões e registro de atendimento"],
+  solicitacoes:["Solicitações de compra","Pedidos enviados ao setor de Suprimentos"],
+  estoque:["Estoque da sala","Itens, movimentações e previsão de consumo"],
+  indicadores:["Indicadores","Saúde ocupacional, absenteísmo e custo evitado"],
+  config:["Configurações","Parâmetros, acessos e dados do sistema"]
+};
+function go(r){ route=r; busca=""; ctx.paciente=null; $("#q").value=""; render(); window.scrollTo({top:0}); }
+function render(){
+  renderNav();
+  if(!EU.admin&&["pacientes","agenda","config"].indexOf(route)>=0) route="painel";
+  const t=TITLES[route]||TITLES.painel;
+  $("#pg-title").textContent=t[0]; $("#pg-sub").textContent=t[1];
+  const acts={
+    pacientes:'<button class="btn ghost" data-act="kiosk">Autoatendimento</button><button class="btn" data-act="novo-paciente"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo colaborador</button>',
+    agenda:'<button class="btn" data-act="novo-atend"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo atendimento</button>',
+    solicitacoes:'<button class="btn ghost" data-act="exp-sol">Exportar CSV</button><button class="btn" data-act="nova-sol"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Nova solicitação</button>',
+    estoque:'<button class="btn ghost" data-act="gerar-sol-falta">Gerar solicitação do que falta</button><button class="btn" data-act="novo-item"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Novo item</button>',
+    indicadores:EU.admin?'<button class="btn ghost" data-act="exp-atend">Exportar CSV</button><button class="btn ghost" data-act="publicar-resumo">Publicar resumo do mês</button><button class="btn" data-act="relatorio">Relatório mensal</button>':""
+  };
+  $("#pg-act").innerHTML=acts[route]||"";
+  const v=$("#view");
+  if(!ready){ v.innerHTML='<div class="loading">Carregando dados…</div>'; return; }
+  if(route==="painel") v.innerHTML=viewPainel();
+  else if(route==="pacientes") v.innerHTML=ctx.paciente?viewFicha(ctx.paciente):viewPacientes();
+  else if(route==="agenda") v.innerHTML=viewAgenda();
+  else if(route==="solicitacoes") v.innerHTML=viewSolicitacoes();
+  else if(route==="estoque") v.innerHTML=viewEstoque();
+  else if(route==="indicadores") v.innerHTML=viewIndicadores();
+  else if(route==="config") v.innerHTML=viewConfig();
+  resolverNomes();
+}
+async function resolverNomes(){
+  const ids=$$("[data-uid]").map(e=>e.dataset.uid);
+  if(!ids.length) return;
+  await nomesDe(ids);
+  $$("[data-uid]").forEach(e=>{ const n=nomeDe(e.dataset.uid); if(n) e.textContent=n; });
+}
+
+/* ===================== PAINEL ===================== */
+function viewPainel(){
+  const hoje=todayISO(),mes=hoje.slice(0,7),c=cfg();
+  const baixo=estoqueBaixo(),pend=solPendentes(),venc=validadeProxima(),acab=itensAcabando();
+  const alertas=[];
+  if(baixo.length) alertas.push({k:"crit",t:baixo.length+" item(ns) no mínimo ou zerado(s)",d:baixo.slice(0,4).map(i=>i.item).join(" · "),a:'<button class="btn sm ghost" data-act="gerar-sol-falta">Gerar solicitação</button>'});
+  if(acab.length) alertas.push({k:"warn",t:acab.length+" item(ns) acabam em menos de 15 dias no ritmo atual",d:acab.slice(0,4).map(x=>x.i.item+" (~"+x.d+"d)").join(" · "),a:'<button class="btn sm ghost" data-go="estoque">Ver consumo</button>'});
+  if(venc.length) alertas.push({k:"warn",t:venc.length+" item(ns) com validade em até "+c.diasValidade+" dias",d:venc.slice(0,4).map(i=>i.item+" ("+fdate(i.validade)+")").join(" · "),a:'<button class="btn sm ghost" data-go="estoque">Ver estoque</button>'});
+  if(pend.length) alertas.push({k:"info",t:pend.length+" solicitação(ões) aguardando Suprimentos",d:pend.slice(0,3).map(s=>s.numero).join(" · "),a:'<button class="btn sm ghost" data-go="solicitacoes">Acompanhar</button>'});
+
+  if(!EU.admin){
+    return `<div class="lock no-print"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      <div><b>Acesso operacional</b><div style="color:var(--muted);margin-top:2px">Você vê solicitações de compra, estoque e os indicadores publicados. As fichas clínicas e a agenda ficam restritas ao profissional de quiropraxia.</div></div></div>
+    <div class="tiles">
+      ${tile("Solicitações pendentes",pend.length,"aguardando você",true)}
+      ${tile("Itens em falta",baixo.length,"abaixo do mínimo")}
+      ${tile("Acabando em 15 dias",acab.length,"pelo consumo médio")}
+      ${tile("Validade próxima",venc.length,"nos próximos "+c.diasValidade+" dias")}
+    </div>
+    ${alertas.length?`<div class="card"><div class="card-h"><h2>Pendências</h2></div><div class="card-b stack">
+      ${alertas.map(a=>`<div class="alert ${a.k}"><div class="grow"><b>${esc(a.t)}</b><div style="opacity:.85;margin-top:2px">${esc(a.d)}</div></div>${a.a}</div>`).join("")}</div></div>`:`<div class="card"><div class="card-b"><div class="alert info"><div class="grow"><b>Nada pendente</b><div style="opacity:.85">Sem pedidos em aberto e estoque acima do mínimo.</div></div></div></div></div>`}`;
+  }
+
+  const mesPre=mesAnterior(mes),PA=metricasMes(mes),PB=metricasMes(mesPre);
+  const doMes=state.atendimentos.filter(a=>String(a.data).slice(0,7)===mes&&a.status==="Realizado");
+  const ativos=state.pacientes.filter(p=>p.ativo!==false);
+  const hj=sessoesDe(hoje);
+  const sem=semRetorno(),anam=anamnesesPendentes(),ergo=alertaErgonomico();
+  const comDor=doMes.filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  const reducao=comDor.length?(comDor.reduce((s,a)=>s+(Number(a.dorAntes)-Number(a.dorDepois)),0)/comDor.length):null;
+  const dias=diasPerdidos(afastMes(mes));
+  if(anam.length) alertas.unshift({k:"info",t:anam.length+" anamnese(s) preenchida(s) pelo colaborador aguardando revisão",d:anam.slice(0,4).map(p=>p.nome).join(" · "),a:'<button class="btn sm ghost" data-go="pacientes">Revisar</button>'});
+  if(sem.length) alertas.push({k:"warn",t:sem.length+" colaborador(es) sem retorno há mais de "+c.diasRetorno+" dias",d:sem.slice(0,4).map(p=>p.nome).join(" · "),a:'<button class="btn sm ghost" data-go="pacientes">Ver lista</button>'});
+  ergo.slice(0,2).forEach(e=>alertas.push({k:"warn",t:"Concentração de queixas em "+e.setor,d:e.n+" colaboradores com queixa na região "+e.regiao.toLowerCase()+". Vale avaliar o posto de trabalho, não só a pessoa.",a:'<button class="btn sm ghost" data-go="indicadores">Ver indicadores</button>'}));
+
+  return `${bannerExemplo()}
+  <div class="tiles">
+    ${tileD("Atendimentos no mês",doMes.length,"realizados em "+mesLabel(mes),deltaHTML(PA.atendimentos,PB.atendimentos,true),true)}
+    ${tileD("Colaboradores atendidos",PA.colaboradores,ativos.length+" ativos no cadastro",deltaHTML(PA.colaboradores,PB.colaboradores,true))}
+    ${tile("Sessões hoje",hj.length,hj.filter(a=>a.status==="Realizado").length+" já realizadas")}
+    ${tileD("Redução média da dor",reducao==null?"—":("−"+reducao.toFixed(1)),"pontos na escala 0–10",deltaHTML(PA.alivio,PB.alivio,true))}
+    ${tileD("Dias perdidos no mês",dias,brl(dias*c.custoDia)+" em custo estimado",deltaHTML(PA.dias,PB.dias,false))}
+    ${tile("Pendências de compra",pend.length+baixo.length,pend.length+" pedidos · "+baixo.length+" itens em falta")}
+  </div>
+  ${alertas.length?`<div class="card"><div class="card-h"><h2>Alertas e pendências</h2></div><div class="card-b stack">
+    ${alertas.map(a=>`<div class="alert ${a.k}"><div class="grow"><b>${esc(a.t)}</b><div style="opacity:.85;margin-top:2px">${esc(a.d)}</div></div>${a.a}</div>`).join("")}
+  </div></div>`:`<div class="card"><div class="card-b"><div class="alert info"><div class="grow"><b>Nenhuma pendência</b><div style="opacity:.85">Estoque abastecido, sem pedidos em aberto e retornos em dia.</div></div></div></div></div>`}
+  <div class="grid3">
+    <div class="card">
+      <div class="card-h"><h2>Agenda de hoje · ${fdate(hoje)}</h2><div class="grow"></div><button class="btn sm ghost" data-go="agenda">Ver semana</button><button class="btn sm" data-act="novo-atend">Agendar</button></div>
+      ${hj.length?`<div class="tblwrap"><table><thead><tr><th>Hora</th><th>Colaborador</th><th>Tipo</th><th>Status</th><th></th></tr></thead><tbody>
+        ${hj.map(a=>{const p=byId("pacientes",a.pacienteId)||{};return `<tr>
+          <td class="mono">${esc(a.hora||"—")}</td>
+          <td><div class="nm">${esc(p.nome||"—")}</div><div class="sm">${esc(p.setor||"")}</div></td>
+          <td>${esc(a.tipo||"—")}</td><td>${pillAt(a.status)}</td>
+          <td class="rowact">${a.status==="Agendado"?`<button class="btn sm" data-act="concluir" data-id="${a.id}">Registrar</button>`:`<button class="btn sm ghost" data-act="edit-atend" data-id="${a.id}">Abrir</button>`}</td>
+        </tr>`}).join("")}
+      </tbody></table></div>`:`<div class="empty"><b>Nenhuma sessão hoje</b>Use “Agendar” para marcar um atendimento.</div>`}
+    </div>
+    <div class="card"><div class="card-h"><h2>Regiões mais atendidas</h2></div><div class="card-b">${hbars(contar(state.atendimentos.filter(a=>a.status==="Realizado"),a=>a.regioes||[]),"Sem atendimentos registrados")}</div></div>
+  </div>`;
+}
+
+/* ===================== COLABORADORES ===================== */
+function viewPacientes(){
+  const q=busca.trim().toLowerCase(),hoje=todayISO();
+  let l=state.pacientes.slice().sort((a,b)=>String(a.nome).localeCompare(String(b.nome),"pt"));
+  if(q) l=l.filter(p=>[p.nome,p.matricula,p.setor,p.funcao,p.diagnostico,p.observacoes].join(" ").toLowerCase().indexOf(q)>=0);
+  const anam=anamnesesPendentes();
+  return `${bannerExemplo()}
+  ${anam.length?`<div class="alert info no-print"><div class="grow"><b>${anam.length} anamnese(s) aguardando revisão</b><div style="opacity:.9">Preenchidas pelo próprio colaborador no autoatendimento: ${esc(anam.map(p=>p.nome).join(" · "))}</div></div></div>`:""}
+  <div class="card">
+    <div class="card-h"><h2>${l.length} colaborador(es)</h2><div class="grow"></div>
+      <span class="pill mute">${state.pacientes.filter(p=>String(p.problemaColuna||"").indexOf("Sim")===0).length} com queixa de coluna</span>
+      <span class="pill mute">${state.pacientes.filter(p=>p.usaMedicamento==="Sim").length} em uso de medicamento</span>
+      <button class="btn sm ghost" data-act="exp-pac">Exportar CSV</button>
+    </div>
+    ${l.length?`<div class="tblwrap"><table><thead><tr><th>Colaborador</th><th>Setor / função</th><th>Coluna</th><th>Medicamento</th><th>Sessões</th><th>Último atend.</th><th></th></tr></thead><tbody>
+    ${l.map(p=>{
+      const ats=atendDoPaciente(p.id).filter(a=>a.status==="Realizado"),ult=ats[0],atr=ult?daysBetween(ult.data,hoje):null;
+      return `<tr>
+        <td><div class="nm">${esc(p.nome)}${p.origem==="autoatendimento"&&!p.revisado?' <span class="pill info">revisar</span>':""}</div><div class="sm">${p.matricula?"Mat. "+esc(p.matricula)+" · ":""}${idade(p.nascimento)?idade(p.nascimento)+" anos":""}</div></td>
+        <td><div>${esc(p.setor||"—")}</div><div class="sm">${esc(p.funcao||"")}</div></td>
+        <td>${String(p.problemaColuna||"").indexOf("Sim")===0?`<span class="pill crit">${esc(p.problemaColuna)}</span><div class="sm" style="margin-top:3px">${esc(p.diagnostico||"")}</div>`:'<span class="pill ok">Sem queixa</span>'}</td>
+        <td>${p.usaMedicamento==="Sim"?`<span class="pill warn">Sim</span><div class="sm" style="margin-top:3px">${esc(p.medicamentos||"")}</div>`:'<span class="pill mute">Não</span>'}</td>
+        <td class="num">${ats.length}</td>
+        <td>${ult?`${fdate(ult.data)}<div class="sm">${atr===0?"hoje":"há "+atr+" dias"}</div>`:'<span class="sm">nunca</span>'}</td>
+        <td class="rowact"><button class="btn sm ghost" data-act="ficha" data-id="${p.id}">Ficha</button></td>
+      </tr>`;}).join("")}
+    </tbody></table></div>`:`<div class="empty"><b>Nenhum colaborador cadastrado</b>Cadastre a primeira ficha ou use o autoatendimento num tablet.</div>`}
+  </div>`;
+}
+
+function viewFicha(id){
+  const p=byId("pacientes",id);
+  if(!p){ ctx.paciente=null; return viewPacientes(); }
+  const ats=atendDoPaciente(id),real=ats.filter(a=>a.status==="Realizado");
+  const comDor=real.filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  const media=comDor.length?(comDor.reduce((s,a)=>s+(Number(a.dorAntes)-Number(a.dorDepois)),0)/comDor.length).toFixed(1):null;
+  const prox=ats.filter(a=>a.status==="Agendado"&&a.data>=todayISO()).sort((a,b)=>a.data.localeCompare(b.data))[0];
+  const notas=real.filter(a=>a.avaliacao).map(a=>Number(a.avaliacao));
+  const afast=state.afastamentos.filter(a=>a.pacienteId===id).sort((a,b)=>String(b.inicio).localeCompare(String(a.inicio)));
+  const pontos=[]; real.forEach(a=>(a.pontos||[]).forEach(pt=>pontos.push(pt)));
+  const alerta=[];
+  if(p.contraindicacoes) alerta.push(["crit","Contraindicações",p.contraindicacoes]);
+  if(p.apto==="Não") alerta.push(["crit","Não liberado para atendimento",p.motivoNaoApto||"Aguardando avaliação médica."]);
+  if(p.usaMedicamento==="Sim") alerta.push(["warn","Medicamento em uso",p.medicamentos||"não especificado"]);
+  if(p.consentimento!=="Sim") alerta.push(["warn","Termo de consentimento pendente","Colher a assinatura antes da próxima sessão."]);
+  if(p.origem==="autoatendimento"&&!p.revisado) alerta.push(["info","Anamnese preenchida pelo colaborador","Revise os dados e confirme para liberar o atendimento."]);
+
+  return `
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap" class="no-print">
+    <button class="btn ghost sm" data-act="voltar-lista">← Todos os colaboradores</button>
+    <div style="flex:1"></div>
+    ${p.origem==="autoatendimento"&&!p.revisado?`<button class="btn sm" data-act="revisar-anamnese" data-id="${p.id}">Confirmar revisão</button>`:""}
+    <button class="btn ghost sm" data-act="assinar" data-id="${p.id}">${p.assinaturaId?"Ver/refazer assinatura":"Colher assinatura"}</button>
+    <button class="btn ghost sm" data-act="anexar" data-id="${p.id}">Anexar exame</button>
+    <button class="btn ghost sm" data-act="afastar" data-id="${p.id}">Registrar afastamento</button>
+    <button class="btn ghost sm" data-act="imprimir">Imprimir</button>
+    <button class="btn ghost sm" data-act="edit-paciente" data-id="${p.id}">Editar ficha</button>
+    <button class="btn sm" data-act="novo-atend" data-id="${p.id}">Novo atendimento</button>
+  </div>
+
+  <div class="card"><div class="card-b" style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start">
+    <div style="flex:1 1 260px;min-width:0">
+      <h2 style="font-size:20px">${esc(p.nome)}</h2>
+      <div style="color:var(--muted);font-size:12.5px;margin:3px 0 12px">${esc(p.funcao||"—")} · ${esc(p.setor||"—")} · ${esc(p.turno||"—")}</div>
+      <dl class="kv">
+        <dt>Matrícula</dt><dd class="mono">${esc(p.matricula||"—")}</dd>
+        <dt>Nascimento</dt><dd>${fdate(p.nascimento)} ${idade(p.nascimento)?"("+idade(p.nascimento)+" anos)":""}</dd>
+        <dt>Contato</dt><dd>${esc(p.telefone||"—")}</dd>
+        <dt>Admissão</dt><dd>${fdate(p.admissao)}</dd>
+        <dt>Situação</dt><dd>${p.ativo===false?'<span class="pill mute">Inativo</span>':'<span class="pill ok">Ativo</span>'}</dd>
+        <dt>Consentimento</dt><dd>${p.consentimento==="Sim"?'<span class="pill ok">Assinado</span>'+(p.assinaturaEm?' <span class="mini">'+fdate(p.assinaturaEm)+'</span>':""):'<span class="pill warn">Pendente</span>'}</dd>
+        <dt>Cadastro</dt><dd class="mini">${p.criadoPor?'por <span data-uid="'+esc(p.criadoPor)+'">alguém</span>':"—"}${p.atualizadoEm?" · alterado em "+fdate(p.atualizadoEm.slice(0,10)):""}</dd>
+      </dl>
+    </div>
+    <div style="flex:1 1 240px;display:grid;grid-template-columns:repeat(auto-fit,minmax(108px,1fr));gap:10px">
+      ${tile("Sessões",real.length,"realizadas",true)}
+      ${tile("Alívio médio",media==null?"—":("−"+media),"escala 0–10")}
+      ${tile("Faltas",ats.filter(a=>a.status==="Faltou").length,"registradas")}
+      ${tile("Satisfação",notas.length?(notas.reduce((s,n)=>s+n,0)/notas.length).toFixed(1)+"/5":"—",plural(notas.length,"avaliação","avaliações"))}
+      ${tile("Dias perdidos",diasPerdidos(afast),plural(afast.length,"afastamento"))}
+      ${tile("Próxima",prox?fdateShort(prox.data):"—",prox?(prox.hora||"")+" · "+(prox.tipo||""):"sem agendamento")}
+    </div>
+  </div></div>
+
+  ${alerta.length?`<div class="card"><div class="card-h"><h2>Atenção clínica</h2></div><div class="card-b stack">
+    ${alerta.map(a=>`<div class="alert ${a[0]}"><div class="grow"><b>${esc(a[1])}</b><div style="opacity:.9;margin-top:2px">${esc(a[2])}</div></div></div>`).join("")}</div></div>`:""}
+
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h2>Quadro clínico</h2></div><div class="card-b">
+      <dl class="kv">
+        <dt>Problema na coluna</dt><dd>${esc(p.problemaColuna||"Não informado")}</dd>
+        <dt>Diagnóstico</dt><dd>${esc(p.diagnostico||"—")}</dd>
+        <dt>Regiões afetadas</dt><dd>${(p.regioes||[]).length?(p.regioes||[]).map(r=>'<span class="pill mute" style="margin:0 4px 4px 0">'+esc(r)+'</span>').join(""):"—"}</dd>
+        <dt>Exames</dt><dd>${esc(p.exames||"—")}</dd>
+        <dt>Cirurgias</dt><dd>${esc(p.cirurgias||"—")}</dd>
+        <dt>Medicamentos</dt><dd>${p.usaMedicamento==="Sim"?esc(p.medicamentos||"Sim (não especificado)"):"Não usa"}</dd>
+        <dt>Atividade física</dt><dd>${esc(p.atividade||"—")}</dd>
+        <dt>Posto de trabalho</dt><dd>${esc(p.posto||"—")}</dd>
+        <dt>Esforço no cargo</dt><dd>${esc(p.esforco||"—")}</dd>
+        <dt>Observações</dt><dd>${esc(p.observacoes||"—")}</dd>
+      </dl>
+      <div class="sect" style="margin-top:14px"><div class="st">Anexos</div>
+        ${(p.anexos||[]).length?`<div class="chips">${(p.anexos||[]).map((an,i)=>`<span class="filechip"><a href="/_blob/${esc(an.id)}" target="_blank" rel="noopener">${esc(an.nome)}</a><button type="button" class="icon-btn no-print" data-act="rm-anexo" data-id="${p.id}" data-i="${i}" style="width:22px;height:22px" aria-label="Remover"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></span>`).join("")}</div>`:`<div class="mini">Nenhum laudo, exame ou atestado anexado.</div>`}
+      </div>
+      ${p.assinaturaId?`<div class="sect"><div class="st">Termo assinado</div><img src="/_blob/${esc(p.assinaturaId)}" alt="Assinatura do colaborador" style="max-width:320px;border:1px solid var(--line);border-radius:8px;background:#fff"></div>`:""}
+    </div></div>
+    <div class="card"><div class="card-h"><h2>Mapa corporal acumulado</h2><div class="grow"></div><span class="pill mute">${pontos.length} marcações</span></div>
+      <div class="card-b">${pontos.length?`<div class="bodymap">${corpoSVG("f",pontos,false)}${corpoSVG("b",pontos,false)}<div style="flex:1;min-width:140px" class="mini">Cada ponto é uma queixa registrada numa sessão. Quanto mais forte a cor, maior a intensidade relatada.</div></div>`:`<div class="empty">Marque os pontos de dor ao registrar um atendimento.</div>`}</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h2>Evolução da dor</h2></div><div class="card-b">${linhaDor(real)}</div></div>
+    <div class="card"><div class="card-h"><h2>Afastamentos</h2><div class="grow"></div><span class="pill mute">${plural(diasPerdidos(afast),"dia")}</span></div>
+      ${afast.length?`<div class="tblwrap"><table><thead><tr><th>Início</th><th>Dias</th><th>Motivo</th><th></th></tr></thead><tbody>
+        ${afast.map(a=>`<tr><td>${fdate(a.inicio)}</td><td class="num">${esc(a.dias)}</td><td>${esc(a.motivo||"—")}${a.relacionado?' <span class="pill crit">coluna</span>':""}</td><td class="rowact no-print"><button class="btn sm ghost" data-act="del-afast" data-id="${a.id}">Excluir</button></td></tr>`).join("")}
+      </tbody></table></div>`:`<div class="empty">Nenhum afastamento registrado. É este número que mostra o retorno do programa.</div>`}
+    </div>
+  </div>
+
+  <div class="card"><div class="card-h"><h2>Histórico de atendimentos</h2><div class="grow"></div><span class="pill mute">${ats.length}</span></div><div class="card-b">
+    ${ats.length?`<div class="tl">${ats.map(a=>`<div class="tl-i"><div class="rail"><span class="bl" style="background:${a.status==="Realizado"?"var(--red)":"var(--line-2)"}"></span><span class="ln"></span></div>
+      <div class="tl-b">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <b style="font-family:var(--display)">${fdate(a.data)}</b><span class="sm mono" style="color:var(--muted)">${esc(a.hora||"")}</span>${pillAt(a.status)}
+          <span style="flex:1"></span><button class="btn sm ghost no-print" data-act="edit-atend" data-id="${a.id}">Abrir</button>
+        </div>
+        <div style="font-size:12.5px;color:var(--ink-2);margin-top:3px">${esc(a.tipo||"")}${a.queixa?" · "+esc(a.queixa):""}</div>
+        ${a.dorAntes!=null&&a.dorDepois!=null?`<div class="mini" style="margin-top:3px">Dor ${a.dorAntes} → ${a.dorDepois} ${Number(a.dorDepois)<Number(a.dorAntes)?'<span class="pill ok" style="margin-left:4px">−'+(a.dorAntes-a.dorDepois)+'</span>':""}${a.avaliacao?' · nota '+a.avaliacao+'/5':""}</div>`:""}
+        ${a.evolucao?`<div style="font-size:12.5px;margin-top:5px;color:var(--ink-2)">${esc(a.evolucao)}</div>`:""}
+        ${a.criadoPor?`<div class="mini" style="margin-top:3px">registrado por <span data-uid="${esc(a.criadoPor)}">alguém</span></div>`:""}
+      </div></div>`).join("")}</div>`:`<div class="empty"><b>Sem atendimentos</b>O histórico aparece aqui após a primeira sessão.</div>`}
+  </div></div>`;
+}
+
+/* ===================== AGENDA ===================== */
+function slots(){
+  const c=cfg(),out=[];
+  const toMin=h=>Number(h.split(":")[0])*60+Number(h.split(":")[1]||0);
+  for(let m=toMin(c.horaInicio);m<toMin(c.horaFim);m+=Number(c.passo||30))
+    out.push(String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0"));
+  return out;
+}
+function viewAgenda(){
+  const aba=ctx.aba.agenda||"semana";
+  return `${bannerExemplo()}
+  <div class="card">
+    <div class="tabs no-print"><button data-aba="agenda:semana" aria-selected="${aba==="semana"}">Semana</button><button data-aba="agenda:lista" aria-selected="${aba==="lista"}">Lista</button></div>
+    ${aba==="semana"?agendaSemana():agendaLista()}
+  </div>`;
+}
+function agendaSemana(){
+  const c=cfg(),ini=ctx.semana,hoje=todayISO(),sl=slots();
+  const dias=c.diasSemana.map(d=>addDays(ini,d));
+  const porCel={};
+  state.atendimentos.filter(a=>dias.indexOf(a.data)>=0).forEach(a=>{
+    const k=a.data+"|"+String(a.hora||"").slice(0,5);
+    (porCel[k]=porCel[k]||[]).push(a);
+  });
+  const clsSt={"Realizado":"done","Faltou":"miss","Cancelado":"canc"};
+  return `<div class="card-h"><button class="btn sm ghost" data-sem="-7">←</button><h2>${fdate(dias[0])} a ${fdate(dias[dias.length-1])}</h2><button class="btn sm ghost" data-sem="7">→</button><button class="btn sm ghost" data-sem="0">Hoje</button><div class="grow"></div>
+    <span class="mini">Clique num horário livre para agendar</span></div>
+  <div class="tblwrap"><div class="wk" style="--cols:${dias.length}">
+    <div class="hd"></div>
+    ${dias.map(d=>`<div class="hd${d===hoje?" today":""}">${DIAS_SEM[new Date(d+"T00:00").getDay()]}<small>${fdateShort(d)}</small></div>`).join("")}
+    ${sl.map(h=>`<div class="hr">${h}</div>`+dias.map(d=>{
+      const arr=porCel[d+"|"+h]||[];
+      return `<div class="cel" data-slot="${d}|${h}">${arr.map(a=>{const p=byId("pacientes",a.pacienteId)||{};
+        return `<button type="button" class="ap ${clsSt[a.status]||""}" data-act="edit-atend" data-id="${a.id}">${esc((p.nome||"—").split(" ")[0])}<small>${esc(a.tipo||"")}</small></button>`;}).join("")}</div>`;
+    }).join("")).join("")}
+  </div></div>`;
+}
+function agendaLista(){
+  const q=busca.trim().toLowerCase(),hoje=todayISO(),f=ctx.filtroAt||"todos";
+  let l=state.atendimentos.slice().sort((a,b)=>String(b.data+(b.hora||"")).localeCompare(String(a.data+(a.hora||""))));
+  if(f!=="todos") l=l.filter(a=>f==="futuros"?(a.data>=hoje&&a.status==="Agendado"):a.status===f);
+  if(q) l=l.filter(a=>{const p=byId("pacientes",a.pacienteId)||{};return [p.nome,p.setor,a.tipo,a.queixa,a.evolucao].join(" ").toLowerCase().indexOf(q)>=0;});
+  return `<div class="card-h"><h2>${l.length} registro(s)</h2><div class="grow"></div>
+    <div class="seg">${[["todos","Todos"],["futuros","Agendados"],["Realizado","Realizados"],["Faltou","Faltas"]].map(([k,lb])=>`<button data-filtro="${k}" aria-pressed="${f===k}">${lb}</button>`).join("")}</div></div>
+  ${l.length?`<div class="tblwrap"><table><thead><tr><th>Data</th><th>Colaborador</th><th>Tipo</th><th>Regiões</th><th>Dor</th><th>Status</th><th></th></tr></thead><tbody>
+    ${l.slice(0,250).map(a=>{const p=byId("pacientes",a.pacienteId)||{},dif=(a.dorAntes!=null&&a.dorDepois!=null)?Number(a.dorAntes)-Number(a.dorDepois):null;return `<tr>
+      <td><div class="nm num">${fdate(a.data)}</div><div class="sm mono">${esc(a.hora||"")}</div></td>
+      <td><div class="nm">${esc(p.nome||"—")}</div><div class="sm">${esc(p.setor||"")}</div></td>
+      <td>${esc(a.tipo||"—")}<div class="sm">${esc((a.tecnicas||[]).slice(0,2).join(", "))}</div></td>
+      <td class="sm">${esc((a.regioes||[]).join(", ")||"—")}</td>
+      <td>${dif==null?'<span class="sm">—</span>':`<span class="num">${a.dorAntes}→${a.dorDepois}</span> ${dif>0?'<span class="pill ok">−'+dif+'</span>':dif<0?'<span class="pill crit">+'+(-dif)+'</span>':'<span class="pill mute">=</span>'}`}</td>
+      <td>${pillAt(a.status)}</td>
+      <td class="rowact">${a.status==="Agendado"?`<button class="btn sm" data-act="concluir" data-id="${a.id}">Registrar</button>`:""}<button class="btn sm ghost" data-act="edit-atend" data-id="${a.id}">Abrir</button></td>
+    </tr>`;}).join("")}
+  </tbody></table></div>`:`<div class="empty"><b>Nenhum atendimento</b>Registre o primeiro em “Novo atendimento”.</div>`}`;
+}
+
+/* ===================== SOLICITAÇÕES ===================== */
+function viewSolicitacoes(){
+  const q=busca.trim().toLowerCase(),f=ctx.filtroSol||"todos",hoje=todayISO();
+  let l=state.solicitacoes.slice().sort((a,b)=>String(b.data+b.numero).localeCompare(String(a.data+a.numero)));
+  if(f!=="todos") l=l.filter(s=>s.status===f);
+  if(q) l=l.filter(s=>[s.numero,s.justificativa,(s.itens||[]).map(i=>i.descricao).join(" ")].join(" ").toLowerCase().indexOf(q)>=0);
+  return `${bannerExemplo()}
+  <div class="banner no-print"><span class="pill info">Fluxo</span><span class="grow">Pendente → Aprovado → Comprado → Entregue. Ao marcar “Entregue” dá para lançar as quantidades direto no estoque da sala.</span></div>
+  <div class="card">
+    <div class="card-h"><h2>${l.length} solicitação(ões)</h2><div class="grow"></div>
+      <div class="seg">${[["todos","Todas"]].concat(STATUS_SOL.map(s=>[s,s])).map(([k,lb])=>`<button data-fsol="${k}" aria-pressed="${f===k}">${lb}</button>`).join("")}</div></div>
+    ${l.length?`<div class="tblwrap"><table><thead><tr><th>Nº / data</th><th>Itens</th><th>Urgência</th><th>Status</th><th>Suprimentos</th><th></th></tr></thead><tbody>
+      ${l.map(s=>{const dias=s.status==="Pendente"?daysBetween(s.data,hoje):null;return `<tr>
+        <td><div class="nm mono">${esc(s.numero||"—")}</div><div class="sm">${fdate(s.data)}${dias!=null&&dias>3?` · <span style="color:var(--crit)">há ${dias} dias</span>`:""}</div></td>
+        <td><div class="nm">${(s.itens||[]).length} item(ns)</div><div class="sm">${esc((s.itens||[]).map(i=>i.qtd+" "+(i.unidade||"")+" "+i.descricao).join(" · ").slice(0,90))}</div></td>
+        <td>${s.urgencia==="Urgente"?'<span class="pill crit">Urgente</span>':'<span class="pill mute">Normal</span>'}</td>
+        <td>${pillSol(s.status)}</td>
+        <td class="sm">${esc(s.resposta||"—")}</td>
+        <td class="rowact"><button class="btn sm ghost" data-act="ver-sol" data-id="${s.id}">Abrir</button></td>
+      </tr>`;}).join("")}
+    </tbody></table></div>`:`<div class="empty"><b>Nenhuma solicitação</b>Peça materiais ao setor de Suprimentos em “Nova solicitação”.</div>`}
+  </div>`;
+}
+
+/* ===================== ESTOQUE ===================== */
+function viewEstoque(){
+  const aba=ctx.aba.estoque||"itens";
+  return `${bannerExemplo()}
+  ${estoqueBaixo().length?`<div class="alert crit no-print"><div class="grow"><b>${estoqueBaixo().length} item(ns) precisam de reposição</b><div style="opacity:.9">${esc(estoqueBaixo().map(i=>i.item).join(" · "))}</div></div><button class="btn sm" data-act="gerar-sol-falta">Gerar solicitação</button></div>`:""}
+  <div class="card">
+    <div class="tabs no-print"><button data-aba="estoque:itens" aria-selected="${aba==="itens"}">Itens</button><button data-aba="estoque:mov" aria-selected="${aba==="mov"}">Movimentações</button></div>
+    ${aba==="itens"?estoqueItens():estoqueMov()}
+  </div>`;
+}
+function estoqueItens(){
+  const q=busca.trim().toLowerCase(),hoje=todayISO();
+  let l=state.estoque.slice().sort((a,b)=>{
+    const sa=(Number(a.quantidade||0)<=Number(a.minimo||0))?0:1,sb=(Number(b.quantidade||0)<=Number(b.minimo||0))?0:1;
+    return sa-sb||String(a.item).localeCompare(String(b.item),"pt");
+  });
+  if(q) l=l.filter(i=>[i.item,i.categoria,i.fornecedor,i.local].join(" ").toLowerCase().indexOf(q)>=0);
+  return `<div class="card-h"><h2>${l.length} item(ns) na sala</h2><div class="grow"></div><span class="pill mute">Baixa automática ao registrar atendimento</span><button class="btn sm ghost" data-act="exp-est">Exportar CSV</button></div>
+  ${l.length?`<div class="tblwrap"><table><thead><tr><th>Item</th><th>Categoria</th><th>Quantidade</th><th>Mínimo</th><th>Consumo / previsão</th><th>Validade</th><th>Situação</th><th></th></tr></thead><tbody>
+    ${l.map(i=>{const dv=i.validade?daysBetween(hoje,i.validade):null,cm=consumoMedio(i.id),pv=previsaoDias(i);return `<tr>
+      <td><div class="nm">${esc(i.item)}</div><div class="sm">${esc([i.fornecedor,i.local].filter(Boolean).join(" · "))}</div></td>
+      <td class="sm">${esc(i.categoria||"—")}</td>
+      <td><span class="num" style="font-weight:600">${esc(i.quantidade||0)}</span> <span class="sm">${esc(i.unidade||"")}</span>
+        <div class="rowact no-print" style="justify-content:flex-start;margin-top:4px"><button class="btn sm ghost" data-act="mov-rapida" data-id="${i.id}" data-d="-1">−</button><button class="btn sm ghost" data-act="mov-rapida" data-id="${i.id}" data-d="1">+</button><button class="btn sm ghost" data-act="mov-form" data-id="${i.id}">Lançar</button></div></td>
+      <td class="num sm">${esc(i.minimo||0)}</td>
+      <td class="sm">${cm?`${(cm*30).toFixed(1)} ${esc(i.unidade||"")}/mês<div class="${pv!=null&&pv<=14?"":"mini"}" style="${pv!=null&&pv<=14?"color:var(--warn);font-weight:600":""}">${pv!=null?"acaba em ~"+pv+" dias":""}</div>`:'<span class="mini">sem histórico</span>'}</td>
+      <td class="sm">${i.validade?fdate(i.validade)+(dv!=null&&dv<=cfg().diasValidade?`<div style="color:${dv<0?"var(--crit)":"var(--warn)"}">${dv<0?"vencido":"em "+dv+" dias"}</div>`:""):"—"}</td>
+      <td>${pillEst(i)}</td>
+      <td class="rowact"><button class="btn sm ghost" data-act="edit-item" data-id="${i.id}">Editar</button></td>
+    </tr>`;}).join("")}
+  </tbody></table></div>`:`<div class="empty"><b>Estoque vazio</b>Cadastre creme de massagem, papel lençol, luvas e o que mais usar na sala.</div>`}`;
+}
+function estoqueMov(){
+  const q=busca.trim().toLowerCase();
+  let l=state.movimentacoes.slice().sort((a,b)=>String(b.data+(b.criadoEm||"")).localeCompare(String(a.data+(a.criadoEm||""))));
+  if(q) l=l.filter(m=>[m.item,m.tipo,m.motivo].join(" ").toLowerCase().indexOf(q)>=0);
+  const pm={"Entrada":"ok","Saída":"info","Descarte":"crit","Ajuste de inventário":"mute"};
+  return `<div class="card-h"><h2>${l.length} movimentação(ões)</h2><div class="grow"></div><span class="mini">Mantemos os 500 lançamentos mais recentes</span><button class="btn sm ghost" data-act="exp-mov">Exportar CSV</button></div>
+  ${l.length?`<div class="tblwrap"><table><thead><tr><th>Data</th><th>Item</th><th>Tipo</th><th>Qtd</th><th>Motivo</th><th>Por</th></tr></thead><tbody>
+    ${l.slice(0,300).map(m=>`<tr>
+      <td class="num">${fdate(m.data)}</td>
+      <td class="nm">${esc(m.item)}</td>
+      <td><span class="pill ${pm[m.tipo]||"mute"}">${esc(m.tipo)}</span></td>
+      <td class="num">${m.tipo==="Entrada"?"+":"−"}${esc(m.qtd)}</td>
+      <td class="sm">${esc(m.motivo||"—")}</td>
+      <td class="sm">${m.por?'<span data-uid="'+esc(m.por)+'">—</span>':"—"}</td>
+    </tr>`).join("")}
+  </tbody></table></div>`:`<div class="empty"><b>Sem movimentações</b>Cada baixa de material num atendimento aparece aqui automaticamente.</div>`}`;
+}
+
+
+/* ===================== MÉTRICAS E VARIAÇÃO ===================== */
+const METRICAS=[
+  {k:"atendimentos",lb:"Atendimentos realizados",up:true,fmt:v=>v==null?"—":String(Math.round(v))},
+  {k:"colaboradores",lb:"Colaboradores atendidos",up:true,fmt:v=>v==null?"—":String(Math.round(v))},
+  {k:"comDor",lb:"Colaboradores com dor moderada ou forte",up:false,fmt:v=>v==null?"—":String(Math.round(v))},
+  {k:"dorChegada",lb:"Dor média na chegada",up:false,fmt:v=>v==null?"—":v.toFixed(1)},
+  {k:"alivio",lb:"Alívio médio por sessão",up:true,fmt:v=>v==null?"—":"−"+v.toFixed(1)},
+  {k:"dias",lb:"Dias perdidos por afastamento",up:false,fmt:v=>v==null?"—":String(Math.round(v))},
+  {k:"custo",lb:"Custo estimado do afastamento",up:false,fmt:v=>v==null?"—":brl(v)},
+  {k:"faltas",lb:"Faltas em sessões agendadas",up:false,fmt:v=>v==null?"—":String(Math.round(v))},
+  {k:"satisfacao",lb:"Satisfação média",up:true,fmt:v=>v==null?"—":v.toFixed(1)+"/5"}
+];
+function metricasMes(m){
+  const real=state.atendimentos.filter(a=>a.status==="Realizado"&&String(a.data).slice(0,7)===m);
+  const comDor=real.filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  const notas=real.filter(a=>a.avaliacao).map(a=>Number(a.avaliacao));
+  const dias=diasPerdidos(afastMes(m));
+  return {
+    mes:m,
+    atendimentos:real.length,
+    colaboradores:new Set(real.map(a=>a.pacienteId)).size,
+    comDor:new Set(real.filter(a=>Number(a.dorAntes)>=4).map(a=>a.pacienteId)).size,
+    dorChegada:comDor.length?comDor.reduce((s,a)=>s+Number(a.dorAntes),0)/comDor.length:null,
+    alivio:comDor.length?comDor.reduce((s,a)=>s+(Number(a.dorAntes)-Number(a.dorDepois)),0)/comDor.length:null,
+    dias:dias, custo:dias*cfg().custoDia,
+    faltas:state.atendimentos.filter(a=>a.status==="Faltou"&&String(a.data).slice(0,7)===m).length,
+    satisfacao:notas.length?notas.reduce((s,n)=>s+n,0)/notas.length:null,
+    setores:contar(real,a=>{const p=byId("pacientes",a.pacienteId);return p?p.setor:null;}),
+    regioes:contar(real,a=>a.regioes||[]),
+    tecnicas:contar(real,a=>a.tecnicas||[])
+  };
+}
+function mesAnterior(m){ const d=new Date(Number(m.slice(0,4)),Number(m.slice(5,7))-1,1); d.setMonth(d.getMonth()-1); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0"); }
+function variacao(a,b){ if(a==null||b==null) return null; if(b===0) return a?Infinity:0; return (a-b)/b*100; }
+function deltaHTML(a,b,up,sufixo){
+  const v=variacao(a,b);
+  if(v===null) return '<span class="delta flat">sem base</span>';
+  if(v===Infinity) return '<span class="delta '+(up?"up":"down")+'">novo</span>';
+  if(Math.abs(v)<0.5) return '<span class="delta flat">estável'+(sufixo||"")+'</span>';
+  const sobe=v>0,bom=up?sobe:!sobe;
+  return '<span class="delta '+(bom?"up":"down")+'">'+(sobe?"▲":"▼")+" "+Math.abs(v).toFixed(0)+"%"+(sufixo||"")+'</span>';
+}
+function textoVar(a,b,up){
+  const v=variacao(a,b);
+  if(v===null||v===Infinity||Math.abs(v)<0.5) return "estável em relação ao mês anterior";
+  return Math.abs(v).toFixed(0)+"% "+(v>0?"acima":"abaixo")+" do mês anterior";
+}
+function barrasVar(meses,vals,up,fmt){
+  const W=560,H=215,padB=30,padT=46;
+  const max=Math.max(1,...vals.map(v=>Number(v||0))),bw=W/Math.max(1,meses.length);
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;min-width:320px;height:auto" role="img" aria-label="Evolução mensal com variação">
+    <line x1="0" y1="${H-padB}" x2="${W}" y2="${H-padB}" stroke="var(--line-2)" stroke-width="1"/>
+    ${meses.map((m,i)=>{
+      const v=Number(vals[i]||0),h=v/max*(H-padB-padT),x=i*bw+bw*0.24,w=bw*0.52,y=H-padB-h;
+      const ant=i?Number(vals[i-1]||0):null,va=i?variacao(v,ant):null;
+      let dl="",dc="var(--muted)";
+      if(i&&va!==null&&va!==Infinity&&Math.abs(va)>=0.5){ const sobe=va>0; dc=(up?sobe:!sobe)?"var(--ok)":"var(--crit)"; dl=(sobe?"▲":"▼")+" "+Math.abs(va).toFixed(0)+"%"; }
+      else if(i&&va===Infinity){ dl="novo"; }
+      return `${v>0?`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="var(--red)" opacity="${i===meses.length-1?1:.68}"/>`:""}
+        <text x="${x+w/2}" y="${y-7}" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--ink)" font-family="IBM Plex Mono, monospace">${esc(fmt?fmt(v):v)}</text>
+        ${dl?`<text x="${x+w/2}" y="${y-22}" text-anchor="middle" font-size="10.5" font-weight="700" fill="${dc}" font-family="IBM Plex Sans, sans-serif">${dl}</text>`:""}
+        <text x="${x+w/2}" y="${H-padB+15}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${esc(mesCurto(m))}</text>`;
+    }).join("")}
+  </svg>`;
+}
+function barrasDiverg(meses,vals,up){
+  const W=560,H=230,padB=26,padT=16;
+  const pcts=meses.map((m,i)=>i?variacao(Number(vals[i]),Number(vals[i-1])):null);
+  const fin=pcts.filter(v=>v!==null&&v!==Infinity).map(v=>Math.abs(v));
+  const max=Math.max(10,...fin),bw=W/Math.max(1,meses.length);
+  const mid=padT+(H-padT-padB)/2,half=(H-padT-padB)/2-12;
+  return `<svg viewBox="0 0 ${W} ${H}" style="width:100%;min-width:320px;height:auto" role="img" aria-label="Variação percentual mês a mês">
+    <line x1="0" y1="${mid}" x2="${W}" y2="${mid}" stroke="var(--line-2)" stroke-width="1"/>
+    <text x="2" y="${mid-5}" font-size="9.5" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">0%</text>
+    ${meses.map((m,i)=>{
+      const x=i*bw+bw*0.3,w=bw*0.4,v=pcts[i];
+      let corpo="",rot="";
+      if(i===0) rot="base";
+      else if(v===null) rot="—";
+      else if(v===Infinity) rot="novo";
+      else{
+        const h=Math.min(half,Math.abs(v)/max*half),sobe=v>0,bom=up?sobe:!sobe;
+        const cor=Math.abs(v)<0.5?"var(--line-2)":(bom?"var(--ok)":"var(--crit)");
+        corpo=`<rect x="${x}" y="${sobe?mid-h:mid}" width="${w}" height="${Math.max(h,1.5)}" rx="2.5" fill="${cor}"/>`;
+        rot=(Math.abs(v)<0.5?"0%":((sobe?"+":"−")+Math.abs(v).toFixed(0)+"%"));
+        return `${corpo}<text x="${x+w/2}" y="${sobe?mid-h-6:mid+h+13}" text-anchor="middle" font-size="10.5" font-weight="700" fill="${cor}" font-family="IBM Plex Mono, monospace">${rot}</text>
+          <text x="${x+w/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${esc(mesCurto(m))}</text>`;
+      }
+      return `<text x="${x+w/2}" y="${mid+13}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${rot}</text>
+        <text x="${x+w/2}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Sans, sans-serif">${esc(mesCurto(m))}</text>`;
+    }).join("")}
+  </svg>`;
+}
+function tabelaComparativa(mA,mB){
+  const a=metricasMes(mA),b=metricasMes(mB);
+  return `<div class="tblwrap"><table class="cmp"><thead><tr><th>Indicador</th><th style="text-align:right">${esc(mesLabel(mB))}</th><th style="text-align:right">${esc(mesLabel(mA))}</th><th style="text-align:right">Variação</th></tr></thead><tbody>
+    ${METRICAS.map(m=>`<tr><td>${esc(m.lb)}</td><td class="n">${esc(m.fmt(b[m.k]))}</td><td class="n">${esc(m.fmt(a[m.k]))}</td><td class="n">${deltaHTML(a[m.k],b[m.k],m.up)}</td></tr>`).join("")}
+  </tbody></table></div>`;
+}
+
+/* ===================== INDICADORES ===================== */
+function viewIndicadores(){
+  if(!EU.admin){
+    const rs=state.resumos.slice().sort((a,b)=>String(b.id).localeCompare(String(a.id)));
+    return `<div class="lock no-print"><svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+      <div><b>Indicadores publicados</b><div style="color:var(--muted);margin-top:2px">Números agregados, sem nome de colaborador — é o que a área clínica libera para RH, SESMT e gestão.</div></div></div>
+    ${rs.length?rs.map(r=>`<div class="card"><div class="card-h"><h2>${esc(mesLabel(r.id))}</h2><div class="grow"></div><span class="mini">publicado em ${fdate(String(r.publicadoEm||"").slice(0,10))}</span></div>
+      <div class="card-b"><div class="tiles">
+        ${tile("Atendimentos",r.atendimentos,"realizados",true)}
+        ${tile("Colaboradores",r.colaboradores,"atendidos no mês")}
+        ${tile("Alívio médio",r.alivio==null?"—":"−"+r.alivio,"escala 0–10")}
+        ${tile("Dias perdidos",r.diasPerdidos,brl(r.custo)+" estimado")}
+        ${tile("Absenteísmo",r.faltas+" faltas","nas sessões agendadas")}
+        ${tile("Satisfação",r.satisfacao==null?"—":r.satisfacao+"/5","média das avaliações")}
+      </div>
+      ${(r.setores||[]).length?`<div class="sect" style="margin-top:14px"><div class="st">Atendimentos por setor</div>${hbars(r.setores,"")}</div>`:""}
+      ${(r.regioes||[]).length?`<div class="sect"><div class="st">Regiões tratadas</div>${hbars(r.regioes,"")}</div>`:""}
+      </div></div>`).join(""):`<div class="card"><div class="empty"><b>Nenhum resumo publicado</b>O profissional de quiropraxia publica o fechamento de cada mês por aqui.</div></div>`}`;
+  }
+  const c=cfg(),real=state.atendimentos.filter(a=>a.status==="Realizado");
+  const meses=ultimos(6),mesAtual=todayISO().slice(0,7),mesAnt=mesAnterior(mesAtual);
+  const MA=metricasMes(mesAtual),MB=metricasMes(mesAnt);
+  const serie=k=>meses.map(m=>metricasMes(m)[k]);
+  const mk=ctx.metrica||"atendimentos",MD=METRICAS.filter(x=>x.k===mk)[0]||METRICAS[0];
+  const comDor=real.filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  const antes=comDor.length?comDor.reduce((s,a)=>s+Number(a.dorAntes),0)/comDor.length:0;
+  const depois=comDor.length?comDor.reduce((s,a)=>s+Number(a.dorDepois),0)/comDor.length:0;
+  const faltas=state.atendimentos.filter(a=>a.status==="Faltou").length;
+  const totAg=state.atendimentos.filter(a=>a.status!=="Cancelado"&&a.status!=="Agendado").length;
+  const notas=real.filter(a=>a.avaliacao).map(a=>Number(a.avaliacao));
+  const totalDias=diasPerdidos(state.afastamentos), ligados=diasPerdidos(state.afastamentos.filter(a=>a.relacionado));
+  const ergo=alertaErgonomico();
+  return `${bannerExemplo()}
+  <div class="banner no-print"><span class="pill mute">${esc(mesLabel(mesAtual))}</span><span class="grow">Os cartões abaixo são do mês corrente, comparados com ${esc(mesLabel(mesAnt))}.</span></div>
+  <div class="tiles">
+    ${tileD("Atendimentos no mês",MA.atendimentos,textoVar(MA.atendimentos,MB.atendimentos,true),deltaHTML(MA.atendimentos,MB.atendimentos,true),true)}
+    ${tileD("Colaboradores atendidos",MA.colaboradores,"pessoas distintas",deltaHTML(MA.colaboradores,MB.colaboradores,true))}
+    ${tileD("Com dor moderada ou forte",MA.comDor,"nota 4 ou mais na chegada",deltaHTML(MA.comDor,MB.comDor,false))}
+    ${tileD("Alívio médio por sessão",MA.alivio==null?"—":"−"+MA.alivio.toFixed(1),"pontos na escala 0–10",deltaHTML(MA.alivio,MB.alivio,true))}
+    ${tileD("Dias perdidos",MA.dias,brl(MA.custo)+" estimados",deltaHTML(MA.dias,MB.dias,false))}
+    ${tileD("Satisfação",MA.satisfacao==null?"—":MA.satisfacao.toFixed(1)+"/5","média das notas do mês",deltaHTML(MA.satisfacao,MB.satisfacao,true))}
+  </div>
+  <div class="card">
+    <div class="card-h"><h2>Variação mês a mês</h2><div class="grow"></div>
+      <div class="metricsel"><label class="mini" for="msel">Indicador</label>
+        <select id="msel" data-metrica>${METRICAS.map(x=>`<option value="${x.k}"${x.k===mk?" selected":""}>${esc(x.lb)}</option>`).join("")}</select></div></div>
+    <div class="card-b" style="overflow-x:auto">
+      ${barrasVar(meses,serie(MD.k),MD.up,MD.fmt)}
+      <div class="mini" style="margin:14px 0 4px;font-weight:600;color:var(--ink-2)">Variação percentual sobre o mês anterior</div>
+      ${barrasDiverg(meses,serie(MD.k),MD.up)}
+      <div class="mini" style="margin-top:8px">Verde indica movimento favorável para este indicador; vermelho, desfavorável. Em “${esc(MD.lb)}”, ${MD.up?"subir":"cair"} é o resultado desejado.</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-h"><h2>Comparativo ${esc(mesLabel(mesAnt))} → ${esc(mesLabel(mesAtual))}</h2></div>
+    ${tabelaComparativa(mesAtual,mesAnt)}
+  </div>
+  <div class="tiles">
+    ${tile("Atendimentos acumulados",real.length,"desde o início do programa")}
+    ${tile("Dor média na chegada",comDor.length?antes.toFixed(1):"—","média histórica, escala 0–10")}
+    ${tile("Dor média na saída",comDor.length?depois.toFixed(1):"—","média histórica, escala 0–10")}
+    ${tile("Absenteísmo nas sessões",totAg?Math.round(faltas/totAg*100)+"%":"—",plural(faltas,"falta")+" no histórico")}
+    ${tile("Custo acumulado do afastamento",brl(ligados*c.custoDia),ligados+" de "+totalDias+" dias ligados à coluna")}
+  </div>
+  ${ergo.length?`<div class="card"><div class="card-h"><h2>Alerta ergonômico por setor</h2></div><div class="card-b stack">
+    ${ergo.map(e=>`<div class="alert warn"><div class="grow"><b>${esc(e.setor)} · ${esc(e.regiao)}</b><div style="opacity:.9;margin-top:2px">${e.n} colaboradores do mesmo setor com queixa na mesma região. Quando a queixa se repete no setor, a causa costuma estar no posto de trabalho.</div></div></div>`).join("")}
+  </div></div>`:""}
+  <div class="grid2">
+    <div class="card"><div class="card-h"><h2>Atendimentos por mês</h2></div><div class="card-b" style="overflow-x:auto">${barrasVar(meses,serie("atendimentos"),true)}</div></div>
+    <div class="card"><div class="card-h"><h2>Dias perdidos por afastamento</h2><div class="grow"></div><button class="btn sm ghost" data-act="afastar">Registrar</button></div><div class="card-b" style="overflow-x:auto">${barrasVar(meses,serie("dias"),false)}<div class="mini" style="margin-top:6px">Custo estimado no período: ${brl(serie("dias").reduce((s,x)=>s+Number(x||0),0)*c.custoDia)} — parâmetro de ${brl(c.custoDia)} por dia, ajustável em Configurações.</div></div></div>
+    <div class="card"><div class="card-h"><h2>Atendimentos por setor</h2></div><div class="card-b">${hbars(contar(real,a=>{const p=byId("pacientes",a.pacienteId);return p?p.setor:null;}),"Sem atendimentos realizados")}</div></div>
+    <div class="card"><div class="card-h"><h2>Regiões tratadas</h2></div><div class="card-b">${hbars(contar(real,a=>a.regioes||[]),"Sem atendimentos realizados")}</div></div>
+    <div class="card"><div class="card-h"><h2>Técnicas mais aplicadas</h2></div><div class="card-b">${hbars(contar(real,a=>a.tecnicas||[]),"Sem atendimentos realizados")}</div></div>
+    <div class="card"><div class="card-h"><h2>Diagnósticos mais frequentes</h2></div><div class="card-b">${hbars(contar(state.pacientes.filter(p=>p.diagnostico),p=>p.diagnostico),"Nenhum diagnóstico registrado")}</div></div>
+    <div class="card"><div class="card-h"><h2>Consumo de materiais</h2></div><div class="card-b">${hbars(contar(state.movimentacoes.filter(m=>m.tipo==="Saída"),m=>m.item),"Nenhuma saída registrada")}</div></div>
+    <div class="card"><div class="card-h"><h2>Resumos publicados</h2><div class="grow"></div><button class="btn sm ghost" data-act="publicar-resumo">Publicar mês</button></div><div class="card-b">
+      ${state.resumos.length?`<div class="chips">${state.resumos.slice().sort((a,b)=>String(b.id).localeCompare(String(a.id))).map(r=>`<span class="pill ok">${esc(mesLabel(r.id))}</span>`).join("")}</div><div class="mini" style="margin-top:8px">Quem tem acesso operacional (RH, SESMT, Suprimentos) vê só estes números, sem nomes.</div>`:`<div class="mini">Nada publicado ainda. Publicar o mês libera os números agregados para RH e gestão sem expor ficha clínica.</div>`}
+    </div></div>
+  </div>`;
+}
+
+/* ===================== CONFIGURAÇÕES ===================== */
+function viewConfig(){
+  const c=cfg(),docs=COLS.reduce((s,col)=>s+state[col].length,0);
+  return `<div class="grid2">
+    <div class="card"><div class="card-h"><h2>Parâmetros</h2></div><div class="card-b">
+      <form id="cfgform" class="f">
+        <div class="fr">
+          ${fl("Empresa",`<input name="empresa" value="${esc(c.empresa)}">`)}
+          ${fl("Custo médio de um dia de afastamento (R$)",`<input type="number" name="custoDia" min="0" step="10" value="${esc(c.custoDia)}">`)}
+        </div>
+        <div class="sect"><div class="st">Agenda</div><div class="fr">
+          ${fl("Início",`<input type="time" name="horaInicio" value="${esc(c.horaInicio)}">`)}
+          ${fl("Fim",`<input type="time" name="horaFim" value="${esc(c.horaFim)}">`)}
+          ${fl("Intervalo entre horários (min)",sel("passo",[15,20,30,45,60],c.passo))}
+          ${fl("Duração padrão da sessão (min)",`<input type="number" name="duracao" min="10" step="5" value="${esc(c.duracao)}">`)}
+        </div>
+        ${fl("Dias de atendimento",`<div class="chips">${DIAS_SEM.map((d,i)=>`<label class="chip"><input type="checkbox" name="diasSemana" value="${i}"${c.diasSemana.indexOf(i)>=0?" checked":""}>${d}</label>`).join("")}</div>`)}
+        </div>
+        <div class="sect"><div class="st">Alertas</div><div class="fr">
+          ${fl("Avisar sem retorno após (dias)",`<input type="number" name="diasRetorno" min="7" step="1" value="${esc(c.diasRetorno)}">`)}
+          ${fl("Avisar validade em (dias)",`<input type="number" name="diasValidade" min="7" step="1" value="${esc(c.diasValidade)}">`)}
+          ${fl("Janela do consumo médio (dias)",`<input type="number" name="janelaConsumo" min="15" step="15" value="${esc(c.janelaConsumo)}">`)}
+        </div></div>
+        <div style="display:flex;justify-content:flex-end"><button class="btn" type="submit">Salvar parâmetros</button></div>
+      </form>
+    </div></div>
+    <div class="card"><div class="card-h"><h2>Quem vê o quê</h2></div><div class="card-b stack">
+      <div class="alert info"><div class="grow"><b>Dois níveis de acesso, aplicados no banco de dados</b>
+        <div style="opacity:.9;margin-top:4px">No menu <b>Compartilhar</b> desta página:<br>
+        · <b>“Pode editar”</b> → profissional de quiropraxia e você. Vê fichas clínicas, agenda, anexos e tudo mais.<br>
+        · <b>“Pode interagir”</b> → Suprimentos, RH e SESMT. Vê solicitações de compra, estoque e os resumos mensais publicados. As fichas clínicas e a agenda não chegam nem a ser carregadas no navegador dessa pessoa.</div></div></div>
+      <div class="alert warn"><div class="grow"><b>LGPD — dado de saúde é dado sensível</b><div style="opacity:.9;margin-top:2px">Colha o termo de consentimento de cada colaborador (há um campo e assinatura na ficha), dê acesso “Pode editar” só a quem faz o atendimento, e combine com o RH por quanto tempo a ficha fica guardada depois do desligamento.</div></div></div>
+      <div class="mini">Você está conectado como <b>${esc(EU.nome||"usuário")}</b> · nível ${EU.admin?"editor (acesso clínico)":"operacional"}.</div>
+    </div></div>
+    <div class="card"><div class="card-h"><h2>Profissionais</h2><div class="grow"></div><button class="btn sm" data-act="novo-prof">Adicionar</button></div>
+      ${state.profissionais.length?`<div class="tblwrap"><table><thead><tr><th>Nome</th><th>Registro</th><th>Situação</th><th></th></tr></thead><tbody>
+        ${state.profissionais.map(p=>`<tr><td class="nm">${esc(p.nome)}</td><td class="sm mono">${esc(p.registro||"—")}</td><td>${p.ativo===false?'<span class="pill mute">Inativo</span>':'<span class="pill ok">Ativo</span>'}</td><td class="rowact"><button class="btn sm ghost" data-act="edit-prof" data-id="${p.id}">Editar</button></td></tr>`).join("")}
+      </tbody></table></div>`:`<div class="empty">Cadastre o quiropraxista. Com mais de um profissional, cada atendimento passa a registrar quem atendeu.</div>`}
+    </div>
+    <div class="card"><div class="card-h"><h2>Dados</h2></div><div class="card-b stack">
+      <div class="mini">${docs} registros no banco (limite de 5.000). Movimentações antigas são removidas automaticamente acima de 500 lançamentos.</div>
+      <div class="chips">
+        <button class="btn sm ghost" data-act="exp-pac">Colaboradores CSV</button>
+        <button class="btn sm ghost" data-act="exp-atend">Atendimentos CSV</button>
+        <button class="btn sm ghost" data-act="exp-sol">Solicitações CSV</button>
+        <button class="btn sm ghost" data-act="exp-est">Estoque CSV</button>
+        <button class="btn sm ghost" data-act="exp-mov">Movimentações CSV</button>
+        <button class="btn sm ghost" data-act="exp-json">Backup completo (JSON)</button>
+      </div>
+      ${COLS.reduce((s,col)=>s+state[col].filter(x=>x.exemplo).length,0)?`<div><button class="btn sm danger" data-act="limpar-exemplos">Apagar dados de exemplo</button></div>`:""}
+      <div class="mini">Atalhos: <b>/</b> busca · <b>n</b> novo registro do módulo · <b>Esc</b> fecha</div>
+    </div></div>
+  </div>`;
+}
+
+/* ===================== MODAL / FORM HELPERS ===================== */
+let modalSubmit=null;
+function openModal(title,sub,body,footer,cls){
+  $("#modal-root").innerHTML=`<div class="ov ${cls||""}" id="ov"><div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-h"><div style="flex:1"><h3>${esc(title)}</h3>${sub?`<div class="sub">${esc(sub)}</div>`:""}</div>
+      <button class="icon-btn" data-close="1" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <form id="mform"><div class="modal-b">${body}</div>
+    <div class="modal-f">${footer||'<button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar</button>'}</div></form>
+  </div></div>`;
+  const f=$("#mform");
+  f.addEventListener("submit",async ev=>{ ev.preventDefault();
+    const b=f.querySelector('button[type="submit"]'); const lbl=b?b.textContent:"";
+    if(b){b.disabled=true;b.textContent="Salvando…";}
+    try{ if(modalSubmit) await modalSubmit(new FormData(f),f); closeModal(); }
+    catch(e){ if(b){b.disabled=false;b.textContent=lbl;} }
+  });
+  $("#ov").addEventListener("mousedown",e=>{ if(e.target.id==="ov") closeModal(); });
+  document.body.classList.add("has-modal");
+}
+function closeModal(){ $("#modal-root").innerHTML=""; modalSubmit=null; document.body.classList.remove("has-modal"); }
+function sel(name,opts,val,extra){ return `<select name="${name}" ${extra||""}>${opts.map(o=>`<option value="${esc(o)}"${String(val)===String(o)?" selected":""}>${esc(o)}</option>`).join("")}</select>`; }
+function chips(name,opts,vals){ vals=vals||[]; return `<div class="chips">${opts.map(o=>`<label class="chip"><input type="checkbox" name="${name}" value="${esc(o)}"${vals.indexOf(o)>=0?" checked":""}>${esc(o)}</label>`).join("")}</div>`; }
+function fl(lb,inner){ return `<label class="fl"><span>${esc(lb)}</span>${inner}</label>`; }
+function multi(fd,name){ return fd.getAll(name).filter(Boolean); }
+function camposSaude(p){ p=p||{}; return `
+  <div class="sect"><div class="st">Avaliação da coluna</div><div class="f">
+    <div class="fr">
+      ${fl("Tem problema na coluna?",sel("problemaColuna",["Não","Sim - em investigação","Sim - diagnosticado","Não informado"],p.problemaColuna))}
+      ${fl("Diagnóstico / queixa",`<input name="diagnostico" placeholder="Ex.: hérnia de disco L4-L5" value="${esc(p.diagnostico||"")}">`)}
+    </div>
+    ${fl("Regiões afetadas",chips("regioes",REGIOES,p.regioes))}
+    <div class="fr">
+      ${fl("Exames realizados",`<input name="exames" placeholder="RX, ressonância…" value="${esc(p.exames||"")}">`)}
+      ${fl("Cirurgias prévias",`<input name="cirurgias" value="${esc(p.cirurgias||"")}">`)}
+    </div>
+  </div></div>
+  <div class="sect"><div class="st">Saúde geral</div><div class="f">
+    <div class="fr">
+      ${fl("Usa medicamento?",sel("usaMedicamento",["Não","Sim"],p.usaMedicamento))}
+      ${fl("Quais medicamentos",`<input name="medicamentos" placeholder="Nome, dose e frequência" value="${esc(p.medicamentos||"")}">`)}
+    </div>
+    <div class="fr">
+      ${fl("Pratica atividade física",`<input name="atividade" placeholder="Ex.: caminhada 3x/semana" value="${esc(p.atividade||"")}">`)}
+      ${fl("Postura no posto",sel("posto",["Não informado","Sentado a maior parte do dia","Em pé a maior parte do dia","Alterna sentado e em pé","Movimentação constante"],p.posto))}
+      ${fl("Esforço no cargo",sel("esforco",["Não informado","Leve","Moderado","Pesado / carga repetitiva"],p.esforco))}
+    </div>
+    ${fl("Contraindicações / cuidados",`<textarea name="contraindicacoes" placeholder="Osteoporose, marcapasso, gestação, anticoagulante…">${esc(p.contraindicacoes||"")}</textarea>`)}
+  </div></div>`;
+}
+function lerSaude(fd,o){
+  ["problemaColuna","diagnostico","exames","cirurgias","usaMedicamento","medicamentos","atividade","posto","esforco","contraindicacoes"].forEach(k=>o[k]=(fd.get(k)||"").toString().trim());
+  o.regioes=multi(fd,"regioes");
+  return o;
+}
+
+/* ---- Ficha do colaborador ---- */
+function formPaciente(id){
+  const p=id?byId("pacientes",id):{};
+  openModal(id?"Editar ficha":"Nova ficha de colaborador","Dados cadastrais e anamnese ocupacional",`
+  <div class="f">
+    <div class="fr">
+      ${fl("Nome completo *",`<input name="nome" required value="${esc(p.nome||"")}">`)}
+      ${fl("Matrícula",`<input name="matricula" value="${esc(p.matricula||"")}">`)}
+    </div>
+    <div class="fr">
+      ${fl("Setor",sel("setor",SETORES,p.setor))}
+      ${fl("Função / cargo",`<input name="funcao" value="${esc(p.funcao||"")}">`)}
+      ${fl("Turno",sel("turno",TURNOS,p.turno))}
+    </div>
+    <div class="fr">
+      ${fl("Data de nascimento",`<input type="date" name="nascimento" value="${esc(p.nascimento||"")}">`)}
+      ${fl("Admissão",`<input type="date" name="admissao" value="${esc(p.admissao||"")}">`)}
+      ${fl("Telefone / ramal",`<input name="telefone" value="${esc(p.telefone||"")}">`)}
+      ${fl("Situação",sel("ativo",["Ativo","Inativo"],p.ativo===false?"Inativo":"Ativo"))}
+    </div>
+    ${camposSaude(p)}
+    <div class="sect"><div class="st">Liberação</div>
+      <div class="fr">
+        ${fl("Liberado para atendimento",sel("apto",["Sim","Não"],p.apto||"Sim"))}
+        ${fl("Motivo (se não)",`<input name="motivoNaoApto" value="${esc(p.motivoNaoApto||"")}">`)}
+        ${fl("Termo de consentimento assinado",sel("consentimento",["Não","Sim"],p.consentimento))}
+      </div>
+      ${fl("Observações",`<textarea name="observacoes">${esc(p.observacoes||"")}</textarea>`)}
+    </div>
+  </div>`,
+  `${id?`<button type="button" class="btn danger" data-act="del-paciente" data-id="${id}">Excluir ficha</button>`:""}<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar ficha</button>`);
+  modalSubmit=async fd=>{
+    const o=lerSaude(fd,{});
+    ["nome","matricula","setor","funcao","turno","nascimento","admissao","telefone","apto","motivoNaoApto","consentimento","observacoes"].forEach(k=>o[k]=(fd.get(k)||"").toString().trim());
+    o.ativo=fd.get("ativo")!=="Inativo";
+    o.criadoEm=p.criadoEm||new Date().toISOString();
+    o.criadoPor=p.criadoPor||EU.id||"";
+    o.anexos=p.anexos||[]; o.assinaturaId=p.assinaturaId||""; o.assinaturaEm=p.assinaturaEm||"";
+    if(p.origem){ o.origem=p.origem; o.revisado=p.revisado===true; }
+    if(p.exemplo) o.exemplo=true;
+    await put("pacientes",id||uid(),o);
+    toast("Ficha salva");
+  };
+}
+
+/* ---- Autoatendimento (anamnese pelo colaborador) ---- */
+function formKiosk(){
+  openModal("Autoatendimento","Preencha seus dados antes da primeira sessão",`
+  <div class="f">
+    <div style="display:flex;justify-content:center;padding:4px 0 6px"><svg class="logo" style="width:150px"><use href="#tsteck"/></svg></div>
+    <div class="alert info"><div class="grow"><b>Seus dados são confidenciais</b><div style="opacity:.9">As informações abaixo ficam disponíveis apenas para o profissional de quiropraxia. Ao enviar, você autoriza o atendimento e o registro destas informações.</div></div></div>
+    <div class="fr">
+      ${fl("Nome completo *",`<input name="nome" required>`)}
+      ${fl("Matrícula",`<input name="matricula">`)}
+    </div>
+    <div class="fr">
+      ${fl("Setor",sel("setor",SETORES,""))}
+      ${fl("Função / cargo",`<input name="funcao">`)}
+      ${fl("Turno",sel("turno",TURNOS,""))}
+    </div>
+    <div class="fr">
+      ${fl("Data de nascimento",`<input type="date" name="nascimento">`)}
+      ${fl("Telefone / ramal",`<input name="telefone">`)}
+    </div>
+    ${camposSaude({})}
+    <div class="sect"><div class="st">Consentimento</div>
+      <label class="chip"><input type="checkbox" name="consentimento" value="Sim" required>Li e autorizo o atendimento e o registro dos meus dados de saúde</label>
+    </div>
+  </div>`,`<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Enviar</button>`,"kiosk");
+  modalSubmit=async fd=>{
+    const o=lerSaude(fd,{});
+    ["nome","matricula","setor","funcao","turno","nascimento","telefone"].forEach(k=>o[k]=(fd.get(k)||"").toString().trim());
+    o.ativo=true; o.apto="Sim"; o.observacoes=""; o.anexos=[];
+    o.consentimento=fd.get("consentimento")?"Sim":"Não";
+    o.origem="autoatendimento"; o.revisado=false;
+    o.criadoEm=new Date().toISOString();
+    await put("pacientes",uid(),o);
+    toast("Enviado. O profissional vai revisar seus dados.");
+  };
+}
+
+/* ---- Atendimento ---- */
+function linhaMaterial(nome,qtd){
+  const itens=state.estoque.slice().sort((a,b)=>String(a.item).localeCompare(String(b.item),"pt"));
+  return `<div class="itemrow" data-mat>
+    ${fl("Material",`<select name="mat_nome"><option value="">— selecione —</option>${itens.map(it=>`<option value="${esc(it.item)}"${it.item===nome?" selected":""}>${esc(it.item)} (${esc(it.quantidade||0)} ${esc(it.unidade||"")})</option>`).join("")}</select>`)}
+    ${fl("Qtd",`<input type="number" name="mat_qtd" min="0" step="0.5" value="${esc(qtd==null?1:qtd)}">`)}
+    <div></div>
+    <button type="button" class="icon-btn" data-rm-mat aria-label="Remover"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>`;
+}
+function formAtendimento(id,pacienteId,forcarRealizado,dataHora){
+  const a=id?byId("atendimentos",id):{};
+  const pacs=state.pacientes.filter(p=>p.ativo!==false).sort((x,y)=>String(x.nome).localeCompare(String(y.nome),"pt"));
+  const pid=a.pacienteId||pacienteId||"";
+  const st=forcarRealizado?"Realizado":(a.status||"Agendado");
+  const p=byId("pacientes",pid),c=cfg();
+  const profs=state.profissionais.filter(x=>x.ativo!==false);
+  const dh=(dataHora||"").split("|");
+  const flags=p?[p.contraindicacoes?"Contraindicações: "+p.contraindicacoes:"",p.apto==="Não"?"NÃO liberado para atendimento: "+(p.motivoNaoApto||""):"",p.usaMedicamento==="Sim"?"Medicamento em uso: "+(p.medicamentos||"não especificado"):""].filter(Boolean):[];
+  openModal(id?"Atendimento":"Novo atendimento",p?p.nome:"Selecione o colaborador",`
+  <div class="f">
+    ${flags.length?`<div class="alert crit"><div class="grow"><b>Verifique antes de aplicar qualquer técnica</b><div style="opacity:.92;margin-top:2px">${flags.map(f=>esc(f)).join("<br>")}</div>
+      <label class="chip" style="margin-top:9px;background:var(--surface)"><input type="checkbox" name="redflag" value="1"${a.redflag?" checked":""} required>Li e vou adaptar a conduta</label></div></div>`:""}
+    <div class="fr">
+      ${fl("Colaborador *",`<select name="pacienteId" required><option value="">— selecione —</option>${pacs.map(x=>`<option value="${esc(x.id)}"${x.id===pid?" selected":""}>${esc(x.nome)} — ${esc(x.setor||"")}</option>`).join("")}</select>`)}
+      ${fl("Data *",`<input type="date" name="data" required value="${esc(a.data||dh[0]||todayISO())}">`)}
+      ${fl("Hora",`<input type="time" name="hora" value="${esc(a.hora||dh[1]||c.horaInicio)}">`)}
+    </div>
+    <div class="fr">
+      ${fl("Tipo",sel("tipo",TIPOS,a.tipo))}
+      ${fl("Status",sel("status",STATUS_AT,st))}
+      ${fl("Duração (min)",`<input type="number" name="duracao" min="0" step="5" value="${esc(a.duracao||c.duracao)}">`)}
+      ${profs.length?fl("Profissional",`<select name="profissionalId"><option value="">— selecione —</option>${profs.map(x=>`<option value="${esc(x.id)}"${a.profissionalId===x.id?" selected":""}>${esc(x.nome)}</option>`).join("")}</select>`):""}
+    </div>
+    ${fl("Queixa principal",`<input name="queixa" placeholder="Ex.: dor lombar ao levantar peso" value="${esc(a.queixa||"")}">`)}
+    ${fl("Regiões trabalhadas",chips("regioes",REGIOES,a.regioes))}
+    <div class="sect"><div class="st">Mapa corporal</div><div id="mapa"></div></div>
+    <div class="sect"><div class="st">Escala de dor (0 a 10)</div><div class="fr">
+      ${fl("Antes da sessão",`<input type="number" name="dorAntes" min="0" max="10" step="1" value="${a.dorAntes==null?"":esc(a.dorAntes)}">`)}
+      ${fl("Depois da sessão",`<input type="number" name="dorDepois" min="0" max="10" step="1" value="${a.dorDepois==null?"":esc(a.dorDepois)}">`)}
+      ${fl("Avaliação do colaborador",sel("avaliacao",["","1","2","3","4","5"],a.avaliacao==null?"":String(a.avaliacao)))}
+    </div></div>
+    <div class="sect"><div class="st">Técnicas aplicadas</div>${chips("tecnicas",TECNICAS,a.tecnicas)}</div>
+    <div class="sect"><div class="st">Materiais utilizados <span class="pill mute" style="text-transform:none;letter-spacing:0">baixa automática</span></div>
+      <div id="mats" class="f">${(a.materiais||[]).map(m=>linhaMaterial(m.nome,m.qtd)).join("")}</div>
+      <button type="button" class="btn ghost sm" id="add-mat" style="margin-top:9px">+ Adicionar material</button>
+    </div>
+    <div class="sect"><div class="st">Conduta e evolução</div>
+      ${fl("Evolução / orientações",`<textarea name="evolucao" placeholder="O que foi feito, resposta do colaborador, orientações dadas…">${esc(a.evolucao||"")}</textarea>`)}
+      <div class="fr" style="margin-top:12px">
+        ${fl("Próxima sessão",`<input type="date" name="proxima" value="${esc(a.proxima||"")}">`)}
+        ${fl("Encaminhamento",sel("encaminhamento",["Nenhum","Médico do trabalho","Fisioterapia","Ergonomia / posto de trabalho","Exame de imagem"],a.encaminhamento))}
+        ${id?"":fl("Repetir semanalmente por",sel("repetir",["Não repetir","2 semanas","4 semanas","6 semanas","8 semanas","12 semanas"],"Não repetir"))}
+      </div>
+    </div>
+  </div>`,
+  `${id?`<button type="button" class="btn danger" data-act="del-atend" data-id="${id}">Excluir</button>`:""}<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar atendimento</button>`);
+
+  montarMapa($("#mapa"),a.pontos||[],true);
+  const mats=$("#mats");
+  $("#add-mat").onclick=()=>mats.insertAdjacentHTML("beforeend",linhaMaterial("",1));
+  $("#modal-root").addEventListener("click",e=>{ const b=e.target.closest("[data-rm-mat]"); if(b) b.closest("[data-mat]").remove(); });
+
+  modalSubmit=async fd=>{
+    const o={};
+    ["pacienteId","data","hora","tipo","status","queixa","evolucao","proxima","encaminhamento","profissionalId"].forEach(k=>o[k]=(fd.get(k)||"").toString());
+    o.duracao=Number(fd.get("duracao")||0);
+    o.regioes=multi(fd,"regioes"); o.tecnicas=multi(fd,"tecnicas");
+    o.pontos=pontosAtuais.slice();
+    o.redflag=!!fd.get("redflag");
+    const da=fd.get("dorAntes"),dd=fd.get("dorDepois"),av=fd.get("avaliacao");
+    o.dorAntes=(da===""||da==null)?null:Number(da);
+    o.dorDepois=(dd===""||dd==null)?null:Number(dd);
+    o.avaliacao=av?Number(av):null;
+    const nomes=fd.getAll("mat_nome"),qtds=fd.getAll("mat_qtd");
+    o.materiais=nomes.map((n,i)=>({nome:n,qtd:Number(qtds[i]||0)})).filter(m=>m.nome&&m.qtd>0);
+    o.criadoEm=a.criadoEm||new Date().toISOString();
+    o.criadoPor=a.criadoPor||EU.id||"";
+    if(a.exemplo) o.exemplo=true;
+    const conflito=state.atendimentos.find(x=>x.id!==id&&x.data===o.data&&String(x.hora).slice(0,5)===String(o.hora).slice(0,5)&&x.status!=="Cancelado"&&(!o.profissionalId||!x.profissionalId||x.profissionalId===o.profissionalId));
+    if(conflito){
+      const pc=byId("pacientes",conflito.pacienteId)||{};
+      if(!confirm("Já existe atendimento de "+(pc.nome||"outro colaborador")+" em "+fdate(o.data)+" às "+o.hora+". Deseja agendar mesmo assim?")) throw new Error("conflito");
+    }
+    const novoId=id||uid();
+    await put("atendimentos",novoId,o);
+    await aplicarBaixa(a.materiais||[],o.materiais,novoId);
+    let extra="";
+    const rep=fd.get("repetir");
+    if(!id&&rep&&rep!=="Não repetir"){
+      const n=parseInt(rep,10);
+      for(let k=1;k<n;k++){
+        await put("atendimentos",uid(),{pacienteId:o.pacienteId,data:addDays(o.data,7*k),hora:o.hora,tipo:"Sessão de manutenção",status:"Agendado",duracao:o.duracao,profissionalId:o.profissionalId,queixa:o.queixa,regioes:o.regioes,tecnicas:[],materiais:[],pontos:[],dorAntes:null,dorDepois:null,avaliacao:null,evolucao:"",criadoEm:new Date().toISOString(),criadoPor:EU.id||""},true);
+      }
+      extra=" · "+(n-1)+" sessões semanais agendadas";
+    } else if(o.proxima&&!id){
+      await put("atendimentos",uid(),{pacienteId:o.pacienteId,data:o.proxima,hora:o.hora,tipo:"Retorno",status:"Agendado",duracao:o.duracao,profissionalId:o.profissionalId,queixa:o.queixa,regioes:o.regioes,tecnicas:[],materiais:[],pontos:[],dorAntes:null,dorDepois:null,avaliacao:null,evolucao:"",criadoEm:new Date().toISOString(),criadoPor:EU.id||""},true);
+      extra=" · retorno em "+fdate(o.proxima);
+    }
+    toast("Atendimento salvo"+extra);
+  };
+}
+async function registrarMov(item,tipo,qtd,motivo,atendimentoId){
+  if(!qtd) return;
+  await put("movimentacoes",uid(),{itemId:item.id,item:item.item,tipo:tipo,qtd:Math.abs(qtd),motivo:motivo||"",atendimentoId:atendimentoId||"",data:todayISO(),por:EU.id||"",criadoEm:new Date().toISOString()},true);
+  if(state.movimentacoes.length>520){
+    const velhas=state.movimentacoes.slice().sort((a,b)=>String(a.data+(a.criadoEm||"")).localeCompare(String(b.data+(b.criadoEm||"")))).slice(0,state.movimentacoes.length-500);
+    for(const m of velhas) await del("movimentacoes",m.id);
+  }
+}
+async function aplicarBaixa(antes,depois,atendimentoId){
+  const delta={};
+  (depois||[]).forEach(m=>delta[m.nome]=(delta[m.nome]||0)+m.qtd);
+  (antes||[]).forEach(m=>delta[m.nome]=(delta[m.nome]||0)-m.qtd);
+  for(const nome of Object.keys(delta)){
+    if(!delta[nome]) continue;
+    const it=state.estoque.find(x=>x.item===nome);
+    if(!it) continue;
+    const copy=Object.assign({},it); delete copy.id;
+    copy.quantidade=Math.max(0,Number(it.quantidade||0)-delta[nome]);
+    await put("estoque",it.id,copy,true);
+    await registrarMov(it,delta[nome]>0?"Saída":"Entrada",delta[nome],"Atendimento",atendimentoId);
+  }
+}
+
+/* ---- Estoque ---- */
+function formItem(id){
+  const i=id?byId("estoque",id):{};
+  openModal(id?"Editar item":"Novo item de estoque","Materiais usados na sala de quiropraxia",`
+  <div class="f">
+    <div class="fr">
+      ${fl("Item *",`<input name="item" required placeholder="Ex.: Creme de massagem 1kg" value="${esc(i.item||"")}">`)}
+      ${fl("Categoria",sel("categoria",CATEG,i.categoria))}
+    </div>
+    <div class="fr">
+      ${fl("Quantidade",`<input type="number" name="quantidade" min="0" step="0.5" value="${esc(i.quantidade==null?0:i.quantidade)}">`)}
+      ${fl("Unidade",sel("unidade",UNID,i.unidade))}
+      ${fl("Estoque mínimo",`<input type="number" name="minimo" min="0" step="0.5" value="${esc(i.minimo==null?1:i.minimo)}">`)}
+      ${fl("Validade",`<input type="date" name="validade" value="${esc(i.validade||"")}">`)}
+    </div>
+    <div class="fr">
+      ${fl("Fornecedor / marca",`<input name="fornecedor" value="${esc(i.fornecedor||"")}">`)}
+      ${fl("Localização na sala",`<input name="local" value="${esc(i.local||"")}">`)}
+    </div>
+    ${fl("Observações",`<textarea name="obs">${esc(i.obs||"")}</textarea>`)}
+  </div>`,
+  `${id?`<button type="button" class="btn danger" data-act="del-item" data-id="${id}">Excluir</button>`:""}<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar item</button>`);
+  modalSubmit=async fd=>{
+    const o={};
+    ["item","categoria","unidade","validade","fornecedor","local","obs"].forEach(k=>o[k]=(fd.get(k)||"").toString().trim());
+    o.quantidade=Number(fd.get("quantidade")||0); o.minimo=Number(fd.get("minimo")||0);
+    if(i.exemplo) o.exemplo=true;
+    const novo=id||uid();
+    const dif=o.quantidade-Number(i.quantidade||0);
+    await put("estoque",novo,o);
+    if(id&&dif) await registrarMov(Object.assign({},o,{id:novo}),dif>0?"Entrada":"Ajuste de inventário",dif,"Edição do cadastro");
+    else if(!id&&o.quantidade) await registrarMov(Object.assign({},o,{id:novo}),"Entrada",o.quantidade,"Cadastro inicial");
+    toast("Item salvo");
+  };
+}
+function formMov(id){
+  const i=byId("estoque",id); if(!i) return;
+  openModal("Lançar movimentação",i.item,`
+  <div class="f">
+    <div class="fr">
+      ${fl("Tipo",sel("tipo",TIPOS_MOV,"Saída"))}
+      ${fl("Quantidade",`<input type="number" name="qtd" min="0" step="0.5" value="1" required>`)}
+      ${fl("Data",`<input type="date" name="data" value="${todayISO()}">`)}
+    </div>
+    ${fl("Motivo",`<input name="motivo" placeholder="Ex.: uso na sessão, produto vencido, conferência de inventário">`)}
+    <div class="mini">Saldo atual: <b>${esc(i.quantidade||0)} ${esc(i.unidade||"")}</b>. Entradas somam; saídas e descartes subtraem. Em “Ajuste de inventário”, informe o saldo final contado.</div>
+    ${fl("Saldo final (só para ajuste)",`<input type="number" name="saldo" min="0" step="0.5" placeholder="deixe vazio se não for ajuste">`)}
+  </div>`);
+  modalSubmit=async fd=>{
+    const tipo=fd.get("tipo"),qtd=Number(fd.get("qtd")||0),saldo=fd.get("saldo");
+    const copy=Object.assign({},i); delete copy.id;
+    let mov=qtd;
+    if(tipo==="Ajuste de inventário"&&saldo!==""&&saldo!=null){ mov=Math.abs(Number(saldo)-Number(i.quantidade||0)); copy.quantidade=Number(saldo); }
+    else if(tipo==="Entrada") copy.quantidade=Number(i.quantidade||0)+qtd;
+    else copy.quantidade=Math.max(0,Number(i.quantidade||0)-qtd);
+    await put("estoque",id,copy);
+    await registrarMov(i,tipo,mov,(fd.get("motivo")||"").toString());
+    toast("Movimentação lançada");
+  };
+}
+
+/* ---- Solicitação ---- */
+function linhaItemSol(desc,qtd,un,obs){
+  return `<div class="itemrow" data-sitem>
+    ${fl("Descrição do material",`<input name="it_desc" placeholder="Ex.: Papel lençol 70cm x 50m" value="${esc(desc||"")}">`)}
+    ${fl("Qtd",`<input type="number" name="it_qtd" min="0" step="1" value="${esc(qtd==null?1:qtd)}">`)}
+    ${fl("Unidade",sel("it_un",UNID,un||"un"))}
+    <button type="button" class="icon-btn" data-rm-item aria-label="Remover"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <input type="hidden" name="it_obs" value="${esc(obs||"")}">
+  </div>`;
+}
+function formSolicitacao(id,pre,justif){
+  const s=id?byId("solicitacoes",id):{};
+  const itens=(s.itens&&s.itens.length)?s.itens:(pre||[{descricao:"",qtd:1,unidade:"un"}]);
+  const nova=!id;
+  openModal(nova?"Nova solicitação de compra":"Solicitação "+(s.numero||""),nova?"Vai para o setor de Suprimentos":"Acompanhe e atualize o andamento",`
+  <div class="f">
+    <div class="fr">
+      ${fl("Número",`<input name="numero" readonly value="${esc(s.numero||proxNumeroSol())}">`)}
+      ${fl("Data",`<input type="date" name="data" value="${esc(s.data||todayISO())}">`)}
+      ${fl("Urgência",sel("urgencia",["Normal","Urgente"],s.urgencia))}
+      ${fl("Solicitante",`<input name="solicitante" value="${esc(s.solicitante||"Sala de Quiropraxia")}">`)}
+    </div>
+    ${fl("Justificativa / finalidade",`<textarea name="justificativa" placeholder="Para que será usado, quantos atendimentos atende, o que acontece se faltar…">${esc(s.justificativa||justif||"")}</textarea>`)}
+    <div class="sect"><div class="st">Itens solicitados</div>
+      <div id="sitens" class="f">${itens.map(i=>linhaItemSol(i.descricao,i.qtd,i.unidade,i.obs)).join("")}</div>
+      <button type="button" class="btn ghost sm" id="add-item" style="margin-top:9px">+ Adicionar item</button>
+    </div>
+    <div class="sect"><div class="st">Andamento em Suprimentos</div>
+      <div class="fr">
+        ${fl("Status",sel("status",STATUS_SOL,s.status||"Pendente"))}
+        ${fl("Nº do pedido / NF",`<input name="pedido" value="${esc(s.pedido||"")}">`)}
+        ${fl("Previsão de entrega",`<input type="date" name="previsao" value="${esc(s.previsao||"")}">`)}
+      </div>
+      ${fl("Resposta de Suprimentos",`<textarea name="resposta" placeholder="Comprado no fornecedor X, chega dia…">${esc(s.resposta||"")}</textarea>`)}
+      ${!nova?`<label class="sw" style="margin-top:11px"><input type="checkbox" name="entradaEstoque" value="1">Ao salvar como “Entregue”, lançar as quantidades no estoque</label>`:""}
+    </div>
+  </div>`,
+  `${id?`<button type="button" class="btn danger" data-act="del-sol" data-id="${id}">Excluir</button>`:""}<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">${nova?"Enviar a Suprimentos":"Salvar"}</button>`);
+  const box=$("#sitens");
+  $("#add-item").onclick=()=>box.insertAdjacentHTML("beforeend",linhaItemSol("",1,"un",""));
+  $("#modal-root").addEventListener("click",e=>{ const b=e.target.closest("[data-rm-item]"); if(b&&box.children.length>1) b.closest("[data-sitem]").remove(); });
+  modalSubmit=async fd=>{
+    const o={};
+    ["numero","data","urgencia","solicitante","justificativa","status","pedido","previsao","resposta"].forEach(k=>o[k]=(fd.get(k)||"").toString());
+    const d=fd.getAll("it_desc"),q=fd.getAll("it_qtd"),u=fd.getAll("it_un"),ob=fd.getAll("it_obs");
+    o.itens=d.map((x,i)=>({descricao:String(x).trim(),qtd:Number(q[i]||0),unidade:u[i]||"un",obs:ob[i]||""})).filter(x=>x.descricao);
+    if(!o.itens.length){ toast("Informe ao menos um item","crit"); throw new Error("sem itens"); }
+    o.criadoEm=s.criadoEm||new Date().toISOString();
+    if(s.exemplo) o.exemplo=true;
+    await put("solicitacoes",id||uid(),o);
+    if(fd.get("entradaEstoque")&&o.status==="Entregue"){
+      for(const it of o.itens){
+        const ex=state.estoque.find(e=>String(e.item).toLowerCase()===it.descricao.toLowerCase());
+        if(ex){ const c=Object.assign({},ex); delete c.id; c.quantidade=Number(ex.quantidade||0)+it.qtd; await put("estoque",ex.id,c,true); await registrarMov(ex,"Entrada",it.qtd,"Entrega da "+o.numero); }
+        else { const nid=uid(); const novo={item:it.descricao,categoria:"Consumível",unidade:it.unidade,quantidade:it.qtd,minimo:1,validade:"",fornecedor:"",local:"",obs:"Entrada pela "+o.numero}; await put("estoque",nid,novo,true); await registrarMov(Object.assign({},novo,{id:nid}),"Entrada",it.qtd,"Entrega da "+o.numero); }
+      }
+      toast("Solicitação salva e estoque atualizado");
+    } else toast("Solicitação salva");
+  };
+}
+function gerarSolDeFalta(){
+  const faltando=estoqueBaixo().concat(itensAcabando().map(x=>x.i)).filter((v,i,a)=>a.indexOf(v)===i);
+  if(!faltando.length){ toast("Nenhum item precisa de reposição agora","crit"); return; }
+  const pre=faltando.map(i=>({descricao:i.item,qtd:Math.max(1,Math.ceil((Number(i.minimo||1)*2)-Number(i.quantidade||0))),unidade:i.unidade||"un",obs:"Reposição automática"}));
+  formSolicitacao(null,pre,"Reposição dos materiais da sala de quiropraxia que atingiram o estoque mínimo ou que, pelo consumo médio, acabam em menos de 15 dias. Sem eles os atendimentos precisam ser suspensos.");
+}
+
+/* ---- Afastamento / profissional ---- */
+function formAfastamento(pacienteId){
+  const pacs=state.pacientes.slice().sort((a,b)=>String(a.nome).localeCompare(String(b.nome),"pt"));
+  openModal("Registrar afastamento","Dias perdidos entram no cálculo de absenteísmo e custo",`
+  <div class="f">
+    ${fl("Colaborador *",`<select name="pacienteId" required><option value="">— selecione —</option>${pacs.map(p=>`<option value="${esc(p.id)}"${p.id===pacienteId?" selected":""}>${esc(p.nome)}</option>`).join("")}</select>`)}
+    <div class="fr">
+      ${fl("Início",`<input type="date" name="inicio" value="${todayISO()}" required>`)}
+      ${fl("Dias perdidos",`<input type="number" name="dias" min="1" step="1" value="1" required>`)}
+      ${fl("Motivo",sel("motivo",MOTIVOS_AFAST,""))}
+    </div>
+    <label class="sw"><input type="checkbox" name="relacionado" value="1" checked>Relacionado a coluna / musculoesquelético</label>
+    ${fl("Observações",`<textarea name="obs"></textarea>`)}
+  </div>`);
+  modalSubmit=async fd=>{
+    await put("afastamentos",uid(),{pacienteId:fd.get("pacienteId"),inicio:fd.get("inicio"),dias:Number(fd.get("dias")||0),motivo:fd.get("motivo"),relacionado:!!fd.get("relacionado"),obs:(fd.get("obs")||"").toString(),criadoEm:new Date().toISOString()});
+    toast("Afastamento registrado");
+  };
+}
+function formProfissional(id){
+  const p=id?byId("profissionais",id):{};
+  openModal(id?"Editar profissional":"Novo profissional","",`
+  <div class="f"><div class="fr">
+    ${fl("Nome *",`<input name="nome" required value="${esc(p.nome||"")}">`)}
+    ${fl("Registro / conselho",`<input name="registro" value="${esc(p.registro||"")}">`)}
+    ${fl("Situação",sel("ativo",["Ativo","Inativo"],p.ativo===false?"Inativo":"Ativo"))}
+  </div></div>`,
+  `${id?`<button type="button" class="btn danger" data-act="del-prof" data-id="${id}">Excluir</button>`:""}<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar</button>`);
+  modalSubmit=async fd=>{ await put("profissionais",id||uid(),{nome:(fd.get("nome")||"").toString().trim(),registro:(fd.get("registro")||"").toString().trim(),ativo:fd.get("ativo")!=="Inativo"}); toast("Profissional salvo"); };
+}
+
+/* ---- Assinatura e anexos (capability assets) ---- */
+function formAssinatura(id){
+  const p=byId("pacientes",id); if(!p) return;
+  if(!ASSETS){ toast("Assinatura indisponível neste acesso","crit"); return; }
+  openModal("Termo de consentimento",p.nome,`
+  <div class="f">
+    <div class="alert info"><div class="grow"><b>Consentimento para atendimento e tratamento de dados de saúde</b>
+      <div style="opacity:.92;margin-top:4px">Declaro que fui informado(a) sobre a avaliação e as técnicas de quiropraxia que podem ser aplicadas, que respondi com veracidade às perguntas de saúde e que autorizo a ${esc(cfg().empresa)} a registrar e guardar estas informações exclusivamente para o acompanhamento do meu atendimento na sala de quiropraxia.</div></div></div>
+    ${p.assinaturaId?`<div><div class="mini" style="margin-bottom:5px">Assinatura atual (${fdate(p.assinaturaEm)}):</div><img src="/_blob/${esc(p.assinaturaId)}" alt="Assinatura registrada" style="max-width:320px;border:1px solid var(--line);border-radius:8px;background:#fff"></div>`:""}
+    <div><div class="mini" style="margin-bottom:5px">Assine no quadro abaixo com o dedo ou o mouse:</div>
+      <canvas id="sig" class="sigpad" width="800" height="300"></canvas>
+      <button type="button" class="btn ghost sm" id="sig-clear" style="margin-top:8px">Limpar</button></div>
+  </div>`,`<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Cancelar</button><button type="submit" class="btn">Salvar assinatura</button>`);
+  const cv=$("#sig"),cx=cv.getContext("2d");
+  cx.lineWidth=3; cx.lineCap="round"; cx.lineJoin="round"; cx.strokeStyle="#111";
+  let desenhando=false,usou=false;
+  const pos=e=>{ const r=cv.getBoundingClientRect(),t=e.touches?e.touches[0]:e; return [(t.clientX-r.left)/r.width*cv.width,(t.clientY-r.top)/r.height*cv.height]; };
+  const start=e=>{ e.preventDefault(); desenhando=true; usou=true; const [x,y]=pos(e); cx.beginPath(); cx.moveTo(x,y); };
+  const move=e=>{ if(!desenhando) return; e.preventDefault(); const [x,y]=pos(e); cx.lineTo(x,y); cx.stroke(); };
+  const end=()=>{ desenhando=false; };
+  cv.addEventListener("pointerdown",start); cv.addEventListener("pointermove",move);
+  window.addEventListener("pointerup",end,{once:false});
+  $("#sig-clear").onclick=()=>{ cx.clearRect(0,0,cv.width,cv.height); usou=false; };
+  modalSubmit=async ()=>{
+    if(!usou){ toast("Assine antes de salvar","crit"); throw new Error("vazio"); }
+    const tmp=document.createElement("canvas"); tmp.width=cv.width; tmp.height=cv.height;
+    const tc=tmp.getContext("2d"); tc.fillStyle="#fff"; tc.fillRect(0,0,tmp.width,tmp.height); tc.drawImage(cv,0,0);
+    const blob=await new Promise(r=>tmp.toBlob(r,"image/png"));
+    try{
+      const res=await ASSETS.upload(blob,{type:"image/png"});
+      const copy=Object.assign({},p); delete copy.id;
+      copy.assinaturaId=res.id; copy.assinaturaEm=todayISO(); copy.consentimento="Sim";
+      await put("pacientes",id,copy);
+      toast("Termo assinado e guardado");
+    }catch(e){ toast("Falha ao guardar a assinatura ("+((e&&e.code)||"erro")+")","crit"); throw e; }
+  };
+}
+function anexarArquivo(id){
+  const p=byId("pacientes",id); if(!p) return;
+  if(!ASSETS){ toast("Anexos indisponíveis neste acesso","crit"); return; }
+  const inp=document.createElement("input");
+  inp.type="file"; inp.accept=".pdf,.png,.jpg,.jpeg,.webp,.csv,.txt,.md";
+  inp.onchange=async ()=>{
+    const f=inp.files&&inp.files[0]; if(!f) return;
+    const ext=(f.name.split(".").pop()||"").toLowerCase();
+    const map={pdf:"application/pdf",png:"image/png",jpg:"image/jpeg",jpeg:"image/jpeg",webp:"image/webp",csv:"text/csv",txt:"text/plain",md:"text/markdown"};
+    toast("Enviando "+f.name+"…");
+    try{
+      const res=await ASSETS.upload(f,{type:map[ext]||f.type});
+      const copy=Object.assign({},p); delete copy.id;
+      copy.anexos=(p.anexos||[]).concat([{id:res.id,nome:f.name,tipo:res.contentType,em:todayISO()}]);
+      await put("pacientes",id,copy);
+      toast("Anexo guardado na ficha");
+    }catch(e){ toast("Não foi possível anexar ("+((e&&e.code)||"erro")+")","crit"); }
+  };
+  inp.click();
+}
+
+/* ---- Exportação CSV ---- */
+function csv(linhas){
+  return "﻿"+linhas.map(l=>l.map(c=>{
+    const s=(c==null?"":String(c)).replace(/"/g,'""');
+    return /[;"\n]/.test(s)?'"'+s+'"':s;
+  }).join(";")).join("\r\n");
+}
+async function baixar(nome,conteudo){
+  if(!DOWNLOADS){ toast("Exportação indisponível neste acesso","crit"); return; }
+  try{ await DOWNLOADS.save({filename:nome,data:conteudo}); }
+  catch(e){ const c=(e&&e.code)||""; if(c!=="declined") toast("Não foi possível exportar ("+c+")","crit"); }
+}
+function exportar(tipo){
+  const hoje=todayISO();
+  if(tipo==="pac"){
+    const l=[["Nome","Matrícula","Setor","Função","Turno","Nascimento","Idade","Problema na coluna","Diagnóstico","Regiões","Medicamento","Quais","Contraindicações","Consentimento","Sessões realizadas","Situação"]];
+    state.pacientes.forEach(p=>l.push([p.nome,p.matricula,p.setor,p.funcao,p.turno,p.nascimento,idade(p.nascimento),p.problemaColuna,p.diagnostico,(p.regioes||[]).join(", "),p.usaMedicamento,p.medicamentos,p.contraindicacoes,p.consentimento,atendDoPaciente(p.id).filter(a=>a.status==="Realizado").length,p.ativo===false?"Inativo":"Ativo"]));
+    baixar("colaboradores-"+hoje+".csv",csv(l));
+  } else if(tipo==="atend"){
+    const l=[["Data","Hora","Colaborador","Setor","Tipo","Status","Queixa","Regiões","Técnicas","Dor antes","Dor depois","Alívio","Avaliação","Duração","Encaminhamento","Evolução"]];
+    state.atendimentos.slice().sort((a,b)=>String(a.data).localeCompare(String(b.data))).forEach(a=>{
+      const p=byId("pacientes",a.pacienteId)||{};
+      l.push([a.data,a.hora,p.nome,p.setor,a.tipo,a.status,a.queixa,(a.regioes||[]).join(", "),(a.tecnicas||[]).join(", "),a.dorAntes,a.dorDepois,(a.dorAntes!=null&&a.dorDepois!=null)?a.dorAntes-a.dorDepois:"",a.avaliacao,a.duracao,a.encaminhamento,a.evolucao]);
+    });
+    baixar("atendimentos-"+hoje+".csv",csv(l));
+  } else if(tipo==="sol"){
+    const l=[["Número","Data","Urgência","Status","Item","Qtd","Unidade","Justificativa","Pedido/NF","Previsão","Resposta"]];
+    state.solicitacoes.forEach(s=>(s.itens||[]).forEach(i=>l.push([s.numero,s.data,s.urgencia,s.status,i.descricao,i.qtd,i.unidade,s.justificativa,s.pedido,s.previsao,s.resposta])));
+    baixar("solicitacoes-"+hoje+".csv",csv(l));
+  } else if(tipo==="est"){
+    const l=[["Item","Categoria","Quantidade","Unidade","Mínimo","Consumo mensal","Previsão (dias)","Validade","Fornecedor","Local","Situação"]];
+    state.estoque.forEach(i=>{const cm=consumoMedio(i.id),pv=previsaoDias(i);l.push([i.item,i.categoria,i.quantidade,i.unidade,i.minimo,cm?(cm*30).toFixed(1):"",pv==null?"":pv,i.validade,i.fornecedor,i.local,Number(i.quantidade||0)<=Number(i.minimo||0)?"Repor":"Ok"]);});
+    baixar("estoque-"+hoje+".csv",csv(l));
+  } else if(tipo==="json"){
+    const dump={gerado:new Date().toISOString(),empresa:cfg().empresa,versao:3};
+    COLS.forEach(k=>dump[k]=state[k]);
+    baixar("backup-quiropraxia-"+hoje+".json",JSON.stringify(dump,null,1));
+  } else if(tipo==="mov"){
+    const l=[["Data","Item","Tipo","Quantidade","Motivo"]];
+    state.movimentacoes.slice().sort((a,b)=>String(a.data).localeCompare(String(b.data))).forEach(m=>l.push([m.data,m.item,m.tipo,m.qtd,m.motivo]));
+    baixar("movimentacoes-"+hoje+".csv",csv(l));
+  }
+}
+
+/* ---- Resumo mensal publicado ---- */
+async function publicarResumo(){
+  const mes=prompt("Qual mês publicar? (formato AAAA-MM)",todayISO().slice(0,7));
+  if(!mes||!/^\d{4}-\d{2}$/.test(mes)) return;
+  const real=state.atendimentos.filter(a=>a.status==="Realizado"&&String(a.data).slice(0,7)===mes);
+  const comDor=real.filter(a=>a.dorAntes!=null&&a.dorDepois!=null);
+  const notas=real.filter(a=>a.avaliacao).map(a=>Number(a.avaliacao));
+  const dias=diasPerdidos(afastMes(mes));
+  const doc={
+    atendimentos:real.length,
+    colaboradores:new Set(real.map(a=>a.pacienteId)).size,
+    alivio:comDor.length?Number((comDor.reduce((s,a)=>s+(a.dorAntes-a.dorDepois),0)/comDor.length).toFixed(1)):null,
+    diasPerdidos:dias, custo:dias*cfg().custoDia,
+    faltas:state.atendimentos.filter(a=>a.status==="Faltou"&&String(a.data).slice(0,7)===mes).length,
+    satisfacao:notas.length?Number((notas.reduce((s,n)=>s+n,0)/notas.length).toFixed(1)):null,
+    setores:contar(real,a=>{const p=byId("pacientes",a.pacienteId);return p?p.setor:null;}),
+    regioes:contar(real,a=>a.regioes||[]),
+    publicadoEm:new Date().toISOString()
+  };
+  await put("resumos",mes,doc);
+  toast("Resumo de "+mesLabel(mes)+" publicado para RH e Suprimentos");
+}
+
+/* ---- Relatório mensal imprimível ---- */
+function ultimosMeses(mes,n){
+  const out=[],d=new Date(Number(mes.slice(0,4)),Number(mes.slice(5,7))-1,1);
+  for(let i=n-1;i>=0;i--){ const x=new Date(d.getFullYear(),d.getMonth()-i,1); out.push(x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")); }
+  return out;
+}
+function relatorioMensal(mes){
+  const c=cfg();
+  mes=mes||todayISO().slice(0,7);
+  const ant=mesAnterior(mes),A=metricasMes(mes),B=metricasMes(ant);
+  const meses=ultimosMeses(mes,6);
+  const opcoes=ultimosMeses(todayISO().slice(0,7),12).slice().reverse();
+  const serie=k=>meses.map(m=>metricasMes(m)[k]);
+  const prof=state.profissionais.filter(p=>p.ativo!==false)[0];
+  const getv=(arr,k)=>{ const f=arr.filter(x=>x[0]===k)[0]; return f?f[1]:0; };
+  const setores=Array.from(new Set(A.setores.concat(B.setores).map(x=>x[0]))).sort((x,y)=>getv(A.setores,y)-getv(A.setores,x));
+  const ergo=alertaErgonomico(),baixo=estoqueBaixo(),sem=semRetorno();
+
+  const frases=[];
+  frases.push(`Em ${mesLabel(mes)} foram realizados <b>${plural(A.atendimentos,"atendimento")}</b> na sala de quiropraxia, envolvendo <b>${plural(A.colaboradores,"colaborador","colaboradores")}</b> — ${textoVar(A.atendimentos,B.atendimentos,true)}.`);
+  if(A.alivio!=null) frases.push(`A dor relatada caiu em média <b>${A.alivio.toFixed(1)} pontos</b> por sessão na escala de 0 a 10, com chegada média em ${A.dorChegada.toFixed(1)} — ${textoVar(A.alivio,B.alivio,true)}.`);
+  if(A.comDor||B.comDor) frases.push(`<b>${plural(A.comDor,"colaborador","colaboradores")}</b> chegaram com dor moderada ou forte (nota 4 ou mais): ${textoVar(A.comDor,B.comDor,false)}.`);
+  frases.push(`Foram registrados <b>${plural(A.dias,"dia")}</b> de afastamento ligados a queixas musculoesqueléticas, equivalentes a <b>${brl(A.custo)}</b> pelo parâmetro interno de ${brl(c.custoDia)} por dia — ${textoVar(A.dias,B.dias,false)}.`);
+  if(A.satisfacao!=null) frases.push(`A satisfação média declarada pelos colaboradores foi de <b>${A.satisfacao.toFixed(1)} de 5</b>.`);
+  if(A.faltas) frases.push(`Houve <b>${plural(A.faltas,"falta")}</b> em sessões agendadas, ${textoVar(A.faltas,B.faltas,false)}.`);
+
+  const acoes=[];
+  ergo.slice(0,3).forEach(e=>acoes.push(`Avaliar ergonomicamente os postos de <b>${esc(e.setor)}</b>: ${e.n} colaboradores apresentam queixa na região ${esc(e.regiao.toLowerCase())}, o que sugere causa no posto e não apenas individual.`));
+  if(sem.length) acoes.push(`Reconvocar <b>${plural(sem.length,"colaborador","colaboradores")}</b> sem retorno há mais de ${c.diasRetorno} dias, para não perder o ganho já obtido.`);
+  if(baixo.length) acoes.push(`Repor <b>${plural(baixo.length,"item","itens")}</b> abaixo do estoque mínimo, sob risco de suspensão dos atendimentos.`);
+  if(A.faltas>A.atendimentos*0.15&&A.atendimentos) acoes.push(`Revisar os horários da agenda junto às lideranças: o índice de faltas do mês está acima de 15% das sessões marcadas.`);
+  if(!acoes.length) acoes.push("Nenhum ponto crítico identificado no período. Manter a rotina de sessões e o acompanhamento dos indicadores.");
+
+  openModal("Relatório mensal","Documento para RH, SESMT e gestão — sem identificação de colaborador",`
+  <div class="rep">
+    <div class="no-print" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line)">
+      <label class="mini" for="repmes">Competência</label>
+      <select id="repmes" data-repmes style="background:var(--surface);border:1px solid var(--line-2);border-radius:8px;padding:6px 10px;font-size:13px">
+        ${opcoes.map(m=>`<option value="${m}"${m===mes?" selected":""}>${esc(mesLabel(m))}</option>`).join("")}</select>
+      <div style="flex:1"></div>
+      <button type="button" class="btn sm" data-act="imprimir">Imprimir / salvar PDF</button>
+    </div>
+
+    <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:nowrap;border-bottom:2px solid var(--red);padding-bottom:10px">
+      <svg class="logo" style="width:132px"><use href="#tsteck"/></svg>
+      <div style="padding-bottom:2px">
+        <div style="font-family:var(--display);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink)">Relatório mensal · Sala de Quiropraxia</div>
+        <div class="mini">Programa de saúde ocupacional · ${esc(c.empresa)}</div>
+      </div>
+    </div>
+    <div class="mini" style="display:flex;gap:18px;flex-wrap:wrap;margin-top:8px">
+      <span><b style="color:var(--ink-2)">Competência:</b> ${esc(mesLabel(mes))}</span>
+      <span><b style="color:var(--ink-2)">Emissão:</b> ${fdate(todayISO())}</span>
+      <span><b style="color:var(--ink-2)">Base de comparação:</b> ${esc(mesLabel(ant))}</span>
+      ${prof?`<span><b style="color:var(--ink-2)">Responsável técnico:</b> ${esc(prof.nome)}</span>`:""}
+    </div>
+    ${mes===todayISO().slice(0,7)?`<div class="alert warn" style="margin-top:10px"><div class="grow"><b>Competência em andamento</b><div style="opacity:.9">Os números refletem o mês até ${fdate(todayISO())} e ainda vão mudar até o fechamento. Para comparação fechada, selecione o mês anterior.</div></div></div>`:""}
+
+    <div class="repsec"><div class="h">Resumo executivo</div>
+      <div class="lead">${frases.map(f=>"<p style=\"margin:0 0 8px\">"+f+"</p>").join("")}</div>
+    </div>
+
+    <div class="repsec"><div class="h">Indicadores do mês</div>
+      <div class="repgrid">
+        ${tileD("Atendimentos",A.atendimentos,"realizados no mês",deltaHTML(A.atendimentos,B.atendimentos,true),true)}
+        ${tileD("Colaboradores",A.colaboradores,"pessoas distintas",deltaHTML(A.colaboradores,B.colaboradores,true))}
+        ${tileD("Com dor 4+",A.comDor,"na chegada",deltaHTML(A.comDor,B.comDor,false))}
+        ${tileD("Alívio médio",A.alivio==null?"—":"−"+A.alivio.toFixed(1),"escala 0–10",deltaHTML(A.alivio,B.alivio,true))}
+        ${tileD("Dias perdidos",A.dias,brl(A.custo)+" estimados",deltaHTML(A.dias,B.dias,false))}
+        ${tileD("Satisfação",A.satisfacao==null?"—":A.satisfacao.toFixed(1)+"/5","média das notas",deltaHTML(A.satisfacao,B.satisfacao,true))}
+      </div>
+    </div>
+
+    <div class="repsec"><div class="h">Comparativo com ${esc(mesLabel(ant))}</div>
+      ${tabelaComparativa(mes,ant)}
+    </div>
+
+    <div class="repsec"><div class="h">Evolução de ${esc(mesLabel(meses[0]))} a ${esc(mesLabel(mes))}</div>
+      <div style="font-size:11.5px;font-weight:600;color:var(--ink-2);margin-bottom:4px">Atendimentos realizados por mês</div>
+      ${barrasVar(meses,serie("atendimentos"),true)}
+      <div style="font-size:11.5px;font-weight:600;color:var(--ink-2);margin:14px 0 4px">Variação percentual dos atendimentos</div>
+      ${barrasDiverg(meses,serie("atendimentos"),true)}
+      <div style="font-size:11.5px;font-weight:600;color:var(--ink-2);margin:16px 0 4px">Dias perdidos por afastamento</div>
+      ${barrasVar(meses,serie("dias"),false)}
+    </div>
+
+    <div class="repsec"><div class="h">Distribuição por setor</div>
+      ${setores.length?`<div class="tblwrap"><table class="cmp"><thead><tr><th>Setor</th><th style="text-align:right">${esc(mesLabel(ant))}</th><th style="text-align:right">${esc(mesLabel(mes))}</th><th style="text-align:right">Variação</th></tr></thead><tbody>
+        ${setores.map(k=>`<tr><td>${esc(k)}</td><td class="n">${getv(B.setores,k)}</td><td class="n">${getv(A.setores,k)}</td><td class="n">${deltaHTML(getv(A.setores,k),getv(B.setores,k),true)}</td></tr>`).join("")}
+      </tbody></table></div>`:`<div class="mini">Sem atendimentos registrados nos dois meses comparados.</div>`}
+    </div>
+
+    <div class="repsec"><div class="h">Regiões tratadas no mês</div>
+      ${hbars(A.regioes,"Sem atendimentos no mês")}
+    </div>
+
+    <div class="repsec"><div class="h">Pontos de atenção e ações recomendadas</div>
+      <ol style="margin:0;padding-left:18px;font-size:13px;line-height:1.6;color:var(--ink-2)">${acoes.map(a=>"<li style=\"margin-bottom:5px\">"+a+"</li>").join("")}</ol>
+    </div>
+
+    <div class="sign">
+      <div>${prof?esc(prof.nome):"Responsável técnico"}<br><span style="font-size:10.5px">${prof&&prof.registro?esc(prof.registro):"Quiropraxia"}</span></div>
+      <div>${esc(c.empresa)}<br><span style="font-size:10.5px">Segurança e Saúde no Trabalho</span></div>
+    </div>
+
+    <div class="repfoot">
+      <span>${esc(c.empresa)} · Sala de Quiropraxia · competência ${esc(mesLabel(mes))}</span>
+      <span>Documento com dados agregados. Não contém informação de saúde identificável (LGPD, art. 11).</span>
+    </div>
+  </div>`,`<div style="flex:1"></div><button type="button" class="btn ghost" data-close="1">Fechar</button><button type="button" class="btn" data-act="imprimir">Imprimir / salvar PDF</button>`);
+  modalSubmit=null;
+}
+
+/* ===================== EVENTOS ===================== */
+document.addEventListener("click",async e=>{
+  if(e.target.closest("[data-close]")){ closeModal(); return; }
+  const g=e.target.closest("[data-go]"); if(g){ go(g.dataset.go); return; }
+  const ab=e.target.closest("[data-aba]"); if(ab){ const [m,v]=ab.dataset.aba.split(":"); ctx.aba[m]=v; render(); return; }
+  const sm=e.target.closest("[data-sem]"); if(sm){ const d=Number(sm.dataset.sem); ctx.semana=d?addDays(ctx.semana,d):inicioSemana(todayISO()); render(); return; }
+  const sl=e.target.closest("[data-slot]"); if(sl&&!e.target.closest(".ap")){ formAtendimento(null,"",false,sl.dataset.slot); return; }
+  const fi=e.target.closest("[data-filtro]"); if(fi){ ctx.filtroAt=fi.dataset.filtro; render(); return; }
+  const fs=e.target.closest("[data-fsol]"); if(fs){ ctx.filtroSol=fs.dataset.fsol; render(); return; }
+  const b=e.target.closest("[data-act]"); if(!b) return;
+  const id=b.dataset.id,act=b.dataset.act;
+  if(act==="novo-paciente") formPaciente(null);
+  else if(act==="edit-paciente"){ closeModal(); formPaciente(id); }
+  else if(act==="ficha"){ ctx.paciente=id; route="pacientes"; render(); window.scrollTo({top:0}); }
+  else if(act==="voltar-lista"){ ctx.paciente=null; render(); }
+  else if(act==="kiosk") formKiosk();
+  else if(act==="imprimir") window.print();
+  else if(act==="novo-atend") formAtendimento(null,id||ctx.paciente||"");
+  else if(act==="edit-atend"){ closeModal(); formAtendimento(id); }
+  else if(act==="concluir") formAtendimento(id,null,true);
+  else if(act==="nova-sol") formSolicitacao(null);
+  else if(act==="ver-sol"){ closeModal(); formSolicitacao(id); }
+  else if(act==="gerar-sol-falta") gerarSolDeFalta();
+  else if(act==="novo-item") formItem(null);
+  else if(act==="edit-item"){ closeModal(); formItem(id); }
+  else if(act==="mov-form"){ closeModal(); formMov(id); }
+  else if(act==="novo-prof") formProfissional(null);
+  else if(act==="edit-prof"){ closeModal(); formProfissional(id); }
+  else if(act==="afastar"){ closeModal(); formAfastamento(id||ctx.paciente||""); }
+  else if(act==="assinar"){ closeModal(); formAssinatura(id); }
+  else if(act==="anexar") anexarArquivo(id);
+  else if(act==="relatorio") relatorioMensal();
+  else if(act==="publicar-resumo") publicarResumo();
+  else if(act==="exp-pac") exportar("pac");
+  else if(act==="exp-atend") exportar("atend");
+  else if(act==="exp-sol") exportar("sol");
+  else if(act==="exp-est") exportar("est");
+  else if(act==="exp-mov") exportar("mov");
+  else if(act==="exp-json") exportar("json");
+  else if(act==="revisar-anamnese"){
+    const p=byId("pacientes",id); if(!p) return;
+    const c=Object.assign({},p); delete c.id; c.revisado=true;
+    await put("pacientes",id,c); toast("Anamnese revisada");
+  }
+  else if(act==="rm-anexo"){
+    const p=byId("pacientes",id); if(!p) return;
+    const i=Number(b.dataset.i),an=(p.anexos||[])[i];
+    if(!an||!confirm("Remover o anexo “"+an.nome+"”? A exclusão é definitiva.")) return;
+    const c=Object.assign({},p); delete c.id;
+    c.anexos=(p.anexos||[]).filter((x,k)=>k!==i);
+    await put("pacientes",id,c);
+    if(ASSETS){ try{ await ASSETS.delete(an.id); }catch(err){} }
+    toast("Anexo removido");
+  }
+  else if(act==="mov-rapida"){
+    const it=byId("estoque",id); if(!it) return;
+    const d=Number(b.dataset.d),c=Object.assign({},it); delete c.id;
+    c.quantidade=Math.max(0,Number(it.quantidade||0)+d);
+    if(c.quantidade===Number(it.quantidade||0)) return;
+    await put("estoque",id,c);
+    await registrarMov(it,d>0?"Entrada":"Saída",1,"Ajuste rápido");
+  }
+  else if(act==="del-paciente"){ if(confirm("Excluir a ficha? Os atendimentos ficam no histórico, mas sem vínculo.")){ closeModal(); ctx.paciente=null; await del("pacientes",id); toast("Ficha excluída"); } }
+  else if(act==="del-atend"){ if(confirm("Excluir este atendimento?")){ closeModal(); await del("atendimentos",id); toast("Atendimento excluído"); } }
+  else if(act==="del-sol"){ if(confirm("Excluir esta solicitação?")){ closeModal(); await del("solicitacoes",id); toast("Solicitação excluída"); } }
+  else if(act==="del-item"){ if(confirm("Excluir este item do estoque?")){ closeModal(); await del("estoque",id); toast("Item excluído"); } }
+  else if(act==="del-prof"){ if(confirm("Excluir este profissional?")){ closeModal(); await del("profissionais",id); toast("Profissional excluído"); } }
+  else if(act==="del-afast"){ if(confirm("Excluir este afastamento?")){ await del("afastamentos",id); toast("Afastamento excluído"); } }
+  else if(act==="limpar-exemplos"){
+    if(!confirm("Apagar todos os registros de demonstração? O que você cadastrou permanece.")) return;
+    for(const col of COLS){ for(const r of state[col].filter(x=>x.exemplo)) await del(col,r.id); }
+    toast("Dados de exemplo removidos");
+  }
+});
+document.addEventListener("change",e=>{
+  if(e.target.matches("[data-metrica]")){ ctx.metrica=e.target.value; render(); }
+  if(e.target.matches("[data-repmes]")){ relatorioMensal(e.target.value); }
+});
+document.addEventListener("submit",async e=>{
+  if(e.target.id!=="cfgform") return;
+  e.preventDefault();
+  const fd=new FormData(e.target),o={};
+  o.empresa=(fd.get("empresa")||"").toString();
+  ["custoDia","passo","duracao","diasRetorno","diasValidade","janelaConsumo"].forEach(k=>o[k]=Number(fd.get(k)||0));
+  o.horaInicio=fd.get("horaInicio"); o.horaFim=fd.get("horaFim");
+  o.diasSemana=fd.getAll("diasSemana").map(Number);
+  if(!o.diasSemana.length) o.diasSemana=[1,2,3,4,5];
+  await put("config","geral",o);
+  toast("Parâmetros salvos");
+});
+$("#q").addEventListener("input",e=>{
+  busca=e.target.value;
+  if(["painel","config","indicadores"].indexOf(route)>=0) route=EU.admin?"pacientes":"estoque";
+  ctx.paciente=null;
+  render();
+});
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape"){ closeModal(); return; }
+  const dentro=/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)||e.target.isContentEditable;
+  if(dentro||e.metaKey||e.ctrlKey||e.altKey) return;
+  if(e.key==="/"){ e.preventDefault(); $("#q").focus(); return; }
+  if(e.key==="n"){
+    e.preventDefault();
+    if(route==="pacientes") formPaciente(null);
+    else if(route==="agenda") formAtendimento(null,"");
+    else if(route==="solicitacoes") formSolicitacao(null);
+    else if(route==="estoque") formItem(null);
+  }
+});
+
+/* ===================== INÍCIO ===================== */
+render();
+boot();
+</script>
+
+</body>
+</html>
