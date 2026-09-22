@@ -227,11 +227,9 @@ As coleções `pacientes`, `atendimentos` e `afastamentos` **não podem sequer s
 
 O front já se adapta sozinho: com `canEdit = false`, o menu não mostra Colaboradores, Agenda e Configurações, e Indicadores exibe apenas os resumos mensais agregados.
 
-### Outros pontos de LGPD a tratar na adaptação
+### Requisitos de segurança da implantação
 
-- Log de acesso (quem abriu qual ficha e quando) — hoje só existe log de escrita.
-- Política de retenção após desligamento do colaborador.
-- Criptografia em repouso dos campos clínicos e dos anexos.
+O tratamento de dado sensível de saúde exige controles definidos com a área de segurança da informação da empresa: registro de auditoria, política de retenção e criptografia dos dados clínicos e dos anexos. O `schema.sql` já contempla a estrutura de auditoria; os parâmetros e o alcance de cada controle são definidos na implantação.
 
 ---
 
@@ -268,7 +266,7 @@ O front já se adapta sozinho: com `canEdit = false`, o menu não mostra Colabor
 5. [ ] Implementar o storage de anexos e a rota `/_blob/{id}`, ou desativar `assets`.
 6. [ ] Remover a poda dos 500 lançamentos em `registrarMov()`.
 7. [ ] Importar `dados-exemplo.json` no ambiente de homologação e apagar antes de ir para produção (os registros têm o campo `exemplo: true`; há um botão no sistema que remove todos).
-8. [ ] Definir retenção, log de acesso e criptografia dos dados clínicos.
+8. [ ] Aplicar os controles de segurança definidos com a área de TI (auditoria, retenção e criptografia).
 
 ---
 
