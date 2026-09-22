@@ -131,7 +131,7 @@ O sistema trabalha com dois perfis, e a separação **precisa ser aplicada no se
 
 As coleções `pacientes`, `atendimentos` e `afastamentos` contêm dado de saúde — sensível pelo art. 11 da LGPD — e **não devem sequer ser retornadas** pela API ao perfil operacional. A interface já se adapta sozinha ao perfil recebido.
 
-Pontos a tratar na implantação: log de acesso a ficha (hoje só há log de escrita), política de retenção após o desligamento do colaborador e criptografia em repouso dos campos clínicos e dos anexos.
+A implantação deve seguir os requisitos de segurança da informação da empresa — controle de acesso, auditoria, retenção e criptografia dos dados clínicos —, definidos junto à área de TI.
 
 ---
 
